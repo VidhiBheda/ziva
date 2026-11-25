@@ -37,8 +37,15 @@
     color: {{ section.settings.stat_label_color }};
   }
 
+  #shopify-section-{{ section.id }} .loomhaus-hero__arch-composition {
+    max-width: {{ section.settings.image_max_width }}px;
+  }
+
   #shopify-section-{{ section.id }} .loomhaus-hero__arch-backdrop {
     background-color: {{ section.settings.backdrop_arch_color }};
+    width: {{ section.settings.backdrop_size }}px;
+    height: {{ section.settings.backdrop_size }}px;
+    right: {{ section.settings.backdrop_offset_x }}px;
   }
 
   #shopify-section-{{ section.id }} .loomhaus-ticker {
@@ -118,22 +125,22 @@
 
       </div>
 
-      <!-- Right Column: Visual Arched Showcase & Product Badge -->
+      <!-- Right Column: Visual Arched Showcase & Big Backdrop Effect -->
       <div class="loomhaus-hero__visual">
         <div class="loomhaus-hero__arch-composition">
           
-          <!-- Offset Architectural Backdrop Arch -->
+          <!-- Big Circular Backdrop Effect (visible prominently behind photo on right) -->
           <div class="loomhaus-hero__arch-backdrop" aria-hidden="true"></div>
 
-          <!-- Main Foreground Image Arch -->
+          <!-- Main Foreground Image Arch (Decreased size & sleek proportions) -->
           <div class="loomhaus-hero__arch-frame">
             {%- if section.settings.image != blank -%}
               <img 
-                src="{{ section.settings.image | image_url: width: 900 }}" 
+                src="{{ section.settings.image | image_url: width: 800 }}" 
                 alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
                 loading="eager"
-                width="460"
-                height="590"
+                width="370"
+                height="470"
                 class="loomhaus-hero__image"
               >
             {%- else -%}
@@ -141,56 +148,68 @@
                 src="{{ 'loomhaus-model.jpg' | asset_url }}" 
                 alt="The Winter Edit Collection Model"
                 loading="eager"
-                width="460"
-                height="590"
+                width="370"
+                height="470"
                 class="loomhaus-hero__image"
               >
             {%- endif -%}
           </div>
 
-          <!-- Floating Product Badge Card -->
+          <!-- Floating Product Badge: Clickable to open the product directly -->
           {%- if section.settings.show_product_badge -%}
-            {%- assign badge_url = section.settings.badge_product.url | default: section.settings.badge_link | default: routes.all_products_collection_url -%}
-            <a href="{{ badge_url }}" class="loomhaus-product-badge">
+            {%- liquid
+              assign badge_product = section.settings.badge_product
+              if badge_product != blank
+                assign badge_url = badge_product.url
+                assign badge_title = badge_product.title
+                if section.settings.badge_image != blank
+                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 90
+                elsif badge_product.featured_image != blank
+                  assign badge_thumb_src = badge_product.featured_image | image_url: width: 90
+                else
+                  assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
+                endif
+              else
+                if collections.all.products.size > 0
+                  assign fallback_prod = collections.all.products.first
+                  assign badge_url = section.settings.badge_link | default: fallback_prod.url
+                else
+                  assign badge_url = section.settings.badge_link | default: routes.all_products_collection_url
+                endif
+                assign badge_title = section.settings.badge_title | default: 'Yellow Wool Jumper'
+                if section.settings.badge_image != blank
+                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 90
+                else
+                  assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
+                endif
+              endif
+            -%}
+            <a 
+              href="{{ badge_url }}" 
+              class="loomhaus-product-badge"
+              title="Open product: {{ badge_title | escape }}"
+              aria-label="Open product: {{ badge_title | escape }}"
+              {% if section.settings.badge_new_tab %}target="_blank" rel="noopener"{% endif %}
+              data-product-url="{{ badge_url }}"
+            >
               <div class="loomhaus-product-badge__thumb">
-                {%- if section.settings.badge_image != blank -%}
-                  <img 
-                    src="{{ section.settings.badge_image | image_url: width: 80 }}" 
-                    alt="{{ section.settings.badge_title | escape }}"
-                    width="36"
-                    height="42"
-                    loading="lazy"
-                  >
-                {%- elsif section.settings.badge_product != blank and section.settings.badge_product.featured_image != blank -%}
-                  <img 
-                    src="{{ section.settings.badge_product.featured_image | image_url: width: 80 }}" 
-                    alt="{{ section.settings.badge_product.title | escape }}"
-                    width="36"
-                    height="42"
-                    loading="lazy"
-                  >
-                {%- else -%}
-                  <img 
-                    src="{{ 'loomhaus-thumb.jpg' | asset_url }}" 
-                    alt="Yellow Wool Jumper Thumbnail"
-                    width="36"
-                    height="42"
-                    loading="lazy"
-                  >
-                {%- endif -%}
+                <img 
+                  src="{{ badge_thumb_src }}" 
+                  alt="{{ badge_title | escape }}"
+                  width="34"
+                  height="38"
+                  loading="lazy"
+                >
               </div>
               <div class="loomhaus-product-badge__info">
                 <span class="loomhaus-product-badge__title">
-                  {%- if section.settings.badge_product != blank -%}
-                    {{ section.settings.badge_product.title }}
-                  {%- else -%}
-                    {{ section.settings.badge_title | default: 'Yellow Wool Jumper' }}
-                  {%- endif -%}
+                  {{ badge_title }}
                 </span>
                 <span class="loomhaus-product-badge__subtitle">
                   {{ section.settings.badge_subtitle | default: 'Bestseller this week' }}
                 </span>
               </div>
+              <span class="loomhaus-product-badge__arrow" aria-hidden="true">&rarr;</span>
             </a>
           {%- endif -%}
 
@@ -236,6 +255,22 @@
   {%- endif -%}
 </section>
 
+<script>
+  // Ensure badge click reliably opens the product even inside the Shopify Theme Editor preview iframe
+  document.addEventListener('DOMContentLoaded', function() {
+    const badges = document.querySelectorAll('.loomhaus-product-badge');
+    badges.forEach(badge => {
+      badge.addEventListener('click', function(e) {
+        const url = this.getAttribute('href');
+        if (url && url !== '#' && window.Shopify && window.Shopify.designMode) {
+          e.preventDefault();
+          window.open(url, '_blank');
+        }
+      });
+    });
+  });
+</script>
+
 <style>
   .loomhaus-hero-wrapper {
     width: 100%;
@@ -253,9 +288,9 @@
     margin: 0 auto;
     padding: 0 48px;
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1.15fr 0.85fr;
     align-items: center;
-    gap: 60px;
+    gap: 50px;
     position: relative;
   }
 
@@ -285,7 +320,7 @@
 
   /* Headline */
   .loomhaus-hero__heading {
-    font-size: clamp(44px, 5.8vw, 78px);
+    font-size: clamp(42px, 5.5vw, 76px);
     font-weight: 850;
     line-height: 1.04;
     letter-spacing: -0.035em;
@@ -298,7 +333,7 @@
     font-size: 16.5px;
     line-height: 1.6;
     margin: 0 0 32px 0;
-    max-width: 480px;
+    max-width: 460px;
     font-weight: 450;
   }
 
@@ -308,7 +343,7 @@
 
   /* CTA Button */
   .loomhaus-hero__action {
-    margin-bottom: 52px;
+    margin-bottom: 50px;
   }
 
   .loomhaus-hero__btn {
@@ -346,7 +381,7 @@
   .loomhaus-hero__stats {
     display: flex;
     align-items: flex-start;
-    gap: 40px;
+    gap: 38px;
     flex-wrap: wrap;
     padding-top: 8px;
   }
@@ -370,7 +405,7 @@
     font-weight: 450;
   }
 
-  /* Right Column: Visual Arch Composition */
+  /* Right Column: Visual Arch Composition & Backdrop */
   .loomhaus-hero__visual {
     display: flex;
     justify-content: center;
@@ -382,32 +417,29 @@
   .loomhaus-hero__arch-composition {
     position: relative;
     width: 100%;
-    max-width: 480px;
     margin: 0 auto;
   }
 
-  /* Backdrop Arch (concentric offset) */
+  /* Big Circular Backdrop Effect (prominently visible behind photo) */
   .loomhaus-hero__arch-backdrop {
     position: absolute;
-    top: -24px;
-    right: -24px;
-    width: 100%;
-    height: 100%;
-    border-radius: 280px 280px 28px 28px;
+    top: 8px;
+    border-radius: 50%;
     z-index: 1;
-    opacity: 0.95;
-    transition: transform 0.3s ease;
+    opacity: 0.98;
+    pointer-events: none;
+    transition: all 0.3s ease;
   }
 
-  /* Main Arch Frame */
+  /* Main Arch Frame: Decreased Size */
   .loomhaus-hero__arch-frame {
     position: relative;
     width: 100%;
     aspect-ratio: 0.78 / 1;
-    border-radius: 260px 260px 24px 24px;
+    border-radius: 220px 220px 24px 24px;
     overflow: hidden;
     z-index: 2;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.08);
     background-color: #E7E2D7;
   }
 
@@ -424,34 +456,37 @@
     transform: scale(1.035);
   }
 
-  /* Floating Product Badge */
+  /* Floating Product Badge: Interactive Pill Card */
   .loomhaus-product-badge {
     position: absolute;
     bottom: 34px;
-    left: -32px;
-    z-index: 3;
+    left: -42px;
+    z-index: 10;
     background: #FFFFFF;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 8px 18px 8px 10px;
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
     color: #191B18;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.09), 0 4px 12px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.11), 0 4px 12px rgba(0, 0, 0, 0.04);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     border: 1px solid rgba(0, 0, 0, 0.04);
+    user-select: none;
   }
 
   .loomhaus-product-badge:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(0, 0, 0, 0.06);
+    transform: translateY(-3px) scale(1.025);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.14), 0 6px 16px rgba(0, 0, 0, 0.06);
+    border-color: rgba(0, 0, 0, 0.1);
   }
 
   .loomhaus-product-badge__thumb {
-    width: 36px;
-    height: 44px;
-    border-radius: 8px;
+    width: 34px;
+    height: 38px;
+    border-radius: 10px;
     overflow: hidden;
     background: #F4EFEB;
     flex-shrink: 0;
@@ -468,6 +503,7 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
+    text-align: left;
   }
 
   .loomhaus-product-badge__title {
@@ -475,6 +511,11 @@
     font-weight: 700;
     line-height: 1.25;
     color: #191B18;
+    transition: color 0.2s ease;
+  }
+
+  .loomhaus-product-badge:hover .loomhaus-product-badge__title {
+    color: #4A5043;
   }
 
   .loomhaus-product-badge__subtitle {
@@ -482,6 +523,21 @@
     color: #74786E;
     line-height: 1.2;
     font-weight: 450;
+  }
+
+  .loomhaus-product-badge__arrow {
+    display: inline-block;
+    font-size: 14px;
+    color: #74786E;
+    opacity: 0.6;
+    margin-left: 2px;
+    transition: all 0.2s ease;
+  }
+
+  .loomhaus-product-badge:hover .loomhaus-product-badge__arrow {
+    opacity: 1;
+    transform: translateX(3px);
+    color: #191B18;
   }
 
   /* Bottom Ticker / Marquee */
@@ -546,14 +602,14 @@
   /* Responsive Breakpoints */
   @media (max-width: 1024px) {
     .loomhaus-hero__container {
-      gap: 40px;
+      gap: 36px;
       padding: 0 32px;
     }
     .loomhaus-hero__stats {
       gap: 28px;
     }
     .loomhaus-product-badge {
-      left: -16px;
+      left: -20px;
       bottom: 24px;
     }
   }
@@ -588,12 +644,18 @@
     }
 
     .loomhaus-hero__arch-composition {
-      max-width: 380px;
+      max-width: 330px !important;
+    }
+
+    .loomhaus-hero__arch-backdrop {
+      width: 380px !important;
+      height: 380px !important;
+      right: -30px !important;
     }
 
     .loomhaus-product-badge {
-      left: 12px;
-      bottom: 20px;
+      left: 6px;
+      bottom: 18px;
     }
   }
 
@@ -603,7 +665,7 @@
     }
 
     .loomhaus-hero__stats {
-      gap: 20px;
+      gap: 18px;
     }
 
     .loomhaus-hero__stat-value {
@@ -615,23 +677,24 @@
     }
 
     .loomhaus-hero__arch-composition {
-      max-width: 320px;
+      max-width: 290px !important;
     }
 
     .loomhaus-hero__arch-backdrop {
-      top: -14px;
-      right: -14px;
+      width: 320px !important;
+      height: 320px !important;
+      right: -20px !important;
     }
 
     .loomhaus-product-badge {
-      left: 8px;
-      bottom: 16px;
+      left: 4px;
+      bottom: 14px;
       padding: 6px 14px 6px 8px;
     }
 
     .loomhaus-product-badge__thumb {
       width: 30px;
-      height: 38px;
+      height: 34px;
     }
 
     .loomhaus-product-badge__title {
@@ -639,7 +702,7 @@
     }
 
     .loomhaus-product-badge__subtitle {
-      font-size: 10.5px;
+      font-size: 10px;
     }
   }
 </style>
@@ -812,7 +875,7 @@
     },
     {
       "type": "header",
-      "content": "Visual Arched Showcase"
+      "content": "Visual Photo & Backdrop Effect"
     },
     {
       "type": "image_picker",
@@ -820,10 +883,40 @@
       "label": "Hero model image (arch frame)"
     },
     {
+      "type": "range",
+      "id": "image_max_width",
+      "min": 280,
+      "max": 480,
+      "step": 10,
+      "unit": "px",
+      "label": "Main photo max width",
+      "default": 370
+    },
+    {
       "type": "color",
       "id": "backdrop_arch_color",
-      "label": "Backdrop arch accent color",
-      "default": "#ECE5DA"
+      "label": "Behind effect disc color",
+      "default": "#E5DFD3"
+    },
+    {
+      "type": "range",
+      "id": "backdrop_size",
+      "min": 320,
+      "max": 520,
+      "step": 10,
+      "unit": "px",
+      "label": "Behind effect disc size",
+      "default": 440
+    },
+    {
+      "type": "range",
+      "id": "backdrop_offset_x",
+      "min": -100,
+      "max": 0,
+      "step": 5,
+      "unit": "px",
+      "label": "Behind effect horizontal offset",
+      "default": -60
     },
     {
       "type": "header",
@@ -838,17 +931,17 @@
     {
       "type": "product",
       "id": "badge_product",
-      "label": "Select Shopify product"
+      "label": "Select Product to open"
     },
     {
       "type": "image_picker",
       "id": "badge_image",
-      "label": "Custom product thumbnail image"
+      "label": "Custom product thumbnail image (optional)"
     },
     {
       "type": "text",
       "id": "badge_title",
-      "label": "Badge title",
+      "label": "Badge title (overrides product title)",
       "default": "Yellow Wool Jumper"
     },
     {
@@ -860,7 +953,13 @@
     {
       "type": "url",
       "id": "badge_link",
-      "label": "Custom badge link (if no product selected)"
+      "label": "Custom URL (if no product selected)"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_new_tab",
+      "label": "Open product in new tab",
+      "default": false
     },
     {
       "type": "header",
