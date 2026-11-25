@@ -1,0 +1,387 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} .loomhaus-hellobar {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    font-size: {{ section.settings.font_size }}px;
+    padding-top: {{ section.settings.padding_vertical }}px;
+    padding-bottom: {{ section.settings.padding_vertical }}px;
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hellobar__star {
+    color: {{ section.settings.star_color }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hellobar a {
+    color: {{ section.settings.text_color }};
+  }
+{%- endstyle -%}
+
+{%- if section.settings.show_hellobar -%}
+  <aside 
+    class="loomhaus-hellobar" 
+    role="region" 
+    aria-label="{{ 'sections.header.announcement' | t | default: 'Announcement' }}"
+    data-section-id="{{ section.id }}"
+  >
+    <div class="loomhaus-hellobar__container">
+      {%- if section.settings.layout_type == 'marquee' -%}
+        <!-- Marquee Mode -->
+        <div class="loomhaus-hellobar__marquee" style="--marquee-duration: {{ section.settings.marquee_speed }}s;">
+          <div class="loomhaus-hellobar__track">
+            {%- for i in (1..4) -%}
+              <div class="loomhaus-hellobar__content" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+                {%- if section.blocks.size > 0 -%}
+                  {%- for block in section.blocks -%}
+                    {%- if block.settings.link != blank -%}
+                      <a href="{{ block.settings.link }}" class="loomhaus-hellobar__link">{{ block.settings.text }}</a>
+                    {%- else -%}
+                      <span class="loomhaus-hellobar__text">{{ block.settings.text }}</span>
+                    {%- endif -%}
+                    <span class="loomhaus-hellobar__star" aria-hidden="true">✦</span>
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- if section.settings.message_1 != blank -%}
+                    {%- if section.settings.link_1 != blank -%}
+                      <a href="{{ section.settings.link_1 }}" class="loomhaus-hellobar__link">{{ section.settings.message_1 }}</a>
+                    {%- else -%}
+                      <span class="loomhaus-hellobar__text">{{ section.settings.message_1 }}</span>
+                    {%- endif -%}
+                  {%- endif -%}
+
+                  {%- if section.settings.show_separator and section.settings.message_2 != blank -%}
+                    <span class="loomhaus-hellobar__star" aria-hidden="true">✦</span>
+                  {%- endif -%}
+
+                  {%- if section.settings.message_2 != blank -%}
+                    {%- if section.settings.link_2 != blank -%}
+                      <a href="{{ section.settings.link_2 }}" class="loomhaus-hellobar__link">{{ section.settings.message_2 }}</a>
+                    {%- else -%}
+                      <span class="loomhaus-hellobar__text">{{ section.settings.message_2 }}</span>
+                    {%- endif -%}
+                  {%- endif -%}
+                  <span class="loomhaus-hellobar__star" aria-hidden="true">✦</span>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- else -%}
+        <!-- Centered Static Mode (As in Mockup) -->
+        <div class="loomhaus-hellobar__centered">
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.settings.link != blank -%}
+                <a href="{{ block.settings.link }}" class="loomhaus-hellobar__link">{{ block.settings.text }}</a>
+              {%- else -%}
+                <span class="loomhaus-hellobar__text">{{ block.settings.text }}</span>
+              {%- endif -%}
+              {%- unless forloop.last -%}
+                <span class="loomhaus-hellobar__star" aria-hidden="true">✦</span>
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- if section.settings.message_1 != blank -%}
+              {%- if section.settings.link_1 != blank -%}
+                <a href="{{ section.settings.link_1 }}" class="loomhaus-hellobar__link">{{ section.settings.message_1 }}</a>
+              {%- else -%}
+                <span class="loomhaus-hellobar__text">{{ section.settings.message_1 }}</span>
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- if section.settings.show_separator and section.settings.message_2 != blank -%}
+              <span class="loomhaus-hellobar__star" aria-hidden="true">✦</span>
+            {%- endif -%}
+
+            {%- if section.settings.message_2 != blank -%}
+              {%- if section.settings.link_2 != blank -%}
+                <a href="{{ section.settings.link_2 }}" class="loomhaus-hellobar__link">{{ section.settings.message_2 }}</a>
+              {%- else -%}
+                <span class="loomhaus-hellobar__text">{{ section.settings.message_2 }}</span>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.enable_dismiss -%}
+        <button 
+          type="button" 
+          class="loomhaus-hellobar__close" 
+          aria-label="Dismiss banner"
+          onclick="this.closest('.loomhaus-hellobar').style.display='none';"
+        >
+          &times;
+        </button>
+      {%- endif -%}
+    </div>
+  </aside>
+{%- endif -%}
+
+<style>
+  .loomhaus-hellobar {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    font-family: inherit;
+    z-index: 40;
+    transition: all 0.25s ease;
+  }
+
+  .loomhaus-hellobar__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .loomhaus-hellobar__centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px 20px;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .loomhaus-hellobar__text,
+  .loomhaus-hellobar__link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .loomhaus-hellobar__link:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .loomhaus-hellobar__star {
+    display: inline-block;
+    font-size: 0.9em;
+    user-select: none;
+    opacity: 0.85;
+    padding: 0 2px;
+  }
+
+  /* Marquee Styles */
+  .loomhaus-hellobar__marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+  }
+
+  .loomhaus-hellobar__track {
+    display: flex;
+    width: max-content;
+    animation: loomhausHellobarScroll var(--marquee-duration, 30s) linear infinite;
+  }
+
+  .loomhaus-hellobar__marquee:hover .loomhaus-hellobar__track {
+    animation-play-state: paused;
+  }
+
+  .loomhaus-hellobar__content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .loomhaus-hellobar__close {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: currentColor;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .loomhaus-hellobar__close:hover {
+    opacity: 1;
+  }
+
+  @keyframes loomhausHellobarScroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .loomhaus-hellobar__centered {
+      gap: 8px 12px;
+      font-size: 11.5px;
+    }
+    .loomhaus-hellobar__star {
+      font-size: 0.8em;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hello Bar (Loomhaus)",
+  "class": "loomhaus-hellobar-section",
+  "enabled_on": {
+    "groups": ["header"],
+    "templates": ["*"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_hellobar",
+      "label": "Show hello bar",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "layout_type",
+      "label": "Display style",
+      "options": [
+        {
+          "value": "centered",
+          "label": "Centered (as shown in image)"
+        },
+        {
+          "value": "marquee",
+          "label": "Scrolling Marquee"
+        }
+      ],
+      "default": "centered"
+    },
+    {
+      "type": "header",
+      "content": "Messages"
+    },
+    {
+      "type": "text",
+      "id": "message_1",
+      "label": "First message",
+      "default": "Free shipping on orders over ₹999"
+    },
+    {
+      "type": "url",
+      "id": "link_1",
+      "label": "First message link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_separator",
+      "label": "Show separator (✦)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "message_2",
+      "label": "Second message",
+      "default": "Use code LOOM10 for 10% off your first order"
+    },
+    {
+      "type": "url",
+      "id": "link_2",
+      "label": "Second message link"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#242520"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Separator icon color",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 11,
+      "max": 16,
+      "step": 0.5,
+      "unit": "px",
+      "label": "Font size",
+      "default": 12.5
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 4,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 9
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Marquee scroll duration",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_dismiss",
+      "label": "Enable close button",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement_item",
+      "name": "Custom Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Announcement text",
+          "default": "Special offer today only"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hello Bar (Loomhaus)"
+    }
+  ]
+}
+{% endschema %}

@@ -1,42 +1,107 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "custom_hero": {
+      "type": "custom-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "stat_1": {
+          "type": "stat",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "value": "4.8★",
+            "label": "2,000+ reviews"
           }
         },
-        "button": {
-          "type": "buttons",
+        "stat_2": {
+          "type": "stat",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "value": "100%",
+            "label": "organic cotton"
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "value": "30 days",
+            "label": "free returns"
+          }
+        },
+        "ticker_1": {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Organic cotton",
+            "link": ""
+          }
+        },
+        "ticker_2": {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Made to last",
+            "link": ""
+          }
+        },
+        "ticker_3": {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Sizes XS to L",
+            "link": ""
+          }
+        },
+        "ticker_4": {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Free returns",
+            "link": ""
+          }
+        },
+        "ticker_5": {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Ethically made",
+            "link": ""
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "stat_1",
+        "stat_2",
+        "stat_3",
+        "ticker_1",
+        "ticker_2",
+        "ticker_3",
+        "ticker_4",
+        "ticker_5"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "show_badge": true,
+        "badge_text": "NEW SEASON • AUTUMN / WINTER",
+        "badge_bg": "#63675F",
+        "badge_text_color": "#FFFFFF",
+        "heading": "The Winter<br>Edit",
+        "heading_color": "#191B18",
+        "description": "Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.",
+        "description_color": "#5A5E55",
+        "btn_text": "SHOP NOW",
+        "btn_link": "",
+        "btn_bg": "#1D1F1C",
+        "btn_text_color": "#FFFFFF",
+        "btn_hover_bg": "#343831",
+        "btn_hover_text": "#FFFFFF",
+        "show_stats": true,
+        "stat_value_color": "#191B18",
+        "stat_label_color": "#74786E",
+        "backdrop_arch_color": "#ECE5DA",
+        "show_product_badge": true,
+        "badge_title": "Yellow Wool Jumper",
+        "badge_subtitle": "Bestseller this week",
+        "badge_link": "",
+        "show_ticker": true,
+        "ticker_bg": "#636C5F",
+        "ticker_text": "#FAF7F2",
+        "ticker_star_color": "#FAF7F2",
+        "ticker_speed": 28,
+        "ticker_padding": 14,
+        "bg_color": "#F6F3EC",
+        "padding_top": 70,
+        "padding_bottom": 80
       }
     },
     "featured_collection": {
@@ -69,7 +134,7 @@
     }
   },
   "order": [
-    "image_banner",
+    "custom_hero",
     "featured_collection"
   ]
 }

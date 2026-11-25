@@ -1,0 +1,1037 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} .loomhaus-hero {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    font-family: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hero__badge {
+    background-color: {{ section.settings.badge_bg }};
+    color: {{ section.settings.badge_text }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hero__heading {
+    color: {{ section.settings.heading_color }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hero__description {
+    color: {{ section.settings.description_color }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hero__btn {
+    background-color: {{ section.settings.btn_bg }};
+    color: {{ section.settings.btn_text }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hero__btn:hover {
+    background-color: {{ section.settings.btn_hover_bg }};
+    color: {{ section.settings.btn_hover_text }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hero__stat-value {
+    color: {{ section.settings.stat_value_color }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hero__stat-label {
+    color: {{ section.settings.stat_label_color }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-hero__arch-backdrop {
+    background-color: {{ section.settings.backdrop_arch_color }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-ticker {
+    background-color: {{ section.settings.ticker_bg }};
+    color: {{ section.settings.ticker_text }};
+    padding-top: {{ section.settings.ticker_padding }}px;
+    padding-bottom: {{ section.settings.ticker_padding }}px;
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-ticker__star {
+    color: {{ section.settings.ticker_star_color }};
+  }
+{%- endstyle -%}
+
+<section class="loomhaus-hero-wrapper" data-section-id="{{ section.id }}">
+  <div class="loomhaus-hero">
+    <div class="loomhaus-hero__container">
+      
+      <!-- Left Column: Content & Statistics -->
+      <div class="loomhaus-hero__content">
+        
+        {%- if section.settings.show_badge and section.settings.badge_text != blank -%}
+          <div class="loomhaus-hero__badge-wrapper">
+            <span class="loomhaus-hero__badge">{{ section.settings.badge_text }}</span>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h1 class="loomhaus-hero__heading">
+            {{ section.settings.heading }}
+          </h1>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <div class="loomhaus-hero__description">
+            <p>{{ section.settings.description }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.btn_text != blank -%}
+          <div class="loomhaus-hero__action">
+            <a href="{{ section.settings.btn_link | default: routes.all_products_collection_url }}" class="loomhaus-hero__btn">
+              <span>{{ section.settings.btn_text }}</span>
+              <span class="loomhaus-hero__btn-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        {%- endif -%}
+
+        <!-- Stats / Trust Metrics Grid -->
+        {%- if section.settings.show_stats -%}
+          <div class="loomhaus-hero__stats">
+            {%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
+            {%- if stat_blocks.size > 0 -%}
+              {%- for block in stat_blocks -%}
+                <div class="loomhaus-hero__stat-item" {{ block.shopify_attributes }}>
+                  <div class="loomhaus-hero__stat-value">{{ block.settings.value }}</div>
+                  <div class="loomhaus-hero__stat-label">{{ block.settings.label }}</div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              <!-- Default Mockup Stats -->
+              <div class="loomhaus-hero__stat-item">
+                <div class="loomhaus-hero__stat-value">{{ section.settings.stat_1_value | default: '4.8★' }}</div>
+                <div class="loomhaus-hero__stat-label">{{ section.settings.stat_1_label | default: '2,000+ reviews' }}</div>
+              </div>
+              <div class="loomhaus-hero__stat-item">
+                <div class="loomhaus-hero__stat-value">{{ section.settings.stat_2_value | default: '100%' }}</div>
+                <div class="loomhaus-hero__stat-label">{{ section.settings.stat_2_label | default: 'organic cotton' }}</div>
+              </div>
+              <div class="loomhaus-hero__stat-item">
+                <div class="loomhaus-hero__stat-value">{{ section.settings.stat_3_value | default: '30 days' }}</div>
+                <div class="loomhaus-hero__stat-label">{{ section.settings.stat_3_label | default: 'free returns' }}</div>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+      </div>
+
+      <!-- Right Column: Visual Arched Showcase & Product Badge -->
+      <div class="loomhaus-hero__visual">
+        <div class="loomhaus-hero__arch-composition">
+          
+          <!-- Offset Architectural Backdrop Arch -->
+          <div class="loomhaus-hero__arch-backdrop" aria-hidden="true"></div>
+
+          <!-- Main Foreground Image Arch -->
+          <div class="loomhaus-hero__arch-frame">
+            {%- if section.settings.image != blank -%}
+              <img 
+                src="{{ section.settings.image | image_url: width: 900 }}" 
+                alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
+                loading="eager"
+                width="460"
+                height="590"
+                class="loomhaus-hero__image"
+              >
+            {%- else -%}
+              <img 
+                src="{{ 'loomhaus-model.jpg' | asset_url }}" 
+                alt="The Winter Edit Collection Model"
+                loading="eager"
+                width="460"
+                height="590"
+                class="loomhaus-hero__image"
+              >
+            {%- endif -%}
+          </div>
+
+          <!-- Floating Product Badge Card -->
+          {%- if section.settings.show_product_badge -%}
+            {%- assign badge_url = section.settings.badge_product.url | default: section.settings.badge_link | default: routes.all_products_collection_url -%}
+            <a href="{{ badge_url }}" class="loomhaus-product-badge">
+              <div class="loomhaus-product-badge__thumb">
+                {%- if section.settings.badge_image != blank -%}
+                  <img 
+                    src="{{ section.settings.badge_image | image_url: width: 80 }}" 
+                    alt="{{ section.settings.badge_title | escape }}"
+                    width="36"
+                    height="42"
+                    loading="lazy"
+                  >
+                {%- elsif section.settings.badge_product != blank and section.settings.badge_product.featured_image != blank -%}
+                  <img 
+                    src="{{ section.settings.badge_product.featured_image | image_url: width: 80 }}" 
+                    alt="{{ section.settings.badge_product.title | escape }}"
+                    width="36"
+                    height="42"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <img 
+                    src="{{ 'loomhaus-thumb.jpg' | asset_url }}" 
+                    alt="Yellow Wool Jumper Thumbnail"
+                    width="36"
+                    height="42"
+                    loading="lazy"
+                  >
+                {%- endif -%}
+              </div>
+              <div class="loomhaus-product-badge__info">
+                <span class="loomhaus-product-badge__title">
+                  {%- if section.settings.badge_product != blank -%}
+                    {{ section.settings.badge_product.title }}
+                  {%- else -%}
+                    {{ section.settings.badge_title | default: 'Yellow Wool Jumper' }}
+                  {%- endif -%}
+                </span>
+                <span class="loomhaus-product-badge__subtitle">
+                  {{ section.settings.badge_subtitle | default: 'Bestseller this week' }}
+                </span>
+              </div>
+            </a>
+          {%- endif -%}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Ticker / Marquee Banner -->
+  {%- if section.settings.show_ticker -%}
+    <div class="loomhaus-ticker" style="--ticker-duration: {{ section.settings.ticker_speed }}s;">
+      <div class="loomhaus-ticker__track">
+        {%- for i in (1..4) -%}
+          <div class="loomhaus-ticker__content" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+            {%- assign ticker_blocks = section.blocks | where: 'type', 'ticker_item' -%}
+            {%- if ticker_blocks.size > 0 -%}
+              {%- for block in ticker_blocks -%}
+                {%- if block.settings.link != blank -%}
+                  <a href="{{ block.settings.link }}" class="loomhaus-ticker__link">{{ block.settings.text }}</a>
+                {%- else -%}
+                  <span class="loomhaus-ticker__item">{{ block.settings.text }}</span>
+                {%- endif -%}
+                <span class="loomhaus-ticker__star" aria-hidden="true">✦</span>
+              {%- endfor -%}
+            {%- else -%}
+              <!-- Default Mockup Ticker Items -->
+              <span class="loomhaus-ticker__item">Organic cotton</span>
+              <span class="loomhaus-ticker__star" aria-hidden="true">✦</span>
+              <span class="loomhaus-ticker__item">Made to last</span>
+              <span class="loomhaus-ticker__star" aria-hidden="true">✦</span>
+              <span class="loomhaus-ticker__item">Sizes XS to L</span>
+              <span class="loomhaus-ticker__star" aria-hidden="true">✦</span>
+              <span class="loomhaus-ticker__item">Free returns</span>
+              <span class="loomhaus-ticker__star" aria-hidden="true">✦</span>
+              <span class="loomhaus-ticker__item">Ethically made</span>
+              <span class="loomhaus-ticker__star" aria-hidden="true">✦</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  .loomhaus-hero-wrapper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .loomhaus-hero {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .loomhaus-hero__container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: 60px;
+    position: relative;
+  }
+
+  /* Left Column: Content */
+  .loomhaus-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 2;
+  }
+
+  /* Pill Badge */
+  .loomhaus-hero__badge-wrapper {
+    margin-bottom: 24px;
+  }
+
+  .loomhaus-hero__badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  /* Headline */
+  .loomhaus-hero__heading {
+    font-size: clamp(44px, 5.8vw, 78px);
+    font-weight: 850;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    margin: 0 0 24px 0;
+    max-width: 560px;
+  }
+
+  /* Description */
+  .loomhaus-hero__description {
+    font-size: 16.5px;
+    line-height: 1.6;
+    margin: 0 0 32px 0;
+    max-width: 480px;
+    font-weight: 450;
+  }
+
+  .loomhaus-hero__description p {
+    margin: 0;
+  }
+
+  /* CTA Button */
+  .loomhaus-hero__action {
+    margin-bottom: 52px;
+  }
+
+  .loomhaus-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    border-radius: 9999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  }
+
+  .loomhaus-hero__btn-arrow {
+    display: inline-block;
+    font-size: 16px;
+    line-height: 1;
+    transition: transform 0.22s ease;
+  }
+
+  .loomhaus-hero__btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+  }
+
+  .loomhaus-hero__btn:hover .loomhaus-hero__btn-arrow {
+    transform: translateX(4px);
+  }
+
+  /* Stats Row */
+  .loomhaus-hero__stats {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+    padding-top: 8px;
+  }
+
+  .loomhaus-hero__stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .loomhaus-hero__stat-value {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .loomhaus-hero__stat-label {
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 450;
+  }
+
+  /* Right Column: Visual Arch Composition */
+  .loomhaus-hero__visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+  }
+
+  .loomhaus-hero__arch-composition {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Backdrop Arch (concentric offset) */
+  .loomhaus-hero__arch-backdrop {
+    position: absolute;
+    top: -24px;
+    right: -24px;
+    width: 100%;
+    height: 100%;
+    border-radius: 280px 280px 28px 28px;
+    z-index: 1;
+    opacity: 0.95;
+    transition: transform 0.3s ease;
+  }
+
+  /* Main Arch Frame */
+  .loomhaus-hero__arch-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 0.78 / 1;
+    border-radius: 260px 260px 24px 24px;
+    overflow: hidden;
+    z-index: 2;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
+    background-color: #E7E2D7;
+  }
+
+  .loomhaus-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .loomhaus-hero__arch-frame:hover .loomhaus-hero__image {
+    transform: scale(1.035);
+  }
+
+  /* Floating Product Badge */
+  .loomhaus-product-badge {
+    position: absolute;
+    bottom: 34px;
+    left: -32px;
+    z-index: 3;
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 8px 18px 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #191B18;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.09), 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .loomhaus-product-badge:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .loomhaus-product-badge__thumb {
+    width: 36px;
+    height: 44px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #F4EFEB;
+    flex-shrink: 0;
+  }
+
+  .loomhaus-product-badge__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .loomhaus-product-badge__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .loomhaus-product-badge__title {
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #191B18;
+  }
+
+  .loomhaus-product-badge__subtitle {
+    font-size: 11.5px;
+    color: #74786E;
+    line-height: 1.2;
+    font-weight: 450;
+  }
+
+  /* Bottom Ticker / Marquee */
+  .loomhaus-ticker {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    position: relative;
+    user-select: none;
+  }
+
+  .loomhaus-ticker__track {
+    display: flex;
+    width: max-content;
+    animation: loomhausTickerScroll var(--ticker-duration, 28s) linear infinite;
+  }
+
+  .loomhaus-ticker:hover .loomhaus-ticker__track {
+    animation-play-state: paused;
+  }
+
+  .loomhaus-ticker__content {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding-right: 28px;
+    flex-shrink: 0;
+  }
+
+  .loomhaus-ticker__item,
+  .loomhaus-ticker__link {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .loomhaus-ticker__link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .loomhaus-ticker__star {
+    font-size: 0.9em;
+    user-select: none;
+    opacity: 0.85;
+  }
+
+  @keyframes loomhausTickerScroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Responsive Breakpoints */
+  @media (max-width: 1024px) {
+    .loomhaus-hero__container {
+      gap: 40px;
+      padding: 0 32px;
+    }
+    .loomhaus-hero__stats {
+      gap: 28px;
+    }
+    .loomhaus-product-badge {
+      left: -16px;
+      bottom: 24px;
+    }
+  }
+
+  @media (max-width: 820px) {
+    .loomhaus-hero__container {
+      grid-template-columns: 1fr;
+      gap: 48px;
+      padding: 0 24px;
+    }
+
+    .loomhaus-hero__content {
+      align-items: center;
+      text-align: center;
+    }
+
+    .loomhaus-hero__heading {
+      max-width: 100%;
+    }
+
+    .loomhaus-hero__description {
+      max-width: 100%;
+    }
+
+    .loomhaus-hero__stats {
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .loomhaus-hero__visual {
+      margin-top: 10px;
+    }
+
+    .loomhaus-hero__arch-composition {
+      max-width: 380px;
+    }
+
+    .loomhaus-product-badge {
+      left: 12px;
+      bottom: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .loomhaus-hero__container {
+      padding: 0 18px;
+    }
+
+    .loomhaus-hero__stats {
+      gap: 20px;
+    }
+
+    .loomhaus-hero__stat-value {
+      font-size: 22px;
+    }
+
+    .loomhaus-hero__stat-label {
+      font-size: 11.5px;
+    }
+
+    .loomhaus-hero__arch-composition {
+      max-width: 320px;
+    }
+
+    .loomhaus-hero__arch-backdrop {
+      top: -14px;
+      right: -14px;
+    }
+
+    .loomhaus-product-badge {
+      left: 8px;
+      bottom: 16px;
+      padding: 6px 14px 6px 8px;
+    }
+
+    .loomhaus-product-badge__thumb {
+      width: 30px;
+      height: 38px;
+    }
+
+    .loomhaus-product-badge__title {
+      font-size: 12px;
+    }
+
+    .loomhaus-product-badge__subtitle {
+      font-size: 10.5px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero - The Winter Edit",
+  "class": "loomhaus-hero-section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Pill Badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show category badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "NEW SEASON • AUTUMN / WINTER"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badge background",
+      "default": "#63675F"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Headings & Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Main headline",
+      "default": "The Winter<br>Edit"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Headline color",
+      "default": "#191B18"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description text",
+      "default": "Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season."
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#5A5E55"
+    },
+    {
+      "type": "header",
+      "content": "Call-to-Action Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button text",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button background",
+      "default": "#1D1F1C"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_bg",
+      "label": "Button hover background",
+      "default": "#343831"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_text",
+      "label": "Button hover text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Trust & Feature Stats"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Show stats row",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "stat_value_color",
+      "label": "Stat value number color",
+      "default": "#191B18"
+    },
+    {
+      "type": "color",
+      "id": "stat_label_color",
+      "label": "Stat label color",
+      "default": "#74786E"
+    },
+    {
+      "type": "paragraph",
+      "content": "Default stats if no Stat blocks are added below:"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "Stat 1 Value",
+      "default": "4.8★"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 Label",
+      "default": "2,000+ reviews"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "Stat 2 Value",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 Label",
+      "default": "organic cotton"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "Stat 3 Value",
+      "default": "30 days"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 Label",
+      "default": "free returns"
+    },
+    {
+      "type": "header",
+      "content": "Visual Arched Showcase"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero model image (arch frame)"
+    },
+    {
+      "type": "color",
+      "id": "backdrop_arch_color",
+      "label": "Backdrop arch accent color",
+      "default": "#ECE5DA"
+    },
+    {
+      "type": "header",
+      "content": "Floating Product Badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_badge",
+      "label": "Show floating product badge",
+      "default": true
+    },
+    {
+      "type": "product",
+      "id": "badge_product",
+      "label": "Select Shopify product"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_image",
+      "label": "Custom product thumbnail image"
+    },
+    {
+      "type": "text",
+      "id": "badge_title",
+      "label": "Badge title",
+      "default": "Yellow Wool Jumper"
+    },
+    {
+      "type": "text",
+      "id": "badge_subtitle",
+      "label": "Badge subtitle",
+      "default": "Bestseller this week"
+    },
+    {
+      "type": "url",
+      "id": "badge_link",
+      "label": "Custom badge link (if no product selected)"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Marquee Ticker"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ticker",
+      "label": "Show bottom ticker banner",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "ticker_bg",
+      "label": "Ticker background color",
+      "default": "#636C5F"
+    },
+    {
+      "type": "color",
+      "id": "ticker_text",
+      "label": "Ticker text color",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "color",
+      "id": "ticker_star_color",
+      "label": "Ticker star (✦) color",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "range",
+      "id": "ticker_speed",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "s",
+      "label": "Ticker scroll duration",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "ticker_padding",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Ticker vertical padding",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Section Layout & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background color",
+      "default": "#F6F3EC"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Stat value (e.g. 4.8★)",
+          "default": "4.8★"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Stat label (e.g. 2,000+ reviews)",
+          "default": "2,000+ reviews"
+        }
+      ]
+    },
+    {
+      "type": "ticker_item",
+      "name": "Ticker Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Ticker text",
+          "default": "Organic cotton"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Ticker item link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero - The Winter Edit",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "value": "4.8★",
+            "label": "2,000+ reviews"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "100%",
+            "label": "organic cotton"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "30 days",
+            "label": "free returns"
+          }
+        },
+        {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Organic cotton"
+          }
+        },
+        {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Made to last"
+          }
+        },
+        {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Sizes XS to L"
+          }
+        },
+        {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Free returns"
+          }
+        },
+        {
+          "type": "ticker_item",
+          "settings": {
+            "text": "Ethically made"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

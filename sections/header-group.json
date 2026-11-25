@@ -1,1 +1,56 @@
-{"name":"t:sections.header.name","type":"header","sections":{"announcement-bar":{"type":"announcement-bar","blocks":{"announcement-bar-0":{"type":"announcement","settings":{"text":"Welcome to our store","link":""}}},"block_order":["announcement-bar-0"],"settings":{"auto_rotate":false,"change_slides_speed":5,"color_scheme":"scheme-1","show_line_separator":true,"show_social":false,"enable_country_selector":false,"enable_language_selector":false}},"header":{"type":"header","settings":{"logo_position":"middle-left","mobile_logo_position":"center","menu":"main-menu","menu_type_desktop":"dropdown","sticky_header_type":"on-scroll-up","show_line_separator":true,"color_scheme":"scheme-1","menu_color_scheme":"scheme-1","enable_country_selector":true,"enable_language_selector":true,"margin_bottom":0,"padding_top":20,"padding_bottom":20}}},"order":["announcement-bar","header"]}
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "hellobar": {
+      "type": "custom-hellobar",
+      "settings": {
+        "show_hellobar": true,
+        "layout_type": "centered",
+        "message_1": "Free shipping on orders over ₹999",
+        "show_separator": true,
+        "message_2": "Use code LOOM10 for 10% off your first order",
+        "bg_color": "#242520",
+        "text_color": "#FAF7F2",
+        "star_color": "#FAF7F2",
+        "font_size": 12.5,
+        "padding_vertical": 9,
+        "marquee_speed": 30,
+        "enable_dismiss": false
+      }
+    },
+    "header": {
+      "type": "custom-header",
+      "settings": {
+        "brand_text": "Loomhaus",
+        "logo_font_size": 26,
+        "center_content": "tagline",
+        "tagline": "Clothes made to be worn for years, not seasons.",
+        "tagline_font_size": 13.5,
+        "menu": "main-menu",
+        "show_cta": true,
+        "cta_text": "SHOP THE DROP",
+        "cta_link": "",
+        "cta_bg": "#E8E4DA",
+        "cta_text_color": "#1A1C19",
+        "cta_hover_bg": "#191B18",
+        "cta_hover_text": "#FFFFFF",
+        "show_cart": true,
+        "preview_cart_count": 3,
+        "cart_badge_bg": "#7C8376",
+        "cart_badge_text": "#FFFFFF",
+        "bg_color": "#F6F3EC",
+        "text_color": "#191B18",
+        "tagline_color": "#4A4E46",
+        "padding_top": 24,
+        "padding_bottom": 24,
+        "enable_sticky": true,
+        "show_bottom_border": false
+      }
+    }
+  },
+  "order": [
+    "hellobar",
+    "header"
+  ]
+}

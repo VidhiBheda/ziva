@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loomhaus - The Winter Edit Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #F6F3EC;
+      color: #191B18;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Hello Bar */
+    .loomhaus-hellobar {
+      background-color: #242520;
+      color: #FAF7F2;
+      font-size: 12.5px;
+      padding: 9px 16px;
+      position: relative;
+      width: 100%;
+      letter-spacing: 0.02em;
+      z-index: 40;
+    }
+    .loomhaus-hellobar__container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .loomhaus-hellobar__centered {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px 20px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .loomhaus-hellobar__link {
+      color: #FAF7F2;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .loomhaus-hellobar__link:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .loomhaus-hellobar__star {
+      color: #FAF7F2;
+      font-size: 0.9em;
+      user-select: none;
+      opacity: 0.85;
+    }
+
+    /* Header */
+    .loomhaus-header {
+      background-color: #F6F3EC;
+      color: #191B18;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      width: 100%;
+    }
+    .loomhaus-header__container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .loomhaus-header__brand {
+      flex-shrink: 0;
+    }
+    .loomhaus-header__logo-link {
+      text-decoration: none;
+      color: inherit;
+    }
+    .loomhaus-header__logo-text {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .loomhaus-header__center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+    }
+    .loomhaus-header__tagline {
+      font-size: 13.5px;
+      font-weight: 450;
+      color: #4A4E46;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .loomhaus-header__actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+    .loomhaus-header__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      background-color: #E8E4DA;
+      color: #1A1C19;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: all 0.22s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .loomhaus-header__cta:hover {
+      background-color: #191B18;
+      color: #FFFFFF;
+    }
+    .loomhaus-header__cta-arrow {
+      transition: transform 0.2s ease;
+      font-size: 14px;
+    }
+    .loomhaus-header__cta:hover .loomhaus-header__cta-arrow {
+      transform: translateX(3px);
+    }
+    .loomhaus-header__cart-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: inherit;
+      text-decoration: none;
+      padding: 6px;
+      transition: transform 0.2s ease;
+    }
+    .loomhaus-header__cart-link:hover {
+      transform: scale(1.05);
+    }
+    .loomhaus-bag-icon {
+      width: 24px;
+      height: 24px;
+    }
+    .loomhaus-header__cart-badge {
+      position: absolute;
+      top: 2px;
+      right: 0px;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 9999px;
+      background-color: #7C8376;
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hero */
+    .loomhaus-hero-wrapper {
+      width: 100%;
+      overflow: hidden;
+    }
+    .loomhaus-hero {
+      width: 100%;
+      padding: 70px 0 80px 0;
+      background-color: #F6F3EC;
+    }
+    .loomhaus-hero__container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 60px;
+    }
+    .loomhaus-hero__content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      z-index: 2;
+    }
+    .loomhaus-hero__badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background-color: #63675F;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+    .loomhaus-hero__heading {
+      font-size: clamp(44px, 5.8vw, 78px);
+      font-weight: 850;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      color: #191B18;
+      margin-bottom: 24px;
+      max-width: 560px;
+    }
+    .loomhaus-hero__description {
+      font-size: 16.5px;
+      line-height: 1.6;
+      color: #5A5E55;
+      margin-bottom: 32px;
+      max-width: 480px;
+      font-weight: 450;
+    }
+    .loomhaus-hero__action {
+      margin-bottom: 52px;
+    }
+    .loomhaus-hero__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      border-radius: 9999px;
+      background-color: #1D1F1C;
+      color: #FFFFFF;
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+    .loomhaus-hero__btn:hover {
+      background-color: #343831;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+    }
+    .loomhaus-hero__btn-arrow {
+      font-size: 16px;
+      transition: transform 0.22s ease;
+    }
+    .loomhaus-hero__btn:hover .loomhaus-hero__btn-arrow {
+      transform: translateX(4px);
+    }
+    .loomhaus-hero__stats {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .loomhaus-hero__stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .loomhaus-hero__stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #191B18;
+    }
+    .loomhaus-hero__stat-label {
+      font-size: 13px;
+      color: #74786E;
+      font-weight: 450;
+    }
+
+    /* Visual Arch Showcase */
+    .loomhaus-hero__visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 100%;
+    }
+    .loomhaus-hero__arch-composition {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .loomhaus-hero__arch-backdrop {
+      position: absolute;
+      top: -24px;
+      right: -24px;
+      width: 100%;
+      height: 100%;
+      border-radius: 280px 280px 28px 28px;
+      background-color: #ECE5DA;
+      z-index: 1;
+      opacity: 0.95;
+    }
+    .loomhaus-hero__arch-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 0.78 / 1;
+      border-radius: 260px 260px 24px 24px;
+      overflow: hidden;
+      z-index: 2;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
+      background-color: #E7E2D7;
+    }
+    .loomhaus-hero__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .loomhaus-hero__arch-frame:hover .loomhaus-hero__image {
+      transform: scale(1.035);
+    }
+
+    /* Floating Product Badge */
+    .loomhaus-product-badge {
+      position: absolute;
+      bottom: 34px;
+      left: -32px;
+      z-index: 3;
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 8px 18px 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #191B18;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.09), 0 4px 12px rgba(0, 0, 0, 0.04);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    .loomhaus-product-badge:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.12);
+    }
+    .loomhaus-product-badge__thumb {
+      width: 36px;
+      height: 44px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #F4EFEB;
+      flex-shrink: 0;
+    }
+    .loomhaus-product-badge__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .loomhaus-product-badge__info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .loomhaus-product-badge__title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #191B18;
+    }
+    .loomhaus-product-badge__subtitle {
+      font-size: 11.5px;
+      color: #74786E;
+      font-weight: 450;
+    }
+
+    /* Bottom Ticker */
+    .loomhaus-ticker {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      display: flex;
+      background-color: #636C5F;
+      color: #FAF7F2;
+      padding: 14px 0;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+    .loomhaus-ticker__track {
+      display: flex;
+      width: max-content;
+      animation: loomhausTickerScroll 28s linear infinite;
+    }
+    .loomhaus-ticker:hover .loomhaus-ticker__track {
+      animation-play-state: paused;
+    }
+    .loomhaus-ticker__content {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding-right: 28px;
+      flex-shrink: 0;
+    }
+    .loomhaus-ticker__star {
+      font-size: 0.9em;
+      opacity: 0.85;
+    }
+
+    @keyframes loomhausTickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @media (max-width: 900px) {
+      .loomhaus-header__center { display: none; }
+      .loomhaus-header__container { padding: 0 20px; }
+      .loomhaus-hero__container {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        padding: 0 24px;
+      }
+      .loomhaus-hero__content {
+        align-items: center;
+        text-align: center;
+      }
+      .loomhaus-hero__stats {
+        justify-content: center;
+      }
+      .loomhaus-product-badge {
+        left: 12px;
+        bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hello Bar -->
+  <aside class="loomhaus-hellobar">
+    <div class="loomhaus-hellobar__container">
+      <div class="loomhaus-hellobar__centered">
+        <a href="#" class="loomhaus-hellobar__link">Free shipping on orders over ₹999</a>
+        <span class="loomhaus-hellobar__star">✦</span>
+        <a href="#" class="loomhaus-hellobar__link">Use code LOOM10 for 10% off your first order</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="loomhaus-header">
+    <div class="loomhaus-header__container">
+      <div class="loomhaus-header__brand">
+        <a href="/" class="loomhaus-header__logo-link">
+          <span class="loomhaus-header__logo-text">Loomhaus</span>
+        </a>
+      </div>
+      <div class="loomhaus-header__center">
+        <p class="loomhaus-header__tagline">Clothes made to be worn for years, not seasons.</p>
+      </div>
+      <div class="loomhaus-header__actions">
+        <a href="#" class="loomhaus-header__cta">
+          <span>SHOP THE DROP</span>
+          <span class="loomhaus-header__cta-arrow">&rarr;</span>
+        </a>
+        <a href="#" class="loomhaus-header__cart-link">
+          <svg class="loomhaus-bag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="loomhaus-header__cart-badge">3</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="loomhaus-hero-wrapper">
+    <div class="loomhaus-hero">
+      <div class="loomhaus-hero__container">
+        
+        <!-- Left Content -->
+        <div class="loomhaus-hero__content">
+          <span class="loomhaus-hero__badge">NEW SEASON • AUTUMN / WINTER</span>
+          <h1 class="loomhaus-hero__heading">The Winter<br>Edit</h1>
+          <div class="loomhaus-hero__description">
+            <p>Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.</p>
+          </div>
+          <div class="loomhaus-hero__action">
+            <a href="#" class="loomhaus-hero__btn">
+              <span>SHOP NOW</span>
+              <span class="loomhaus-hero__btn-arrow">&rarr;</span>
+            </a>
+          </div>
+          <div class="loomhaus-hero__stats">
+            <div class="loomhaus-hero__stat-item">
+              <div class="loomhaus-hero__stat-value">4.8★</div>
+              <div class="loomhaus-hero__stat-label">2,000+ reviews</div>
+            </div>
+            <div class="loomhaus-hero__stat-item">
+              <div class="loomhaus-hero__stat-value">100%</div>
+              <div class="loomhaus-hero__stat-label">organic cotton</div>
+            </div>
+            <div class="loomhaus-hero__stat-item">
+              <div class="loomhaus-hero__stat-value">30 days</div>
+              <div class="loomhaus-hero__stat-label">free returns</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Visual Arch Showcase -->
+        <div class="loomhaus-hero__visual">
+          <div class="loomhaus-hero__arch-composition">
+            <div class="loomhaus-hero__arch-backdrop"></div>
+            <div class="loomhaus-hero__arch-frame">
+              <img src="./assets/loomhaus-model.jpg" alt="The Winter Edit Model" class="loomhaus-hero__image">
+            </div>
+            <a href="#" class="loomhaus-product-badge">
+              <div class="loomhaus-product-badge__thumb">
+                <img src="./assets/loomhaus-thumb.jpg" alt="Yellow Wool Jumper">
+              </div>
+              <div class="loomhaus-product-badge__info">
+                <span class="loomhaus-product-badge__title">Yellow Wool Jumper</span>
+                <span class="loomhaus-product-badge__subtitle">Bestseller this week</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Ticker -->
+    <div class="loomhaus-ticker">
+      <div class="loomhaus-ticker__track">
+        <div class="loomhaus-ticker__content">
+          <span>Organic cotton</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Made to last</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Sizes XS to L</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Free returns</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Ethically made</span><span class="loomhaus-ticker__star">✦</span>
+        </div>
+        <div class="loomhaus-ticker__content" aria-hidden="true">
+          <span>Organic cotton</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Made to last</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Sizes XS to L</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Free returns</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Ethically made</span><span class="loomhaus-ticker__star">✦</span>
+        </div>
+        <div class="loomhaus-ticker__content" aria-hidden="true">
+          <span>Organic cotton</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Made to last</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Sizes XS to L</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Free returns</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Ethically made</span><span class="loomhaus-ticker__star">✦</span>
+        </div>
+        <div class="loomhaus-ticker__content" aria-hidden="true">
+          <span>Organic cotton</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Made to last</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Sizes XS to L</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Free returns</span><span class="loomhaus-ticker__star">✦</span>
+          <span>Ethically made</span><span class="loomhaus-ticker__star">✦</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

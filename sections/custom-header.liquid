@@ -1,0 +1,750 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    position: {% if section.settings.enable_sticky %}sticky{% else %}relative{% endif %};
+    top: 0;
+    z-index: 30;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-header {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    {% if section.settings.show_bottom_border %}
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    {% endif %}
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-header__logo-text {
+    color: {{ section.settings.text_color }};
+    font-size: {{ section.settings.logo_font_size }}px;
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-header__tagline {
+    color: {{ section.settings.tagline_color }};
+    font-size: {{ section.settings.tagline_font_size }}px;
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-header__cta {
+    background-color: {{ section.settings.cta_bg }};
+    color: {{ section.settings.cta_text }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-header__cta:hover {
+    background-color: {{ section.settings.cta_hover_bg }};
+    color: {{ section.settings.cta_hover_text }};
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-header__cart-badge {
+    background-color: {{ section.settings.cart_badge_bg }};
+    color: {{ section.settings.cart_badge_text }};
+  }
+{%- endstyle -%}
+
+<header class="loomhaus-header" data-section-id="{{ section.id }}">
+  <div class="loomhaus-header__container">
+    
+    <!-- Mobile Hamburger Toggle -->
+    <button 
+      type="button" 
+      class="loomhaus-header__mobile-toggle" 
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      onclick="toggleLoomhausDrawer(this)"
+    >
+      <svg class="loomhaus-icon loomhaus-icon--hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <svg class="loomhaus-icon loomhaus-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Left: Brand Logo -->
+    <div class="loomhaus-header__brand">
+      <a href="{{ routes.root_url }}" class="loomhaus-header__logo-link">
+        {%- if section.settings.logo != blank -%}
+          <img 
+            src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" 
+            alt="{{ section.settings.logo.alt | default: shop.name }}"
+            width="{{ section.settings.logo_width }}"
+            height="auto"
+            loading="eager"
+            class="loomhaus-header__logo-img"
+          >
+        {%- else -%}
+          <span class="loomhaus-header__logo-text">
+            {{ section.settings.brand_text | default: 'Loomhaus' }}
+          </span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    <!-- Center: Brand Tagline or Navigation -->
+    <div class="loomhaus-header__center">
+      {%- if section.settings.center_content == 'tagline' and section.settings.tagline != blank -%}
+        <p class="loomhaus-header__tagline">{{ section.settings.tagline }}</p>
+      {%- elsif section.settings.center_content == 'menu' and section.settings.menu != blank -%}
+        <nav class="loomhaus-header__nav" aria-label="Main menu">
+          <ul class="loomhaus-header__menu-list">
+            {%- for link in section.settings.menu.links -%}
+              <li class="loomhaus-header__menu-item">
+                <a href="{{ link.url }}" class="loomhaus-header__menu-link {% if link.active %}loomhaus-header__menu-link--active{% endif %}">
+                  {{ link.title }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- else -%}
+        {%- if section.settings.tagline != blank -%}
+          <p class="loomhaus-header__tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    <!-- Right: Actions (CTA Button + Shopping Bag Cart) -->
+    <div class="loomhaus-header__actions">
+      {%- if section.settings.show_cta and section.settings.cta_text != blank -%}
+        <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="loomhaus-header__cta">
+          <span>{{ section.settings.cta_text }}</span>
+          <span class="loomhaus-header__cta-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.show_cart -%}
+        <a 
+          href="{{ routes.cart_url }}" 
+          class="loomhaus-header__cart-link" 
+          id="loomhaus-cart-icon"
+          aria-label="{{ 'templates.cart.cart' | t | default: 'Shopping Cart' }}"
+        >
+          <!-- Elegant Outline Shopping Bag SVG -->
+          <svg class="loomhaus-bag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          
+          <span class="loomhaus-header__cart-badge" aria-hidden="true">
+            {%- if cart.item_count > 0 -%}
+              {{ cart.item_count }}
+            {%- else -%}
+              {{ section.settings.preview_cart_count | default: 3 }}
+            {%- endif -%}
+          </span>
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+
+  <!-- Mobile Slide-out Drawer -->
+  <div class="loomhaus-drawer" id="loomhausMobileDrawer" aria-hidden="true">
+    <div class="loomhaus-drawer__overlay" onclick="toggleLoomhausDrawer(document.querySelector('.loomhaus-header__mobile-toggle'))"></div>
+    <div class="loomhaus-drawer__panel">
+      <div class="loomhaus-drawer__header">
+        <span class="loomhaus-header__logo-text">{{ section.settings.brand_text | default: 'Loomhaus' }}</span>
+        <button 
+          type="button" 
+          class="loomhaus-drawer__close" 
+          aria-label="Close menu"
+          onclick="toggleLoomhausDrawer(document.querySelector('.loomhaus-header__mobile-toggle'))"
+        >
+          &times;
+        </button>
+      </div>
+      
+      {%- if section.settings.tagline != blank -%}
+        <p class="loomhaus-drawer__tagline">{{ section.settings.tagline }}</p>
+      {%- endif -%}
+
+      <nav class="loomhaus-drawer__nav">
+        <ul class="loomhaus-drawer__menu-list">
+          {%- if section.settings.menu != blank -%}
+            {%- for link in section.settings.menu.links -%}
+              <li class="loomhaus-drawer__menu-item">
+                <a href="{{ link.url }}" class="loomhaus-drawer__menu-link">{{ link.title }}</a>
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            <li class="loomhaus-drawer__menu-item"><a href="{{ routes.root_url }}" class="loomhaus-drawer__menu-link">Home</a></li>
+            <li class="loomhaus-drawer__menu-item"><a href="{{ routes.all_products_collection_url }}" class="loomhaus-drawer__menu-link">Shop</a></li>
+            <li class="loomhaus-drawer__menu-item"><a href="{{ routes.all_products_collection_url }}" class="loomhaus-drawer__menu-link">Winter Edit</a></li>
+            <li class="loomhaus-drawer__menu-item"><a href="/pages/about" class="loomhaus-drawer__menu-link">About</a></li>
+          {%- endif -%}
+        </ul>
+      </nav>
+
+      {%- if section.settings.show_cta and section.settings.cta_text != blank -%}
+        <div class="loomhaus-drawer__footer">
+          <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="loomhaus-header__cta loomhaus-header__cta--drawer">
+            <span>{{ section.settings.cta_text }}</span>
+            <span class="loomhaus-header__cta-arrow">&rarr;</span>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</header>
+
+<script>
+  function toggleLoomhausDrawer(btn) {
+    const drawer = document.getElementById('loomhausMobileDrawer');
+    if (!drawer) return;
+    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !isExpanded);
+    drawer.setAttribute('aria-hidden', isExpanded);
+    drawer.classList.toggle('loomhaus-drawer--open', !isExpanded);
+    
+    const burgerIcon = btn.querySelector('.loomhaus-icon--hamburger');
+    const closeIcon = btn.querySelector('.loomhaus-icon--close');
+    if (burgerIcon && closeIcon) {
+      burgerIcon.style.display = isExpanded ? 'block' : 'none';
+      closeIcon.style.display = isExpanded ? 'none' : 'block';
+    }
+    document.body.style.overflow = !isExpanded ? 'hidden' : '';
+  }
+</script>
+
+<style>
+  .loomhaus-header {
+    width: 100%;
+    transition: background-color 0.25s ease;
+    font-family: inherit;
+  }
+
+  .loomhaus-header__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+  }
+
+  /* Left: Brand */
+  .loomhaus-header__brand {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .loomhaus-header__logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .loomhaus-header__logo-text {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    font-family: inherit;
+  }
+
+  .loomhaus-header__logo-img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Center: Tagline or Menu */
+  .loomhaus-header__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-grow: 1;
+    padding: 0 16px;
+  }
+
+  .loomhaus-header__tagline {
+    margin: 0;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .loomhaus-header__menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .loomhaus-header__menu-link {
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .loomhaus-header__menu-link:hover,
+  .loomhaus-header__menu-link--active {
+    opacity: 0.65;
+  }
+
+  /* Right: Actions */
+  .loomhaus-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+
+  .loomhaus-header__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 9999px;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: all 0.22s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .loomhaus-header__cta-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .loomhaus-header__cta:hover .loomhaus-header__cta-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Cart Icon & Badge */
+  .loomhaus-header__cart-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    text-decoration: none;
+    padding: 6px;
+    transition: transform 0.2s ease;
+  }
+
+  .loomhaus-header__cart-link:hover {
+    transform: scale(1.05);
+  }
+
+  .loomhaus-bag-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  .loomhaus-header__cart-badge {
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 9999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile Toggle */
+  .loomhaus-header__mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 6px;
+    cursor: pointer;
+  }
+
+  .loomhaus-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  /* Mobile Drawer */
+  .loomhaus-drawer {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .loomhaus-header__container {
+      padding: 0 20px;
+      gap: 16px;
+    }
+
+    .loomhaus-header__center {
+      display: none;
+    }
+
+    .loomhaus-header__mobile-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Mobile Drawer */
+    .loomhaus-drawer {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      pointer-events: none;
+      visibility: hidden;
+      transition: visibility 0.3s ease;
+    }
+
+    .loomhaus-drawer--open {
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .loomhaus-drawer__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .loomhaus-drawer--open .loomhaus-drawer__overlay {
+      opacity: 1;
+    }
+
+    .loomhaus-drawer__panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 310px;
+      max-width: 85%;
+      height: 100%;
+      background: #F6F3EC;
+      color: #191B18;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 24px;
+      overflow-y: auto;
+    }
+
+    .loomhaus-drawer--open .loomhaus-drawer__panel {
+      transform: translateX(0);
+    }
+
+    .loomhaus-drawer__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .loomhaus-drawer__close {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: inherit;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .loomhaus-drawer__tagline {
+      font-size: 13px;
+      color: #555850;
+      line-height: 1.4;
+      margin: 0 0 24px 0;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .loomhaus-drawer__menu-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .loomhaus-drawer__menu-link {
+      font-size: 17px;
+      font-weight: 600;
+      color: #191B18;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .loomhaus-drawer__footer {
+      margin-top: auto;
+      padding-top: 24px;
+    }
+
+    .loomhaus-header__cta--drawer {
+      width: 100%;
+      justify-content: center;
+      padding: 13px 24px;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .loomhaus-header__cta {
+      display: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Header (Loomhaus)",
+  "class": "loomhaus-header-section",
+  "enabled_on": {
+    "groups": ["header"],
+    "templates": ["*"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand Logo"
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Logo text",
+      "default": "Loomhaus"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 130,
+      "unit": "px",
+      "label": "Logo image width"
+    },
+    {
+      "type": "range",
+      "id": "logo_font_size",
+      "min": 18,
+      "max": 38,
+      "step": 1,
+      "default": 26,
+      "unit": "px",
+      "label": "Logo text font size"
+    },
+    {
+      "type": "header",
+      "content": "Center Content"
+    },
+    {
+      "type": "select",
+      "id": "center_content",
+      "label": "Center display type",
+      "options": [
+        {
+          "value": "tagline",
+          "label": "Tagline (as shown in image)"
+        },
+        {
+          "value": "menu",
+          "label": "Navigation Menu"
+        }
+      ],
+      "default": "tagline"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline text",
+      "default": "Clothes made to be worn for years, not seasons."
+    },
+    {
+      "type": "range",
+      "id": "tagline_font_size",
+      "min": 11,
+      "max": 18,
+      "step": 0.5,
+      "default": 13.5,
+      "unit": "px",
+      "label": "Tagline font size"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Call-to-Action Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show CTA button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "SHOP THE DROP"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg",
+      "label": "Button background",
+      "default": "#E8E4DA"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "Button text color",
+      "default": "#1A1C19"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_bg",
+      "label": "Button hover background",
+      "default": "#191B18"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_text",
+      "label": "Button hover text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Shopping Cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Show cart icon",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "preview_cart_count",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "label": "Preview cart count (when cart is empty)"
+    },
+    {
+      "type": "color",
+      "id": "cart_badge_bg",
+      "label": "Cart badge background",
+      "default": "#7C8376"
+    },
+    {
+      "type": "color",
+      "id": "cart_badge_text",
+      "label": "Cart badge text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Header background",
+      "default": "#F6F3EC"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Header text color",
+      "default": "#191B18"
+    },
+    {
+      "type": "color",
+      "id": "tagline_color",
+      "label": "Tagline color",
+      "default": "#4A4E46"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "default": 24,
+      "unit": "px",
+      "label": "Top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "default": 24,
+      "unit": "px",
+      "label": "Bottom padding"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "Enable sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_border",
+      "label": "Show subtle bottom divider",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header (Loomhaus)"
+    }
+  ]
+}
+{% endschema %}
