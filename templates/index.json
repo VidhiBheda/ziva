@@ -131,10 +131,108 @@
         "padding_top": 44,
         "padding_bottom": 36
       }
+    },
+    "custom_shop_the_look": {
+      "type": "custom-shop-the-look",
+      "blocks": {
+        "look_1": {
+          "type": "look",
+          "settings": {
+            "title": "Ocean Blue Shirt",
+            "price": "₹331.07",
+            "description": "Crisp ocean blue button-down shirt in premium organic cotton. Lightweight and tailored for everyday wear.",
+            "hotspot_top": 28,
+            "hotspot_left": 50,
+            "color_options": "Black, White",
+            "size_options": "Choose your size, S, M, L, XL"
+          }
+        },
+        "look_2": {
+          "type": "look",
+          "settings": {
+            "title": "Olive Green Jacket",
+            "price": "₹346.06",
+            "description": "Utilitarian olive green overshirt with roomy pockets and reinforced stitching. An essential layering piece.",
+            "hotspot_top": 35,
+            "hotspot_left": 54,
+            "color_options": "Olive, Khaki",
+            "size_options": "Choose your size, S, M, L, XL"
+          }
+        },
+        "look_3": {
+          "type": "look",
+          "settings": {
+            "title": "Navy Sports Jacket",
+            "price": "₹389.55",
+            "description": "Long-sleeved navy waterproof jacket in thin polyester with a soft mesh inside. Keeps you dry in all weather.",
+            "hotspot_top": 29,
+            "hotspot_left": 57,
+            "color_options": "Black, White",
+            "size_options": "Choose your size, S, M, L, XL"
+          }
+        },
+        "look_4": {
+          "type": "look",
+          "settings": {
+            "title": "Striped Silk Blouse",
+            "price": "₹273.61",
+            "description": "Elegant silk blouse with rich vertical stripes. Fluid drape and comfortable breathable feel.",
+            "hotspot_top": 34,
+            "hotspot_left": 53,
+            "color_options": "Burgundy, Black",
+            "size_options": "Choose your size, XS, S, M, L"
+          }
+        },
+        "look_5": {
+          "type": "look",
+          "settings": {
+            "title": "LED High Tops",
+            "price": "₹585.43",
+            "description": "Statement high-top sneakers with illuminated neon green sole and cushioned ankle support.",
+            "hotspot_top": 70,
+            "hotspot_left": 50,
+            "color_options": "Green Neon, Black",
+            "size_options": "Choose your size, 7, 8, 9, 10, 11"
+          }
+        },
+        "look_6": {
+          "type": "look",
+          "settings": {
+            "title": "Striped Skirt and Top",
+            "price": "₹272.27",
+            "description": "Pleated midi skirt paired with tailored classic top. Sophisticated movement and all-day comfort.",
+            "hotspot_top": 60,
+            "hotspot_left": 55,
+            "color_options": "Monochrome, Navy",
+            "size_options": "Choose your size, XS, S, M, L"
+          }
+        }
+      },
+      "block_order": [
+        "look_1",
+        "look_2",
+        "look_3",
+        "look_4",
+        "look_5",
+        "look_6"
+      ],
+      "settings": {
+        "kicker": "SHOP THE LOOK",
+        "heading": "Loomhaus in the wild",
+        "subtext": "Tap the + on any look to shop it.",
+        "columns_desktop": 3,
+        "card_radius": 20,
+        "bg_color": "#F6F3EC",
+        "text_color": "#191B18",
+        "kicker_color": "#74786E",
+        "padding_top": 60,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
     "custom_hero",
+    "custom_shop_the_look",
     "featured_collection"
   ]
 }
