@@ -56,11 +56,35 @@
               assign prod = all_store_products[forloop.index0]
             endif
 
-            # Resolve Product Title
+            # Resolve Product Title: dynamically sync color name if active variant or card is Black vs White
             if prod != blank
               assign look_title = prod.title
+
+              # Color-sync Title: if the product title contains 'White' but the active/featured variant or card image is 'Black' (or vice versa), reflect the correct color
+              assign is_black_first = false
+              for opt in prod.options_with_values
+                assign opt_name_lower = opt.name | downcase
+                if opt_name_lower contains 'color' or opt_name_lower contains 'colour'
+                  assign first_val_lower = opt.values.first | downcase
+                  if first_val_lower contains 'black'
+                    assign is_black_first = true
+                  endif
+                  break
+                endif
+              endfor
+
+              if is_black_first or look_title contains 'Floral White Top'
+                if look_title contains 'White'
+                  assign look_title = look_title | replace: 'White', 'Black'
+                elsif look_title contains 'white'
+                  assign look_title = look_title | replace: 'white', 'black'
+                endif
+              endif
             else
               assign look_title = block.settings.title | default: 'Product Title'
+              if look_title contains 'Floral White Top'
+                assign look_title = look_title | replace: 'Floral White Top', 'Floral Black Top'
+              endif
             endif
 
             # Resolve Product Price
@@ -169,7 +193,8 @@
               <script type="application/json" class="loomhaus-product-json">
                 {
                   "id": {{ prod.id | json }},
-                  "title": {{ prod.title | json }},
+                  "title": {{ look_title | json }},
+                  "base_title": {{ prod.title | json }},
                   "type": {{ prod.type | default: '' | json }},
                   "price": {{ prod.price | money | json }},
                   "description": {{ look_desc | json }},
@@ -551,6 +576,18 @@
           modalImg.src = "{{ 'black-bag-card.jpg' | asset_url }}";
         }
       }
+
+      const titleElem = document.getElementById('loomhausModalTitle');
+      if (titleElem && val) {
+        let currentTitle = titleElem.textContent;
+        const valLower = val.toLowerCase();
+        if (valLower.includes('white')) {
+          currentTitle = currentTitle.replace(/\bBlack\b/gi, 'White').replace(/\bblack\b/g, 'white');
+        } else if (valLower.includes('black')) {
+          currentTitle = currentTitle.replace(/\bWhite\b/gi, 'Black').replace(/\bwhite\b/g, 'black');
+        }
+        titleElem.textContent = currentTitle;
+      }
     }
 
     onModalOptionChange();
@@ -630,6 +667,21 @@
       if (targetImg) {
         modalImg.src = targetImg;
       }
+    }
+
+    // UPDATE TITLE TO MATCH SELECTED COLOR (e.g. Floral Black Top vs Floral White Top)
+    const titleElem = document.getElementById('loomhausModalTitle');
+    if (titleElem && activeProductData) {
+      let currentTitle = activeProductData.title || activeProductData.base_title || '';
+      if (selectedColor && currentTitle) {
+        const colorLower = selectedColor.toLowerCase();
+        if (colorLower.includes('white')) {
+          currentTitle = currentTitle.replace(/\bBlack\b/gi, 'White').replace(/\bblack\b/g, 'white');
+        } else if (colorLower.includes('black')) {
+          currentTitle = currentTitle.replace(/\bWhite\b/gi, 'Black').replace(/\bwhite\b/g, 'black');
+        }
+      }
+      titleElem.textContent = currentTitle;
     }
 
     if (matched) {

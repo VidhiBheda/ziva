@@ -1201,6 +1201,17 @@
         modalImg.src = './assets/black-bag-card.jpg';
       }
     }
+
+    const titleElem = document.getElementById('loomhausModalTitle');
+    if (titleElem) {
+      let currentTitle = titleElem.textContent;
+      if (text.includes('white')) {
+        currentTitle = currentTitle.replace(/\bBlack\b/gi, 'White').replace(/\bblack\b/g, 'white');
+      } else if (text.includes('black')) {
+        currentTitle = currentTitle.replace(/\bWhite\b/gi, 'Black').replace(/\bwhite\b/g, 'black');
+      }
+      titleElem.textContent = currentTitle;
+    }
   }
 
   // When checkout / add to cart is selected in Image 2 -> open Image 3 (Cart Drawer)
