@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Black Leather Bag — Loomhaus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #F6F3EC;
+      color: #191B18;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    /* Hello Bar */
+    .loomhaus-hellobar {
+      background-color: #242520;
+      color: #FAF7F2;
+      font-size: 12.5px;
+      padding: 9px 16px;
+      position: relative;
+      width: 100%;
+      letter-spacing: 0.02em;
+      z-index: 40;
+    }
+    .loomhaus-hellobar__container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .loomhaus-hellobar__centered {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px 20px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .loomhaus-hellobar__star {
+      color: #FAF7F2;
+      font-size: 0.9em;
+      opacity: 0.85;
+    }
+
+    /* Header */
+    .loomhaus-header {
+      background-color: #F6F3EC;
+      color: #191B18;
+      padding: 22px 0;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .loomhaus-header__container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .loomhaus-header__logo-link {
+      text-decoration: none;
+      color: inherit;
+    }
+    .loomhaus-header__logo-text {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .loomhaus-header__tagline {
+      font-size: 13.5px;
+      font-weight: 450;
+      color: #4A4E46;
+    }
+    .loomhaus-header__actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .loomhaus-header__back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      background: #E8E4DA;
+      color: #191B18;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .loomhaus-header__back-btn:hover {
+      background: #191B18;
+      color: #FFFFFF;
+    }
+
+    /* Product Page Container */
+    .loomhaus-product-page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+
+    /* Breadcrumbs */
+    .loomhaus-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #74786E;
+      margin-bottom: 32px;
+    }
+    .loomhaus-breadcrumbs a {
+      color: #74786E;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .loomhaus-breadcrumbs a:hover {
+      color: #191B18;
+      text-decoration: underline;
+    }
+    .loomhaus-breadcrumbs span.current {
+      color: #191B18;
+      font-weight: 600;
+    }
+
+    /* Grid Layout */
+    .loomhaus-product-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    /* Gallery */
+    .loomhaus-product-gallery {
+      position: sticky;
+      top: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .loomhaus-gallery-main {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #EAE6DF;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+    }
+    .loomhaus-gallery-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .loomhaus-gallery-main:hover img {
+      transform: scale(1.03);
+    }
+    .loomhaus-gallery-thumbs {
+      display: flex;
+      gap: 12px;
+    }
+    .loomhaus-gallery-thumb {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #EAE6DF;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .loomhaus-gallery-thumb.active,
+    .loomhaus-gallery-thumb:hover {
+      border-color: #191B18;
+    }
+    .loomhaus-gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Details */
+    .loomhaus-product-details {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .loomhaus-meta-badges {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .loomhaus-pill-tag {
+      display: inline-block;
+      background: #636C5F;
+      color: #FAF7F2;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .loomhaus-rating {
+      font-size: 13px;
+      font-weight: 600;
+      color: #191B18;
+    }
+    .loomhaus-rating span {
+      color: #74786E;
+      font-weight: 400;
+    }
+
+    .loomhaus-title {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: #191B18;
+    }
+
+    .loomhaus-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .loomhaus-price {
+      font-size: 26px;
+      font-weight: 800;
+      color: #191B18;
+    }
+    .loomhaus-compare-price {
+      font-size: 18px;
+      color: #8C8F85;
+      text-decoration: line-through;
+    }
+    .loomhaus-discount-badge {
+      background: #8B4513;
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+    .loomhaus-tax-note {
+      font-size: 12px;
+      color: #74786E;
+      margin-top: -12px;
+    }
+
+    .loomhaus-feature-box {
+      background: #EAE5DC;
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: #2D302A;
+      font-weight: 500;
+    }
+    .loomhaus-feature-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #636C5F;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    /* Option Pickers */
+    .loomhaus-option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .loomhaus-option-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #191B18;
+    }
+    .loomhaus-swatches {
+      display: flex;
+      gap: 10px;
+    }
+    .loomhaus-swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #FFF;
+      outline: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .loomhaus-swatch.active {
+      outline-color: #191B18;
+    }
+
+    /* Actions */
+    .loomhaus-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .loomhaus-qty {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid #D5CEBF;
+      border-radius: 12px;
+      padding: 0 8px;
+      background: #FAF7F2;
+      font-weight: 700;
+      font-size: 14px;
+      height: 52px;
+      min-width: 100px;
+      justify-content: space-between;
+    }
+    .loomhaus-qty button {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #4A4E46;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .loomhaus-btn-add {
+      flex: 1;
+      height: 52px;
+      background: #252822;
+      color: #FAF7F2;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .loomhaus-btn-add:hover {
+      background: #141613;
+      transform: translateY(-2px);
+    }
+    .loomhaus-btn-buy {
+      width: 100%;
+      height: 52px;
+      background: #E8E3D8;
+      color: #191B18;
+      border: 1.5px solid #D5CEBF;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .loomhaus-btn-buy:hover {
+      background: #D8D2C4;
+    }
+
+    /* Promo Banners */
+    .loomhaus-coupons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .loomhaus-coupon {
+      border: 1.5px dashed #C5BEAD;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #2D302A;
+    }
+    .loomhaus-coupon strong {
+      color: #191B18;
+      display: block;
+      font-size: 13px;
+    }
+
+    /* Accordion */
+    .loomhaus-accordions {
+      margin-top: 20px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .loomhaus-accordion-item {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 18px 0;
+    }
+    .loomhaus-accordion-header {
+      font-size: 14px;
+      font-weight: 700;
+      color: #191B18;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .loomhaus-accordion-body {
+      font-size: 13.5px;
+      color: #555A50;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    /* Footer */
+    .loomhaus-footer {
+      width: 100%;
+      background-color: #292A26;
+      color: #C7C3B9;
+      padding: 70px 0 60px;
+      margin-top: 60px;
+    }
+    .loomhaus-footer__container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(24px, 7.13%, 90px);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+    }
+    .loomhaus-footer__brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .loomhaus-footer__brand-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: #FAF7F2;
+      text-decoration: none;
+    }
+    .loomhaus-footer__tagline {
+      font-size: 13px;
+      color: #C7C3B9;
+      margin-top: 14px;
+    }
+    .loomhaus-footer__col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .loomhaus-footer__col-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #FAF7F2;
+      margin-bottom: 16px;
+    }
+    .loomhaus-footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .loomhaus-footer__link {
+      font-size: 13px;
+      color: #C7C3B9;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .loomhaus-footer__link:hover {
+      color: #FFFFFF;
+    }
+
+    @media (max-width: 900px) {
+      .loomhaus-product-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .loomhaus-gallery-main {
+        aspect-ratio: 1 / 1;
+      }
+      .loomhaus-product-gallery {
+        position: static;
+      }
+      .loomhaus-footer__container {
+        flex-direction: column;
+        gap: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hello Bar -->
+  <div class="loomhaus-hellobar">
+    <div class="loomhaus-hellobar__container">
+      <div class="loomhaus-hellobar__centered">
+        <span>✦ Free worldwide shipping on orders over ₹999</span>
+        <span class="loomhaus-hellobar__star">✦</span>
+        <span>Ethically made from full-grain materials</span>
+        <span class="loomhaus-hellobar__star">✦</span>
+        <span>30 days free returns</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="loomhaus-header">
+    <div class="loomhaus-header__container">
+      <div class="loomhaus-header__brand">
+        <a href="./preview-loomhaus.html" class="loomhaus-header__logo-link">
+          <span class="loomhaus-header__logo-text">Loomhaus</span>
+        </a>
+      </div>
+      <div class="loomhaus-header__center">
+        <span class="loomhaus-header__tagline">Clothes and accessories made to be worn for years, not seasons.</span>
+      </div>
+      <div class="loomhaus-header__actions">
+        <a href="./preview-loomhaus.html" class="loomhaus-header__back-btn">
+          ← Back to Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Product Page Section -->
+  <main class="loomhaus-product-page">
+    <!-- Breadcrumbs -->
+    <nav class="loomhaus-breadcrumbs" aria-label="Breadcrumb">
+      <a href="./preview-loomhaus.html">Home</a>
+      <span>/</span>
+      <a href="./preview-loomhaus.html#shop">Accessories</a>
+      <span>/</span>
+      <span class="current">Black Leather Bag</span>
+    </nav>
+
+    <!-- Product Grid -->
+    <div class="loomhaus-product-grid">
+      <!-- Gallery Column -->
+      <div class="loomhaus-product-gallery">
+        <div class="loomhaus-gallery-main">
+          <img id="mainProductImg" src="./assets/black-bag-thumb.jpg" alt="Black Leather Bag">
+        </div>
+        <div class="loomhaus-gallery-thumbs">
+          <div class="loomhaus-gallery-thumb active" onclick="setMainImage('./assets/black-bag-thumb.jpg', this)">
+            <img src="./assets/black-bag-thumb.jpg" alt="Black Leather Bag front view">
+          </div>
+          <div class="loomhaus-gallery-thumb" onclick="setMainImage('./assets/black-leather-bag-main.jpg', this)">
+            <img src="./assets/black-leather-bag-main.jpg" alt="Black Leather Bag angle view">
+          </div>
+        </div>
+      </div>
+
+      <!-- Details Column -->
+      <div class="loomhaus-product-details">
+        <div class="loomhaus-meta-badges">
+          <span class="loomhaus-pill-tag">Loomhaus #1 Everyday Bag</span>
+          <div class="loomhaus-rating">★ 4.9 <span>(840+ Reviews)</span></div>
+        </div>
+
+        <h1 class="loomhaus-title">Black Leather Bag</h1>
+
+        <div class="loomhaus-price-row">
+          <span class="loomhaus-price">₹3,499.00</span>
+          <span class="loomhaus-compare-price">₹4,499.00</span>
+          <span class="loomhaus-discount-badge">SAVE 22%</span>
+        </div>
+        <p class="loomhaus-tax-note">MRP inclusive of all taxes</p>
+
+        <div class="loomhaus-feature-box">
+          <div class="loomhaus-feature-icon">✓</div>
+          <div>
+            <strong>100% Full-Grain Leather</strong> — Hand-stitched with brass hardware, engineered to last for years.
+          </div>
+        </div>
+
+        <!-- Color Swatch -->
+        <div class="loomhaus-option-group">
+          <span class="loomhaus-option-label">Color: Black</span>
+          <div class="loomhaus-swatches">
+            <div class="loomhaus-swatch active" style="background: #191B18;" title="Black"></div>
+            <div class="loomhaus-swatch" style="background: #8B5A2B;" title="Tan Brown"></div>
+          </div>
+        </div>
+
+        <!-- Quantity & Add to Cart -->
+        <div class="loomhaus-actions">
+          <div class="loomhaus-qty">
+            <button type="button" onclick="changeQty(-1)">-</button>
+            <span id="qtyVal">01</span>
+            <button type="button" onclick="changeQty(1)">+</button>
+          </div>
+          <button type="button" class="loomhaus-btn-add" onclick="handleAddToCart()">
+            ADD TO CART →
+          </button>
+        </div>
+
+        <button type="button" class="loomhaus-btn-buy" onclick="handleBuyNow()">
+          BUY IT NOW
+        </button>
+
+        <!-- Promo Coupons -->
+        <div class="loomhaus-coupons">
+          <div class="loomhaus-coupon">
+            <div>
+              <strong>Get it for ₹3,149.10</strong>
+              <span>Use code LOOM10 for 10% off</span>
+            </div>
+          </div>
+          <div class="loomhaus-coupon">
+            <div>
+              <strong>Get it for ₹2,974.15</strong>
+              <span>Buy 2, code LOOM15 for 15% off</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordions -->
+        <div class="loomhaus-accordions">
+          <div class="loomhaus-accordion-item">
+            <div class="loomhaus-accordion-header">
+              <span>Product Details & Dimensions</span>
+              <span>+</span>
+            </div>
+            <div class="loomhaus-accordion-body">
+              Dimensions: 28cm (H) x 32cm (W) x 12cm (D). Features a padded internal laptop sleeve (up to 13-inch), dedicated zip pockets, and an adjustable full-grain leather shoulder strap with antique brass buckles.
+            </div>
+          </div>
+
+          <div class="loomhaus-accordion-item">
+            <div class="loomhaus-accordion-header">
+              <span>Materials & Ethical Craft</span>
+              <span>+</span>
+            </div>
+            <div class="loomhaus-accordion-body">
+              Ethically sourced, vegetable-tanned leather lined with 100% organic cotton canvas. Finished with natural plant-based waxes that develop a rich, personal patina over time.
+            </div>
+          </div>
+
+          <div class="loomhaus-accordion-item">
+            <div class="loomhaus-accordion-header">
+              <span>Shipping & Hassle-Free Returns</span>
+              <span>+</span>
+            </div>
+            <div class="loomhaus-accordion-body">
+              Orders ship within 24 hours. Enjoy doorstep delivery with live tracking and an unconditional 30-day return policy.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="loomhaus-footer" id="loomhausFooter">
+    <div class="loomhaus-footer__container">
+      <div class="loomhaus-footer__brand">
+        <a href="./preview-loomhaus.html" class="loomhaus-footer__brand-title">Loomhaus</a>
+        <p class="loomhaus-footer__tagline">
+          Clothes and accessories made to be worn for years, not seasons.
+        </p>
+      </div>
+
+      <div class="loomhaus-footer__col">
+        <h3 class="loomhaus-footer__col-title">SHOP</h3>
+        <ul class="loomhaus-footer__links">
+          <li><a href="./preview-loomhaus.html#women" class="loomhaus-footer__link">Women</a></li>
+          <li><a href="./preview-loomhaus.html#men" class="loomhaus-footer__link">Men</a></li>
+          <li><a href="./preview-loomhaus.html#new-arrivals" class="loomhaus-footer__link">New arrivals</a></li>
+          <li><a href="./preview-loomhaus.html#bestsellers" class="loomhaus-footer__link">Bestsellers</a></li>
+        </ul>
+      </div>
+
+      <div class="loomhaus-footer__col">
+        <h3 class="loomhaus-footer__col-title">HELP</h3>
+        <ul class="loomhaus-footer__links">
+          <li><a href="./preview-loomhaus.html#shipping" class="loomhaus-footer__link">Shipping</a></li>
+          <li><a href="./preview-loomhaus.html#returns" class="loomhaus-footer__link">Returns</a></li>
+          <li><a href="./preview-loomhaus.html#size-guide" class="loomhaus-footer__link">Size guide</a></li>
+          <li><a href="./preview-loomhaus.html#contact" class="loomhaus-footer__link">Contact us</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function setMainImage(src, el) {
+      document.getElementById('mainProductImg').src = src;
+      document.querySelectorAll('.loomhaus-gallery-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    let qty = 1;
+    function changeQty(delta) {
+      qty = Math.max(1, qty + delta);
+      document.getElementById('qtyVal').textContent = qty < 10 ? '0' + qty : qty;
+    }
+
+    function handleAddToCart() {
+      alert('Black Leather Bag (' + qty + ') added to your cart!');
+    }
+
+    function handleBuyNow() {
+      alert('Proceeding to checkout for Black Leather Bag...');
+    }
+  </script>
+
+</body>
+</html>
