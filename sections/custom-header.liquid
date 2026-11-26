@@ -12,7 +12,7 @@
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
     {% if section.settings.show_bottom_border %}
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      border-bottom: 1px solid #DDD8CE;
     {% endif %}
   }
 
@@ -738,7 +738,7 @@
       "type": "checkbox",
       "id": "show_bottom_border",
       "label": "Show subtle bottom divider",
-      "default": false
+      "default": true
     }
   ],
   "presets": [
