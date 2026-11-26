@@ -162,10 +162,11 @@
               assign badge_product = section.settings.badge_product
 
               # Auto-resolve real product from store if not manually selected
+              # Looks for the Classic Varsity Top matching Image 2
               if badge_product == blank and all_store_prods.size > 0
                 for p in all_store_prods
                   assign p_name = p.title | downcase
-                  if p_name contains 'bag'
+                  if p_name contains 'varsity'
                     assign badge_product = p
                     break
                   endif
@@ -173,30 +174,24 @@
                 if badge_product == blank
                   for p in all_store_prods
                     assign p_name = p.title | downcase
-                    if p_name contains 'black'
+                    if p_name contains 'classic' or p_name contains 'top' or p_name contains 'jumper'
                       assign badge_product = p
                       break
                     endif
                   endfor
                 endif
-                if badge_product == blank
-                  assign badge_product = all_store_prods.first
-                endif
               endif
 
               # Resolve Title, URL, and Thumbnail
-              # Default values strictly match Image 1 (Yellow Wool Jumper with the model photo)
+              # Default thumbnail strictly uses the lady in the black top (Image 1)
               # Destination URL matches Image 2 (Classic Varsity Top showcase or product)
               if badge_product != blank
                 assign badge_url = badge_product.url
                 assign badge_title = section.settings.badge_title | default: badge_product.title
-                assign prod_img = badge_product.featured_image | default: badge_product.featured_media.preview_image | default: badge_product.images.first
                 if section.settings.badge_image != blank
                   assign badge_thumb_src = section.settings.badge_image | image_url: width: 120
-                elsif prod_img != blank
-                  assign badge_thumb_src = prod_img | image_url: width: 120
                 else
-                  assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
+                  assign badge_thumb_src = 'badge-lady-top.jpg' | asset_url
                 endif
               else
                 assign badge_url = section.settings.badge_link | default: '#featured-product-showcase'
@@ -204,7 +199,7 @@
                 if section.settings.badge_image != blank
                   assign badge_thumb_src = section.settings.badge_image | image_url: width: 120
                 else
-                  assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
+                  assign badge_thumb_src = 'badge-lady-top.jpg' | asset_url
                 endif
               endif
 
@@ -235,7 +230,6 @@
                   {{ badge_sub }}
                 </span>
               </div>
-              <span class="loomhaus-product-badge__arrow" aria-hidden="true">&rarr;</span>
             </a>
           {%- endif -%}
 
@@ -288,16 +282,13 @@
     badges.forEach(badge => {
       badge.addEventListener('click', function(e) {
         const showcase = document.getElementById('featured-product-showcase');
-        const url = this.getAttribute('data-product-url') || this.getAttribute('href');
-        
-        if (url === '#featured-product-showcase' || (showcase && (!url || url === '#' || url === ''))) {
+        if (showcase) {
           e.preventDefault();
-          if (showcase) {
-            showcase.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            return;
-          }
+          showcase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
         }
 
+        const url = this.getAttribute('data-product-url') || this.getAttribute('href');
         if (url && url !== '#' && url !== '#featured-product-showcase') {
           if (window.Shopify && window.Shopify.designMode) {
             e.preventDefault();
