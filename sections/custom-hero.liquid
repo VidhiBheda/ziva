@@ -185,33 +185,26 @@
               endif
 
               # Resolve Title, URL, and Thumbnail
+              # Default values strictly match Image 1 (Yellow Wool Jumper with the model photo)
+              # Destination URL matches Image 2 (Classic Varsity Top showcase or product)
               if badge_product != blank
                 assign badge_url = badge_product.url
-                assign badge_title = badge_product.title
-                if section.settings.badge_title != blank and section.settings.badge_title != 'Yellow Wool Jumper' and section.settings.badge_title != 'Classic Black Bag'
-                  assign badge_title = section.settings.badge_title
-                endif
-
+                assign badge_title = section.settings.badge_title | default: badge_product.title
                 assign prod_img = badge_product.featured_image | default: badge_product.featured_media.preview_image | default: badge_product.images.first
-                if prod_img != blank
-                  assign badge_thumb_src = prod_img | image_url: width: 120
-                elsif section.settings.badge_image != blank
+                if section.settings.badge_image != blank
                   assign badge_thumb_src = section.settings.badge_image | image_url: width: 120
+                elsif prod_img != blank
+                  assign badge_thumb_src = prod_img | image_url: width: 120
                 else
-                  assign badge_thumb_src = 'black-leather-bag-thumb.jpg' | asset_url
+                  assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
                 endif
               else
-                assign badge_url = section.settings.badge_link | default: '/products/black-leather-bag'
-                if section.settings.badge_title != blank and section.settings.badge_title != 'Yellow Wool Jumper'
-                  assign badge_title = section.settings.badge_title
-                else
-                  assign badge_title = 'Black Leather Bag'
-                endif
-
+                assign badge_url = section.settings.badge_link | default: '#featured-product-showcase'
+                assign badge_title = section.settings.badge_title | default: 'Yellow Wool Jumper'
                 if section.settings.badge_image != blank
                   assign badge_thumb_src = section.settings.badge_image | image_url: width: 120
                 else
-                  assign badge_thumb_src = 'black-leather-bag-thumb.jpg' | asset_url
+                  assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
                 endif
               endif
 
@@ -289,15 +282,27 @@
 </section>
 
 <script>
-  // Ensure badge click reliably opens the product even inside the Shopify Theme Editor preview iframe
+  // Ensure badge click reliably opens the product or scrolls smoothly to Image 2 (Classic Varsity Top)
   document.addEventListener('DOMContentLoaded', function() {
     const badges = document.querySelectorAll('.loomhaus-product-badge');
     badges.forEach(badge => {
       badge.addEventListener('click', function(e) {
-        const url = this.getAttribute('href');
-        if (url && url !== '#' && window.Shopify && window.Shopify.designMode) {
+        const showcase = document.getElementById('featured-product-showcase');
+        const url = this.getAttribute('data-product-url') || this.getAttribute('href');
+        
+        if (url === '#featured-product-showcase' || (showcase && (!url || url === '#' || url === ''))) {
           e.preventDefault();
-          window.open(url, '_blank');
+          if (showcase) {
+            showcase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          }
+        }
+
+        if (url && url !== '#' && url !== '#featured-product-showcase') {
+          if (window.Shopify && window.Shopify.designMode) {
+            e.preventDefault();
+            window.open(url, '_blank');
+          }
         }
       });
     });
@@ -974,8 +979,8 @@
     {
       "type": "text",
       "id": "badge_title",
-      "label": "Custom badge title override (optional)",
-      "default": ""
+      "label": "Badge title",
+      "default": "Yellow Wool Jumper"
     },
     {
       "type": "text",
