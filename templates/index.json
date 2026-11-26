@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "custom_hero": {
@@ -73,63 +82,47 @@
       "settings": {
         "show_badge": true,
         "badge_text": "NEW SEASON • AUTUMN / WINTER",
-        "badge_bg": "#63675F",
-        "badge_text_color": "#FFFFFF",
+        "badge_bg": "#63675f",
+        "badge_text_color": "#ffffff",
         "heading": "The Winter Edit",
-        "heading_color": "#191B18",
+        "heading_color": "#191b18",
         "description": "Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.",
-        "description_color": "#5A5E55",
+        "description_color": "#5a5e55",
         "btn_text": "SHOP NOW",
         "btn_link": "",
-        "btn_bg": "#1D1F1C",
-        "btn_text_color": "#FFFFFF",
+        "btn_bg": "#1d1f1c",
+        "btn_text_color": "#ffffff",
         "btn_hover_bg": "#343831",
-        "btn_hover_text": "#FFFFFF",
+        "btn_hover_text": "#ffffff",
         "show_stats": true,
-        "stat_value_color": "#191B18",
-        "stat_label_color": "#74786E",
-        "backdrop_arch_color": "#ECE5DA",
+        "stat_value_color": "#191b18",
+        "stat_label_color": "#74786e",
+        "stat_1_value": "4.8★",
+        "stat_1_label": "2,000+ reviews",
+        "stat_2_value": "100%",
+        "stat_2_label": "organic cotton",
+        "stat_3_value": "30 days",
+        "stat_3_label": "free returns",
+        "image": "shopify://shop_images/WhatsApp_Image_2026-11-25_at_6.19.12_PM.jpg",
+        "image_max_width": 370,
+        "backdrop_arch_color": "#ece5da",
+        "backdrop_size": 440,
+        "backdrop_offset_x": -60,
         "show_product_badge": true,
+        "badge_product": "",
         "badge_title": "Yellow Wool Jumper",
         "badge_subtitle": "Bestseller this week",
         "badge_link": "#featured-product-showcase",
+        "badge_new_tab": false,
         "show_ticker": true,
-        "ticker_bg": "#636C5F",
-        "ticker_text": "#FAF7F2",
-        "ticker_star_color": "#FAF7F2",
+        "ticker_bg": "#636c5f",
+        "ticker_text": "#faf7f2",
+        "ticker_star_color": "#faf7f2",
         "ticker_speed": 28,
         "ticker_padding": 14,
-        "bg_color": "#F6F3EC",
+        "bg_color": "#f6f3ec",
         "padding_top": 70,
         "padding_bottom": 80
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
       }
     },
     "custom_shop_the_look": {
@@ -138,73 +131,79 @@
         "look_1": {
           "type": "look",
           "settings": {
+            "product": "",
+            "use_product_image": true,
             "title": "Ocean Blue Shirt",
             "price": "₹331.07",
             "description": "Crisp ocean blue button-down shirt in premium organic cotton. Lightweight and tailored for everyday wear.",
             "hotspot_top": 28,
             "hotspot_left": 50,
-            "color_options": "Black, White",
-            "size_options": "Choose your size, S, M, L, XL"
+            "custom_url": ""
           }
         },
         "look_2": {
           "type": "look",
           "settings": {
+            "product": "",
+            "use_product_image": true,
             "title": "Olive Green Jacket",
             "price": "₹346.06",
             "description": "Utilitarian olive green overshirt with roomy pockets and reinforced stitching. An essential layering piece.",
             "hotspot_top": 35,
             "hotspot_left": 54,
-            "color_options": "Olive, Khaki",
-            "size_options": "Choose your size, S, M, L, XL"
+            "custom_url": ""
           }
         },
         "look_3": {
           "type": "look",
           "settings": {
+            "product": "",
+            "use_product_image": true,
             "title": "Navy Sports Jacket",
             "price": "₹389.55",
             "description": "Long-sleeved navy waterproof jacket in thin polyester with a soft mesh inside. Keeps you dry in all weather.",
             "hotspot_top": 29,
             "hotspot_left": 57,
-            "color_options": "Black, White",
-            "size_options": "Choose your size, S, M, L, XL"
+            "custom_url": ""
           }
         },
         "look_4": {
           "type": "look",
           "settings": {
+            "product": "",
+            "use_product_image": true,
             "title": "Striped Silk Blouse",
             "price": "₹273.61",
             "description": "Elegant silk blouse with rich vertical stripes. Fluid drape and comfortable breathable feel.",
             "hotspot_top": 34,
             "hotspot_left": 53,
-            "color_options": "Burgundy, Black",
-            "size_options": "Choose your size, XS, S, M, L"
+            "custom_url": ""
           }
         },
         "look_5": {
           "type": "look",
           "settings": {
+            "product": "",
+            "use_product_image": true,
             "title": "LED High Tops",
             "price": "₹585.43",
             "description": "Statement high-top sneakers with illuminated neon green sole and cushioned ankle support.",
             "hotspot_top": 70,
             "hotspot_left": 50,
-            "color_options": "Green Neon, Black",
-            "size_options": "Choose your size, 7, 8, 9, 10, 11"
+            "custom_url": ""
           }
         },
         "look_6": {
           "type": "look",
           "settings": {
+            "product": "",
+            "use_product_image": true,
             "title": "Striped Skirt and Top",
             "price": "₹272.27",
             "description": "Pleated midi skirt paired with tailored classic top. Sophisticated movement and all-day comfort.",
             "hotspot_top": 60,
             "hotspot_left": 55,
-            "color_options": "Monochrome, Navy",
-            "size_options": "Choose your size, XS, S, M, L"
+            "custom_url": ""
           }
         }
       },
@@ -218,13 +217,13 @@
       ],
       "settings": {
         "kicker": "SHOP THE LOOK",
-        "heading": "Loomhaus in the wild",
+        "heading": "Ziva in the wild",
         "subtext": "Tap the + on any look to shop it.",
         "columns_desktop": 3,
         "card_radius": 20,
-        "bg_color": "#F6F3EC",
-        "text_color": "#191B18",
-        "kicker_color": "#74786E",
+        "bg_color": "#f6f3ec",
+        "text_color": "#191b18",
+        "kicker_color": "#74786e",
         "padding_top": 60,
         "padding_bottom": 80
       }
@@ -232,6 +231,7 @@
     "custom_featured_product": {
       "type": "custom-featured-product",
       "settings": {
+        "product": "",
         "badge_text": "Loomhaus #1 Everyday Top",
         "rating_text": "4.6 (1,240+ Reviews)",
         "title": "Classic Varsity Top",
@@ -247,10 +247,38 @@
         "coupon_2_title": "Get it for ₹273.65",
         "coupon_2_code": "LOOM15",
         "coupon_2_desc": "Buy 2, code LOOM15 for 15% off",
-        "bg_color": "#F6F3EC",
-        "text_color": "#191B18",
+        "bg_color": "#f6f3ec",
+        "text_color": "#191b18",
         "padding_top": 60,
         "padding_bottom": 80
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "all",
+        "products_to_show": 8,
+        "title": "Featured products",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 44,
+        "padding_bottom": 36
       }
     }
   },

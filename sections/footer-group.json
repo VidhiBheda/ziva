@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
@@ -9,6 +18,7 @@
           "type": "menu_column",
           "settings": {
             "title": "SHOP",
+            "menu": "",
             "links_fallback": "Women\nMen\nNew arrivals\nBestsellers"
           }
         },
@@ -16,6 +26,7 @@
           "type": "menu_column",
           "settings": {
             "title": "HELP",
+            "menu": "",
             "links_fallback": "Shipping\nReturns\nSize guide\nContact us"
           }
         }
@@ -25,12 +36,13 @@
         "help"
       ],
       "settings": {
-        "brand_title": "Loomhaus",
+        "brand_title": "Ziva",
+        "logo_width": 130,
         "brand_tagline": "Clothes made to be worn for years, not seasons.",
-        "bg_color": "#292A26",
-        "heading_color": "#FAF7F2",
-        "link_color": "#C7C3B9",
-        "link_hover_color": "#FFFFFF",
+        "bg_color": "#292a26",
+        "heading_color": "#faf7f2",
+        "link_color": "#c7c3b9",
+        "link_hover_color": "#ffffff",
         "padding_top": 45,
         "padding_bottom": 45
       }
