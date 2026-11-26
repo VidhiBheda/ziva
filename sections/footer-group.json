@@ -31,8 +31,8 @@
         "heading_color": "#FAF7F2",
         "link_color": "#C7C3B9",
         "link_hover_color": "#FFFFFF",
-        "padding_top": 55,
-        "padding_bottom": 60
+        "padding_top": 45,
+        "padding_bottom": 45
       }
     }
   },
