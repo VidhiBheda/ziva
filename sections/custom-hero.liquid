@@ -187,31 +187,31 @@
               # Resolve Title, URL, and Thumbnail
               if badge_product != blank
                 assign badge_url = badge_product.url
-                if section.settings.badge_title != blank and section.settings.badge_title != 'Yellow Wool Jumper'
+                assign badge_title = badge_product.title
+                if section.settings.badge_title != blank and section.settings.badge_title != 'Yellow Wool Jumper' and section.settings.badge_title != 'Classic Black Bag'
                   assign badge_title = section.settings.badge_title
-                else
-                  assign badge_title = badge_product.title
                 endif
 
-                if section.settings.badge_image != blank
-                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 90
-                elsif badge_product.featured_image != blank
-                  assign badge_thumb_src = badge_product.featured_image | image_url: width: 90
+                assign prod_img = badge_product.featured_image | default: badge_product.featured_media.preview_image | default: badge_product.images.first
+                if prod_img != blank
+                  assign badge_thumb_src = prod_img | image_url: width: 120
+                elsif section.settings.badge_image != blank
+                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 120
                 else
-                  assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
+                  assign badge_thumb_src = 'black-leather-bag-thumb.jpg' | asset_url
                 endif
               else
-                assign badge_url = section.settings.badge_link | default: routes.all_products_collection_url
+                assign badge_url = section.settings.badge_link | default: '/products/black-leather-bag'
                 if section.settings.badge_title != blank and section.settings.badge_title != 'Yellow Wool Jumper'
                   assign badge_title = section.settings.badge_title
                 else
-                  assign badge_title = 'Classic Black Bag'
+                  assign badge_title = 'Black Leather Bag'
                 endif
 
                 if section.settings.badge_image != blank
-                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 90
+                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 120
                 else
-                  assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
+                  assign badge_thumb_src = 'black-leather-bag-thumb.jpg' | asset_url
                 endif
               endif
 
