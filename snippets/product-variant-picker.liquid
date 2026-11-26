@@ -20,6 +20,16 @@
     data-selected-price-amount="{{ product.selected_or_first_available_variant.price | default: 0 | money_amount | escape }}"
     {{ block.shopify_attributes }}
   >
+    {%- liquid
+      assign is_bag_product = false
+      assign prod_title_lower = product.title | downcase
+      assign prod_type_lower = product.type | downcase
+      assign prod_handle_lower = product.handle | downcase
+      assign prod_tags_lower = product.tags | join: ',' | downcase
+      if prod_title_lower contains 'bag' or prod_type_lower contains 'bag' or prod_handle_lower contains 'bag' or prod_tags_lower contains 'bag'
+        assign is_bag_product = true
+      endif
+    -%}
     {%- for option in product.options_with_values -%}
       {%- liquid
         assign swatch_count = option.values | map: 'swatch' | compact | size
@@ -32,8 +42,39 @@
             assign picker_type = 'swatch'
           endif
         endif
+
+        assign option_name_lower = option.name | downcase
+        assign hide_option = false
+        if is_bag_product and option_name_lower contains 'size'
+          assign hide_option = true
+        endif
       -%}
-      {%- if picker_type == 'swatch' -%}
+      {%- if hide_option -%}
+        <div class="product-form__input product-form__input--hidden" style="display: none !important;" aria-hidden="true">
+          {%- if picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}
+            <select
+              id="Option-{{ section.id }}-{{ forloop.index0 }}"
+              name="options[{{ option.name | escape }}]"
+              form="{{ product_form_id }}"
+            >
+              {% render 'product-variant-options',
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </select>
+          {%- else -%}
+            <fieldset class="js product-form__input product-form__input--pill">
+              <legend class="form__label">{{ option.name | escape }}</legend>
+              {% render 'product-variant-options',
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </fieldset>
+          {%- endif -%}
+        </div>
+      {%- elsif picker_type == 'swatch' -%}
         <fieldset class="js product-form__input product-form__input--swatch">
           <legend class="form__label">
             {{ option.name | escape }}:
