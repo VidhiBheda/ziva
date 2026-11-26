@@ -155,55 +155,40 @@
             {%- endif -%}
           </div>
 
-          <!-- Floating Product Badge: Clickable to open the product directly -->
+          <!-- Floating Product Badge: Render real product dynamically -->
           {%- if section.settings.show_product_badge -%}
             {%- liquid
-              assign all_store_prods = collections.all.products
-              assign badge_product = section.settings.badge_product
-
-              # Auto-resolve real product from store if not manually selected
-              # Looks for the Classic Varsity Top matching Image 2
-              if badge_product == blank and all_store_prods.size > 0
-                for p in all_store_prods
-                  assign p_name = p.title | downcase
-                  if p_name contains 'varsity'
-                    assign badge_product = p
-                    break
-                  endif
-                endfor
-                if badge_product == blank
-                  for p in all_store_prods
-                    assign p_name = p.title | downcase
-                    if p_name contains 'classic' or p_name contains 'top' or p_name contains 'jumper'
-                      assign badge_product = p
-                      break
-                    endif
-                  endfor
-                endif
+              # 1. Resolve product: use customizer setting or first product from collection
+              assign badge_prod = section.settings.badge_product
+              if badge_prod == blank and collections.all.products.size > 0
+                assign badge_prod = collections.all.products.first
               endif
 
-              # Resolve Title, URL, and Thumbnail
-              # Default thumbnail strictly uses the lady in the black top (Image 1)
-              # Destination URL matches Image 2 (Classic Varsity Top showcase or product)
-              if badge_product != blank
-                assign badge_url = badge_product.url
-                assign badge_title = section.settings.badge_title | default: badge_product.title
-                if section.settings.badge_image != blank
-                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 120
+              # 2. Render real product data dynamically (NO hardcoding!)
+              if badge_prod != blank
+                assign badge_url = badge_prod.url
+                assign badge_title = badge_prod.title
+                assign prod_image = badge_prod.featured_image | default: badge_prod.featured_media.preview_image | default: badge_prod.images.first
+                
+                if prod_image != blank
+                  assign badge_thumb_src = prod_image | image_url: width: 140
+                elsif section.settings.badge_image != blank
+                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 140
                 else
-                  assign badge_thumb_src = 'badge-lady-top.jpg' | asset_url
+                  assign badge_thumb_src = 'badge-model-thumb.jpg' | asset_url
                 endif
               else
-                assign badge_url = section.settings.badge_link | default: '#featured-product-showcase'
+                # Fallback only when store has 0 products
+                assign badge_url = section.settings.badge_link | default: routes.all_products_collection_url
                 assign badge_title = section.settings.badge_title | default: 'Yellow Wool Jumper'
                 if section.settings.badge_image != blank
-                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 120
+                  assign badge_thumb_src = section.settings.badge_image | image_url: width: 140
                 else
-                  assign badge_thumb_src = 'badge-lady-top.jpg' | asset_url
+                  assign badge_thumb_src = 'badge-model-thumb.jpg' | asset_url
                 endif
               endif
 
-              assign badge_sub = section.settings.badge_subtitle | default: 'Bestseller this week'
+              assign badge_subtitle = section.settings.badge_subtitle | default: 'Bestseller this week'
             -%}
             <a 
               href="{{ badge_url }}" 
@@ -217,18 +202,14 @@
                 <img 
                   src="{{ badge_thumb_src }}" 
                   alt="{{ badge_title | escape }}"
-                  width="34"
-                  height="38"
+                  width="44"
+                  height="44"
                   loading="lazy"
                 >
               </div>
               <div class="loomhaus-product-badge__info">
-                <span class="loomhaus-product-badge__title">
-                  {{ badge_title }}
-                </span>
-                <span class="loomhaus-product-badge__subtitle">
-                  {{ badge_sub }}
-                </span>
+                <span class="loomhaus-product-badge__title">{{ badge_title }}</span>
+                <span class="loomhaus-product-badge__subtitle">{{ badge_subtitle }}</span>
               </div>
             </a>
           {%- endif -%}
@@ -492,15 +473,15 @@
     left: -42px;
     z-index: 10;
     background: #FFFFFF;
-    border-radius: 20px;
-    padding: 8px 18px 8px 10px;
+    border-radius: 9999px;
+    padding: 10px 24px 10px 12px;
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
     color: #191B18;
     cursor: pointer;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.11), 0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.10), 0 4px 12px rgba(0, 0, 0, 0.04);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     border: 1px solid rgba(0, 0, 0, 0.04);
     user-select: none;
@@ -508,23 +489,27 @@
 
   .loomhaus-product-badge:hover {
     transform: translateY(-3px) scale(1.025);
-    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.14), 0 6px 16px rgba(0, 0, 0, 0.06);
-    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.13), 0 6px 16px rgba(0, 0, 0, 0.06);
+    border-color: rgba(0, 0, 0, 0.08);
   }
 
   .loomhaus-product-badge__thumb {
-    width: 34px;
-    height: 38px;
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     overflow: hidden;
-    background: #F4EFEB;
+    background: transparent;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .loomhaus-product-badge__thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
     display: block;
   }
 
@@ -722,8 +707,8 @@
     }
 
     .loomhaus-product-badge__thumb {
-      width: 30px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
     }
 
     .loomhaus-product-badge__title {
