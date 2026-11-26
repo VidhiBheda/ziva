@@ -2133,7 +2133,7 @@
   @media (max-width: 900px) {
     .loomhaus-stl__grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: 14px 12px;
     }
     .loomhaus-modal__grid {
       grid-template-columns: 1fr;
@@ -2144,21 +2144,87 @@
     }
   }
 
-  @media (max-width: 580px) {
+  @media (max-width: 600px) {
     .loomhaus-stl__container {
-      padding: 0 18px;
+      padding: 0 16px;
     }
     .loomhaus-stl__header {
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
+      margin-bottom: 24px;
     }
     .loomhaus-stl__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px 10px !important;
+    }
+    .loomhaus-stl__card {
+      border-radius: 14px !important;
+      aspect-ratio: 0.77 / 1;
+    }
+    .loomhaus-stl__hotspot {
+      width: 26px;
+      height: 26px;
+    }
+    .loomhaus-stl__hotspot-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+    .loomhaus-stl__card-pill {
+      bottom: 8px;
+      left: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      max-width: calc(100% - 16px);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1px;
+      background: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    .loomhaus-stl__card-title {
+      font-size: 11px;
+      line-height: 1.25;
+      font-weight: 600;
+      color: #191B18;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .loomhaus-stl__card-price {
+      font-size: 10.5px;
+      line-height: 1.25;
+      font-weight: 700;
+      color: #191B18;
     }
     .loomhaus-drawer-cart__panel {
       width: 100%;
       max-width: 100%;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .loomhaus-stl__container {
+      padding: 0 12px;
+    }
+    .loomhaus-stl__grid {
+      gap: 8px !important;
+    }
+    .loomhaus-stl__card-pill {
+      bottom: 6px;
+      left: 6px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      max-width: calc(100% - 12px);
+    }
+    .loomhaus-stl__card-title {
+      font-size: 10px;
+    }
+    .loomhaus-stl__card-price {
+      font-size: 9.5px;
     }
   }
 
