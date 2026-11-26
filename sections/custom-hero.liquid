@@ -158,10 +158,41 @@
           <!-- Floating Product Badge: Clickable to open the product directly -->
           {%- if section.settings.show_product_badge -%}
             {%- liquid
+              assign all_store_prods = collections.all.products
               assign badge_product = section.settings.badge_product
+
+              # Auto-resolve real product from store if not manually selected
+              if badge_product == blank and all_store_prods.size > 0
+                for p in all_store_prods
+                  assign p_name = p.title | downcase
+                  if p_name contains 'bag'
+                    assign badge_product = p
+                    break
+                  endif
+                endfor
+                if badge_product == blank
+                  for p in all_store_prods
+                    assign p_name = p.title | downcase
+                    if p_name contains 'black'
+                      assign badge_product = p
+                      break
+                    endif
+                  endfor
+                endif
+                if badge_product == blank
+                  assign badge_product = all_store_prods.first
+                endif
+              endif
+
+              # Resolve Title, URL, and Thumbnail
               if badge_product != blank
                 assign badge_url = badge_product.url
-                assign badge_title = badge_product.title
+                if section.settings.badge_title != blank and section.settings.badge_title != 'Yellow Wool Jumper'
+                  assign badge_title = section.settings.badge_title
+                else
+                  assign badge_title = badge_product.title
+                endif
+
                 if section.settings.badge_image != blank
                   assign badge_thumb_src = section.settings.badge_image | image_url: width: 90
                 elsif badge_product.featured_image != blank
@@ -170,19 +201,21 @@
                   assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
                 endif
               else
-                if collections.all.products.size > 0
-                  assign fallback_prod = collections.all.products.first
-                  assign badge_url = section.settings.badge_link | default: fallback_prod.url
+                assign badge_url = section.settings.badge_link | default: routes.all_products_collection_url
+                if section.settings.badge_title != blank and section.settings.badge_title != 'Yellow Wool Jumper'
+                  assign badge_title = section.settings.badge_title
                 else
-                  assign badge_url = section.settings.badge_link | default: routes.all_products_collection_url
+                  assign badge_title = 'Classic Black Bag'
                 endif
-                assign badge_title = section.settings.badge_title | default: 'Yellow Wool Jumper'
+
                 if section.settings.badge_image != blank
                   assign badge_thumb_src = section.settings.badge_image | image_url: width: 90
                 else
                   assign badge_thumb_src = 'loomhaus-thumb.jpg' | asset_url
                 endif
               endif
+
+              assign badge_sub = section.settings.badge_subtitle | default: 'Bestseller this week'
             -%}
             <a 
               href="{{ badge_url }}" 
@@ -206,7 +239,7 @@
                   {{ badge_title }}
                 </span>
                 <span class="loomhaus-product-badge__subtitle">
-                  {{ section.settings.badge_subtitle | default: 'Bestseller this week' }}
+                  {{ badge_sub }}
                 </span>
               </div>
               <span class="loomhaus-product-badge__arrow" aria-hidden="true">&rarr;</span>
@@ -941,8 +974,8 @@
     {
       "type": "text",
       "id": "badge_title",
-      "label": "Badge title (overrides product title)",
-      "default": "Yellow Wool Jumper"
+      "label": "Custom badge title override (optional)",
+      "default": ""
     },
     {
       "type": "text",
