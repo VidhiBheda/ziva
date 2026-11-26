@@ -228,11 +228,36 @@
         "padding_top": 60,
         "padding_bottom": 80
       }
+    },
+    "custom_featured_product": {
+      "type": "custom-featured-product",
+      "settings": {
+        "badge_text": "Loomhaus #1 Everyday Top",
+        "rating_text": "4.6 (1,240+ Reviews)",
+        "title": "Classic Varsity Top",
+        "price": "₹321.94",
+        "compare_at_price": "₹400.00",
+        "discount_badge_text": "SAVE 20%",
+        "mrp_note": "MRP inclusive of all taxes",
+        "callout_title": "Keeps its shape after 50+ washes",
+        "callout_subtitle": "Heavyweight 320 GSM cotton, tested in our lab. See test results",
+        "coupon_1_title": "Get it for ₹289.75",
+        "coupon_1_code": "LOOM10",
+        "coupon_1_desc": "Use code LOOM10 for 10% off",
+        "coupon_2_title": "Get it for ₹273.65",
+        "coupon_2_code": "LOOM15",
+        "coupon_2_desc": "Buy 2, code LOOM15 for 15% off",
+        "bg_color": "#F6F3EC",
+        "text_color": "#191B18",
+        "padding_top": 60,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
     "custom_hero",
     "custom_shop_the_look",
+    "custom_featured_product",
     "featured_collection"
   ]
 }

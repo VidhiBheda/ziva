@@ -1,0 +1,1137 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} .loomhaus-fp {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    font-family: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .loomhaus-fp__title {
+    color: {{ section.settings.text_color }};
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign prod = section.settings.product
+  if prod == blank and collections.all.products.size > 0
+    # Use first product or designated product from store if available
+    assign prod = collections.all.products.first
+  endif
+
+  if prod != blank
+    assign fp_title = prod.title
+    assign fp_price = prod.price | money
+    if prod.compare_at_price > prod.price
+      assign fp_compare_price = prod.compare_at_price | money
+      assign discount_pct = prod.compare_at_price | minus: prod.price | times: 100.0 | divided_by: prod.compare_at_price | round
+      assign fp_discount_text = 'SAVE ' | append: discount_pct | append: '%'
+    else
+      assign fp_compare_price = ''
+      assign fp_discount_text = ''
+    endif
+    assign fp_variant_id = prod.selected_or_first_available_variant.id
+    assign fp_available = prod.available
+  else
+    assign fp_title = section.settings.title | default: 'Classic Varsity Top'
+    assign fp_price = section.settings.price | default: '₹321.94'
+    assign fp_compare_price = section.settings.compare_at_price | default: '₹400.00'
+    assign fp_discount_text = section.settings.discount_badge_text | default: 'SAVE 20%'
+    assign fp_variant_id = ''
+    assign fp_available = true
+  endif
+-%}
+
+<section class="loomhaus-fp" data-section-id="{{ section.id }}">
+  <div class="loomhaus-fp__container">
+    
+    <!-- Left Column: Product Gallery -->
+    <div class="loomhaus-fp__gallery">
+      <div class="loomhaus-fp__main-media-wrap">
+        
+        <!-- Main Image -->
+        <div class="loomhaus-fp__main-media">
+          {%- if prod != blank and prod.featured_image != blank -%}
+            <img 
+              id="loomhausFpMainImg" 
+              src="{{ prod.featured_image | image_url: width: 900 }}" 
+              alt="{{ fp_title | escape }}"
+              loading="lazy"
+              width="450"
+              height="430"
+              class="loomhaus-fp__main-img"
+            >
+          {%- else -%}
+            <img 
+              id="loomhausFpMainImg" 
+              src="{{ 'varsity-main-1.jpg' | asset_url }}" 
+              alt="{{ fp_title | escape }}"
+              loading="lazy"
+              width="450"
+              height="430"
+              class="loomhaus-fp__main-img"
+            >
+          {%- endif -%}
+        </div>
+
+        <!-- Slider Arrows -->
+        <button type="button" class="loomhaus-fp__arrow loomhaus-fp__arrow--prev" aria-label="Previous image" onclick="slideFpImage(-1)">
+          &#x2039;
+        </button>
+        <button type="button" class="loomhaus-fp__arrow loomhaus-fp__arrow--next" aria-label="Next image" onclick="slideFpImage(1)">
+          &#x203A;
+        </button>
+
+      </div>
+
+      <!-- Thumbnails Carousel / Row -->
+      <div class="loomhaus-fp__thumbs" id="loomhausFpThumbs">
+        {%- if prod != blank and prod.media.size > 1 -%}
+          {%- for media in prod.media limit: 5 -%}
+            <button 
+              type="button" 
+              class="loomhaus-fp__thumb {% if forloop.first %}loomhaus-fp__thumb--active{% endif %}" 
+              onclick="selectFpThumb(this, '{{ media | image_url: width: 900 }}')"
+              aria-label="Select photo {{ forloop.index }}"
+            >
+              <img src="{{ media | image_url: width: 140 }}" alt="{{ fp_title | escape }}" loading="lazy">
+            </button>
+          {%- endfor -%}
+        {%- else -%}
+          <!-- Default Mockup Thumbnails -->
+          <button type="button" class="loomhaus-fp__thumb loomhaus-fp__thumb--active" onclick="selectFpThumb(this, '{{ 'varsity-main-1.jpg' | asset_url }}')">
+            <img src="{{ 'varsity-thumb-1.jpg' | asset_url }}" alt="Black Varsity Jacket Front">
+          </button>
+          <button type="button" class="loomhaus-fp__thumb" onclick="selectFpThumb(this, '{{ 'varsity-thumb-2.jpg' | asset_url }}')">
+            <img src="{{ 'varsity-thumb-2.jpg' | asset_url }}" alt="White Varsity Jacket Front">
+          </button>
+          <button type="button" class="loomhaus-fp__thumb" onclick="selectFpThumb(this, '{{ 'varsity-thumb-3.jpg' | asset_url }}')">
+            <img src="{{ 'varsity-thumb-3.jpg' | asset_url }}" alt="Varsity Patch Close Up">
+          </button>
+          <button type="button" class="loomhaus-fp__thumb" onclick="selectFpThumb(this, '{{ 'varsity-thumb-4.jpg' | asset_url }}')">
+            <img src="{{ 'varsity-thumb-4.jpg' | asset_url }}" alt="Grey Varsity Outdoor">
+          </button>
+          <button type="button" class="loomhaus-fp__thumb" onclick="selectFpThumb(this, '{{ 'varsity-thumb-5.jpg' | asset_url }}')">
+            <img src="{{ 'varsity-thumb-5.jpg' | asset_url }}" alt="Navy Varsity Model">
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Right Column: Product Details & Purchase Form -->
+    <div class="loomhaus-fp__details">
+      
+      <!-- Top Meta Row: Badge & Rating -->
+      <div class="loomhaus-fp__meta-row">
+        {%- if section.settings.badge_text != blank -%}
+          <span class="loomhaus-fp__kicker-badge">{{ section.settings.badge_text }}</span>
+        {%- endif -%}
+        {%- if section.settings.rating_text != blank -%}
+          <span class="loomhaus-fp__rating">
+            <span class="loomhaus-fp__rating-star" aria-hidden="true">&#9733;</span>
+            {{ section.settings.rating_text }}
+          </span>
+        {%- endif -%}
+      </div>
+
+      <!-- Title -->
+      <h2 class="loomhaus-fp__title">{{ fp_title }}</h2>
+
+      <!-- Price Row -->
+      <div class="loomhaus-fp__price-row">
+        <span class="loomhaus-fp__sale-price" id="loomhausFpPrice">{{ fp_price }}</span>
+        {%- if fp_compare_price != blank -%}
+          <span class="loomhaus-fp__compare-price">{{ fp_compare_price }}</span>
+        {%- endif -%}
+        {%- if fp_discount_text != blank -%}
+          <span class="loomhaus-fp__save-badge">{{ fp_discount_text }}</span>
+        {%- endif -%}
+      </div>
+      <p class="loomhaus-fp__tax-note">{{ section.settings.mrp_note | default: 'MRP inclusive of all taxes' }}</p>
+
+      <!-- Quality / Guarantee Callout Box -->
+      {%- if section.settings.callout_title != blank -%}
+        <div class="loomhaus-fp__callout">
+          <div class="loomhaus-fp__callout-icon" aria-hidden="true">&#10003;</div>
+          <div class="loomhaus-fp__callout-text">
+            <div class="loomhaus-fp__callout-title">{{ section.settings.callout_title }}</div>
+            <div class="loomhaus-fp__callout-subtitle">{{ section.settings.callout_subtitle }}</div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <!-- Color Selector -->
+      <div class="loomhaus-fp__option-section">
+        <div class="loomhaus-fp__option-header">
+          <span class="loomhaus-fp__option-title">COLOR: <span id="loomhausFpColorLabel">BLACK</span></span>
+        </div>
+        <div class="loomhaus-fp__color-swatches">
+          <button 
+            type="button" 
+            class="loomhaus-fp__color-swatch loomhaus-fp__color-swatch--active" 
+            data-color="BLACK"
+            aria-label="Select Black color"
+            onclick="selectFpColor(this, 'BLACK', '{{ 'varsity-main-1.jpg' | asset_url }}')"
+          >
+            <span class="loomhaus-fp__color-circle" style="background-color: #191B18;"></span>
+          </button>
+          <button 
+            type="button" 
+            class="loomhaus-fp__color-swatch" 
+            data-color="WHITE"
+            aria-label="Select White color"
+            onclick="selectFpColor(this, 'WHITE', '{{ 'varsity-thumb-2.jpg' | asset_url }}')"
+          >
+            <span class="loomhaus-fp__color-circle" style="background-color: #FFFFFF; border: 1px solid #D5D0C7;"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Size Selector -->
+      <div class="loomhaus-fp__option-section">
+        <div class="loomhaus-fp__option-header">
+          <span class="loomhaus-fp__option-title">SELECT SIZE</span>
+        </div>
+        <div class="loomhaus-fp__size-pills">
+          
+          <!-- Size XS -->
+          <button type="button" class="loomhaus-fp__size-pill" onclick="selectFpSize(this, 'XS')">
+            <span>XS</span>
+          </button>
+
+          <!-- Size S (with Most Ordered badge) -->
+          <div class="loomhaus-fp__size-pill-wrap">
+            <span class="loomhaus-fp__tag-badge">Most Ordered</span>
+            <button type="button" class="loomhaus-fp__size-pill" onclick="selectFpSize(this, 'S')">
+              <span>S</span>
+            </button>
+          </div>
+
+          <!-- Size M (Active / Selected) -->
+          <button type="button" class="loomhaus-fp__size-pill loomhaus-fp__size-pill--active" onclick="selectFpSize(this, 'M')">
+            <span>M</span>
+          </button>
+
+          <!-- Size L (with Best Fit badge) -->
+          <div class="loomhaus-fp__size-pill-wrap">
+            <span class="loomhaus-fp__tag-badge">Best Fit</span>
+            <button type="button" class="loomhaus-fp__size-pill" onclick="selectFpSize(this, 'L')">
+              <span>L</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quantity + Add to Cart Row -->
+      <div class="loomhaus-fp__purchase-row">
+        
+        <!-- Quantity Box -->
+        <div class="loomhaus-fp__qty-box">
+          <button type="button" class="loomhaus-fp__qty-btn" aria-label="Decrease quantity" onclick="updateFpQty(-1)">-</button>
+          <span class="loomhaus-fp__qty-display" id="loomhausFpQty">01</span>
+          <button type="button" class="loomhaus-fp__qty-btn" aria-label="Increase quantity" onclick="updateFpQty(1)">+</button>
+        </div>
+
+        <!-- Add To Cart Button -->
+        <button 
+          type="button" 
+          class="loomhaus-fp__btn-add" 
+          id="loomhausFpAddBtn"
+          data-variant-id="{{ fp_variant_id }}"
+          onclick="addFpToCart()"
+        >
+          <span id="loomhausFpAddBtnText">ADD TO CART</span>
+          <span class="loomhaus-fp__btn-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+
+      </div>
+
+      <!-- Buy It Now Button -->
+      <div class="loomhaus-fp__buy-now-wrap">
+        <button type="button" class="loomhaus-fp__btn-buy" onclick="buyFpNow()">
+          BUY IT NOW
+        </button>
+      </div>
+
+      <!-- Discount Coupon Cards Row -->
+      <div class="loomhaus-fp__coupons-row">
+        
+        <!-- Coupon 1 -->
+        <div class="loomhaus-fp__coupon-card" onclick="copyCouponCode('{{ section.settings.coupon_1_code | default: 'LOOM10' }}', this)">
+          <div class="loomhaus-fp__coupon-left">
+            <div class="loomhaus-fp__coupon-icon" aria-hidden="true">%</div>
+            <div class="loomhaus-fp__coupon-info">
+              <span class="loomhaus-fp__coupon-price">{{ section.settings.coupon_1_title | default: 'Get it for ₹289.75' }}</span>
+              <span class="loomhaus-fp__coupon-code">{{ section.settings.coupon_1_desc | default: 'Use code LOOM10 for 10% off' }}</span>
+            </div>
+          </div>
+          <button type="button" class="loomhaus-fp__coupon-copy-btn" title="Copy coupon">
+            <svg class="loomhaus-fp__copy-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Coupon 2 -->
+        <div class="loomhaus-fp__coupon-card" onclick="copyCouponCode('{{ section.settings.coupon_2_code | default: 'LOOM15' }}', this)">
+          <div class="loomhaus-fp__coupon-left">
+            <div class="loomhaus-fp__coupon-icon" aria-hidden="true">%</div>
+            <div class="loomhaus-fp__coupon-info">
+              <span class="loomhaus-fp__coupon-price">{{ section.settings.coupon_2_title | default: 'Get it for ₹273.65' }}</span>
+              <span class="loomhaus-fp__coupon-code">{{ section.settings.coupon_2_desc | default: 'Buy 2, code LOOM15 for 15% off' }}</span>
+            </div>
+          </div>
+          <button type="button" class="loomhaus-fp__coupon-copy-btn" title="Copy coupon">
+            <svg class="loomhaus-fp__copy-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script>
+  let currentFpQty = 1;
+  let activeFpThumbIndex = 0;
+
+  function selectFpThumb(btn, imgSrc) {
+    const mainImg = document.getElementById('loomhausFpMainImg');
+    if (mainImg && imgSrc) {
+      mainImg.src = imgSrc;
+    }
+    const thumbs = document.querySelectorAll('.loomhaus-fp__thumb');
+    thumbs.forEach(t => t.classList.remove('loomhaus-fp__thumb--active'));
+    btn.classList.add('loomhaus-fp__thumb--active');
+  }
+
+  function slideFpImage(dir) {
+    const thumbs = document.querySelectorAll('.loomhaus-fp__thumb');
+    if (thumbs.length === 0) return;
+    
+    let activeIdx = 0;
+    thumbs.forEach((t, i) => {
+      if (t.classList.contains('loomhaus-fp__thumb--active')) activeIdx = i;
+    });
+
+    let nextIdx = activeIdx + dir;
+    if (nextIdx < 0) nextIdx = thumbs.length - 1;
+    if (nextIdx >= thumbs.length) nextIdx = 0;
+
+    thumbs[nextIdx].click();
+  }
+
+  function selectFpColor(btn, colorName, matchingImg) {
+    document.querySelectorAll('.loomhaus-fp__color-swatch').forEach(s => s.classList.remove('loomhaus-fp__color-swatch--active'));
+    btn.classList.add('loomhaus-fp__color-swatch--active');
+    document.getElementById('loomhausFpColorLabel').textContent = colorName;
+    if (matchingImg) {
+      const mainImg = document.getElementById('loomhausFpMainImg');
+      if (mainImg) mainImg.src = matchingImg;
+    }
+  }
+
+  function selectFpSize(btn, sizeVal) {
+    document.querySelectorAll('.loomhaus-fp__size-pill').forEach(s => s.classList.remove('loomhaus-fp__size-pill--active'));
+    btn.classList.add('loomhaus-fp__size-pill--active');
+  }
+
+  function updateFpQty(delta) {
+    currentFpQty += delta;
+    if (currentFpQty < 1) currentFpQty = 1;
+    const disp = document.getElementById('loomhausFpQty');
+    if (disp) {
+      disp.textContent = currentFpQty < 10 ? '0' + currentFpQty : currentFpQty;
+    }
+  }
+
+  function addFpToCart() {
+    const btn = document.getElementById('loomhausFpAddBtn');
+    const variantId = btn.getAttribute('data-variant-id');
+    const originalText = document.getElementById('loomhausFpAddBtnText').textContent;
+
+    document.getElementById('loomhausFpAddBtnText').textContent = 'ADDING...';
+    btn.disabled = true;
+
+    if (variantId && variantId !== '') {
+      const rootUrl = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) ? window.Shopify.routes.root : '/';
+      fetch(rootUrl + 'cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: parseInt(variantId, 10), quantity: currentFpQty })
+      })
+      .then(res => res.json())
+      .then(item => {
+        document.getElementById('loomhausFpAddBtnText').textContent = originalText;
+        btn.disabled = false;
+        if (typeof openLoomhausCartDrawer === 'function') {
+          if (typeof fetchRealCartData === 'function') fetchRealCartData();
+          openLoomhausCartDrawer();
+        }
+      })
+      .catch(e => {
+        document.getElementById('loomhausFpAddBtnText').textContent = originalText;
+        btn.disabled = false;
+        if (typeof openLoomhausCartDrawer === 'function') openLoomhausCartDrawer();
+      });
+    } else {
+      setTimeout(() => {
+        document.getElementById('loomhausFpAddBtnText').textContent = originalText;
+        btn.disabled = false;
+        if (typeof openLoomhausCartDrawer === 'function') openLoomhausCartDrawer();
+      }, 300);
+    }
+  }
+
+  function buyFpNow() {
+    const btn = document.getElementById('loomhausFpAddBtn');
+    const variantId = btn.getAttribute('data-variant-id');
+    if (variantId && variantId !== '') {
+      window.location.href = '/cart/' + variantId + ':' + currentFpQty;
+    } else {
+      window.location.href = '/checkout';
+    }
+  }
+
+  function copyCouponCode(code, card) {
+    if (!code) return;
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = card.querySelector('.loomhaus-fp__coupon-copy-btn');
+      if (btn) {
+        btn.innerHTML = '<span style="font-size:10px;font-weight:700;color:#191B18;">COPIED!</span>';
+        setTimeout(() => {
+          btn.innerHTML = `
+            <svg class="loomhaus-fp__copy-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          `;
+        }, 1800);
+      }
+    });
+  }
+</script>
+
+<style>
+  .loomhaus-fp {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .loomhaus-fp__container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  /* Left Column: Gallery */
+  .loomhaus-fp__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 90px;
+  }
+
+  .loomhaus-fp__main-media-wrap {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #EAE5DC;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+
+  .loomhaus-fp__main-media {
+    width: 100%;
+    aspect-ratio: 1.04 / 1;
+    overflow: hidden;
+  }
+
+  .loomhaus-fp__main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .loomhaus-fp__main-media-wrap:hover .loomhaus-fp__main-img {
+    transform: scale(1.02);
+  }
+
+  /* Slider Navigation Arrows */
+  .loomhaus-fp__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(85, 90, 80, 0.85);
+    color: #FFFFFF;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    transition: background 0.2s ease, transform 0.2s ease;
+    padding: 0;
+  }
+
+  .loomhaus-fp__arrow--prev {
+    left: 14px;
+  }
+
+  .loomhaus-fp__arrow--next {
+    right: 14px;
+  }
+
+  .loomhaus-fp__arrow:hover {
+    background: #191B18;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  /* Thumbnails */
+  .loomhaus-fp__thumbs {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+  }
+
+  .loomhaus-fp__thumb {
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    padding: 0;
+    background: #EAE5DC;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .loomhaus-fp__thumb--active {
+    border-color: #191B18;
+  }
+
+  .loomhaus-fp__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Right Column: Details */
+  .loomhaus-fp__details {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  /* Meta Row */
+  .loomhaus-fp__meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .loomhaus-fp__kicker-badge {
+    background: #63675F;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+
+  .loomhaus-fp__rating {
+    font-size: 12px;
+    font-weight: 600;
+    color: #191B18;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .loomhaus-fp__rating-star {
+    font-size: 13px;
+  }
+
+  /* Title */
+  .loomhaus-fp__title {
+    font-size: clamp(28px, 3.5vw, 38px);
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin: 8px 0 12px 0;
+  }
+
+  /* Price */
+  .loomhaus-fp__price-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .loomhaus-fp__sale-price {
+    font-size: 26px;
+    font-weight: 850;
+    letter-spacing: -0.02em;
+    color: #191B18;
+  }
+
+  .loomhaus-fp__compare-price {
+    font-size: 16px;
+    color: #74786E;
+    text-decoration: line-through;
+    font-weight: 500;
+  }
+
+  .loomhaus-fp__save-badge {
+    background: #833B31;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .loomhaus-fp__tax-note {
+    font-size: 11.5px;
+    color: #74786E;
+    margin: 4px 0 18px 0;
+  }
+
+  /* Callout Box */
+  .loomhaus-fp__callout {
+    background: #E8E2D7;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+
+  .loomhaus-fp__callout-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #63675F;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .loomhaus-fp__callout-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #191B18;
+    line-height: 1.25;
+  }
+
+  .loomhaus-fp__callout-subtitle {
+    font-size: 11.5px;
+    color: #5E625A;
+    line-height: 1.35;
+    margin-top: 2px;
+  }
+
+  /* Option Section */
+  .loomhaus-fp__option-section {
+    margin-bottom: 18px;
+  }
+
+  .loomhaus-fp__option-header {
+    margin-bottom: 8px;
+  }
+
+  .loomhaus-fp__option-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #191B18;
+  }
+
+  /* Color Swatches */
+  .loomhaus-fp__color-swatches {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .loomhaus-fp__color-swatch {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 2px;
+    background: transparent;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .loomhaus-fp__color-swatch--active {
+    border-color: #191B18;
+  }
+
+  .loomhaus-fp__color-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: block;
+  }
+
+  /* Size Pills */
+  .loomhaus-fp__size-pills {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .loomhaus-fp__size-pill-wrap {
+    position: relative;
+  }
+
+  .loomhaus-fp__tag-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4A5245;
+    color: #FFFFFF;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 2;
+  }
+
+  .loomhaus-fp__size-pill {
+    padding: 10px 24px;
+    border-radius: 9999px;
+    background: #E8E3DA;
+    color: #191B18;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .loomhaus-fp__size-pill:hover {
+    background: #DFD9CE;
+  }
+
+  .loomhaus-fp__size-pill--active {
+    background: #191B18;
+    color: #FFFFFF;
+  }
+
+  .loomhaus-fp__size-pill--active:hover {
+    background: #191B18;
+  }
+
+  /* Purchase Row */
+  .loomhaus-fp__purchase-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 8px;
+  }
+
+  .loomhaus-fp__qty-box {
+    border: 1px solid #C8C2B8;
+    border-radius: 8px;
+    background: #EAE5DC;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 120px;
+    padding: 12px 14px;
+  }
+
+  .loomhaus-fp__qty-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    color: #191B18;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+  }
+
+  .loomhaus-fp__qty-display {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #191B18;
+  }
+
+  .loomhaus-fp__btn-add {
+    flex: 1;
+    background: #222420;
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 15px 24px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s ease;
+  }
+
+  .loomhaus-fp__btn-add:hover {
+    background: #383C35;
+  }
+
+  .loomhaus-fp__btn-arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .loomhaus-fp__btn-add:hover .loomhaus-fp__btn-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Buy It Now */
+  .loomhaus-fp__buy-now-wrap {
+    margin-top: 10px;
+  }
+
+  .loomhaus-fp__btn-buy {
+    width: 100%;
+    background: #FAF8F5;
+    border: 1.5px solid #191B18;
+    color: #191B18;
+    border-radius: 8px;
+    padding: 15px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .loomhaus-fp__btn-buy:hover {
+    background: #191B18;
+    color: #FFFFFF;
+  }
+
+  /* Coupon Cards */
+  .loomhaus-fp__coupons-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .loomhaus-fp__coupon-card {
+    border: 1.5px dashed #B8B0A2;
+    border-radius: 12px;
+    padding: 10px 14px;
+    background: #EFECE5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .loomhaus-fp__coupon-card:hover {
+    background: #E8E4DA;
+    border-color: #8C8476;
+  }
+
+  .loomhaus-fp__coupon-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .loomhaus-fp__coupon-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #74786E;
+    color: #74786E;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .loomhaus-fp__coupon-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .loomhaus-fp__coupon-price {
+    font-size: 12.5px;
+    font-weight: 750;
+    color: #191B18;
+    line-height: 1.2;
+  }
+
+  .loomhaus-fp__coupon-code {
+    font-size: 11px;
+    color: #74786E;
+    line-height: 1.2;
+  }
+
+  .loomhaus-fp__coupon-copy-btn {
+    background: none;
+    border: none;
+    color: #74786E;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loomhaus-fp__copy-svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Responsive */
+  @media (max-width: 990px) {
+    .loomhaus-fp__container {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 0 24px;
+    }
+    .loomhaus-fp__gallery {
+      position: static;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .loomhaus-fp__container {
+      padding: 0 16px;
+    }
+    .loomhaus-fp__purchase-row {
+      flex-direction: column;
+    }
+    .loomhaus-fp__qty-box {
+      width: 100%;
+    }
+    .loomhaus-fp__btn-add {
+      width: 100%;
+    }
+    .loomhaus-fp__coupons-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured Product Showcase",
+  "class": "loomhaus-fp-section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Selection"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select Shopify Product"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Top kicker badge",
+      "default": "Loomhaus #1 Everyday Top"
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating text",
+      "default": "4.6 (1,240+ Reviews)"
+    },
+    {
+      "type": "header",
+      "content": "Product Details (Fallback / Overrides)"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Product Title",
+      "default": "Classic Varsity Top"
+    },
+    {
+      "type": "text",
+      "id": "price",
+      "label": "Sale Price",
+      "default": "₹321.94"
+    },
+    {
+      "type": "text",
+      "id": "compare_at_price",
+      "label": "Original Price (strikethrough)",
+      "default": "₹400.00"
+    },
+    {
+      "type": "text",
+      "id": "discount_badge_text",
+      "label": "Discount badge text",
+      "default": "SAVE 20%"
+    },
+    {
+      "type": "text",
+      "id": "mrp_note",
+      "label": "Tax disclaimer",
+      "default": "MRP inclusive of all taxes"
+    },
+    {
+      "type": "header",
+      "content": "Guarantee Callout Box"
+    },
+    {
+      "type": "text",
+      "id": "callout_title",
+      "label": "Callout title",
+      "default": "Keeps its shape after 50+ washes"
+    },
+    {
+      "type": "text",
+      "id": "callout_subtitle",
+      "label": "Callout subtitle",
+      "default": "Heavyweight 320 GSM cotton, tested in our lab. See test results"
+    },
+    {
+      "type": "header",
+      "content": "Promo Coupon 1"
+    },
+    {
+      "type": "text",
+      "id": "coupon_1_title",
+      "label": "Coupon 1 price title",
+      "default": "Get it for ₹289.75"
+    },
+    {
+      "type": "text",
+      "id": "coupon_1_code",
+      "label": "Coupon 1 code",
+      "default": "LOOM10"
+    },
+    {
+      "type": "text",
+      "id": "coupon_1_desc",
+      "label": "Coupon 1 description",
+      "default": "Use code LOOM10 for 10% off"
+    },
+    {
+      "type": "header",
+      "content": "Promo Coupon 2"
+    },
+    {
+      "type": "text",
+      "id": "coupon_2_title",
+      "label": "Coupon 2 price title",
+      "default": "Get it for ₹273.65"
+    },
+    {
+      "type": "text",
+      "id": "coupon_2_code",
+      "label": "Coupon 2 code",
+      "default": "LOOM15"
+    },
+    {
+      "type": "text",
+      "id": "coupon_2_desc",
+      "label": "Coupon 2 description",
+      "default": "Buy 2, code LOOM15 for 15% off"
+    },
+    {
+      "type": "header",
+      "content": "Section Colors & Padding"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background color",
+      "default": "#F6F3EC"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#191B18"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product Showcase"
+    }
+  ]
+}
+{% endschema %}
