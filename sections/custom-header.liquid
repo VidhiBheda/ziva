@@ -16,6 +16,13 @@
     {% endif %}
   }
 
+  @media (max-width: 900px) {
+    #shopify-section-{{ section.id }} .loomhaus-header {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+  }
+
   #shopify-section-{{ section.id }} .loomhaus-header__logo-text {
     color: {{ section.settings.text_color }};
     font-size: {{ section.settings.logo_font_size }}px;
@@ -46,23 +53,25 @@
   <div class="loomhaus-header__container">
     
     <!-- Mobile Hamburger Toggle -->
-    <button 
-      type="button" 
-      class="loomhaus-header__mobile-toggle" 
-      aria-label="Toggle navigation menu"
-      aria-expanded="false"
-      onclick="toggleLoomhausDrawer(this)"
-    >
-      <svg class="loomhaus-icon loomhaus-icon--hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-      </svg>
-      <svg class="loomhaus-icon loomhaus-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
+    {%- if section.settings.show_mobile_menu -%}
+      <button 
+        type="button" 
+        class="loomhaus-header__mobile-toggle" 
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        onclick="toggleLoomhausDrawer(this)"
+      >
+        <svg class="loomhaus-icon loomhaus-icon--hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <svg class="loomhaus-icon loomhaus-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    {%- endif -%}
 
     <!-- Left: Brand Logo -->
     <div class="loomhaus-header__brand">
@@ -394,12 +403,20 @@
 
   @media (max-width: 900px) {
     .loomhaus-header__container {
-      padding: 0 20px;
+      padding: 0 16px;
       gap: 16px;
     }
 
     .loomhaus-header__center {
       display: none;
+    }
+
+    .loomhaus-header__cta {
+      display: none;
+    }
+
+    .loomhaus-header__logo-text {
+      font-size: 22px;
     }
 
     .loomhaus-header__mobile-toggle {
@@ -739,6 +756,12 @@
       "id": "show_bottom_border",
       "label": "Show subtle bottom divider",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_menu",
+      "label": "Show mobile menu button",
+      "default": false
     }
   ],
   "presets": [
