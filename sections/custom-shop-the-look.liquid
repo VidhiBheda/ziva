@@ -89,14 +89,16 @@
               assign card_img = block.settings.image
             endif
 
-            # Resolve Modal Product Image: Use real product studio/second image or featured image
+            # Resolve Modal Product Image: Default to product featured/first image (e.g. black bag)
             assign modal_img = blank
             if block.settings.modal_image != blank
               assign modal_img = block.settings.modal_image
-            elsif prod != blank and prod.media.size > 1
-              assign modal_img = prod.media[1]
             elsif prod != blank and prod.featured_image != blank
               assign modal_img = prod.featured_image
+            elsif prod != blank and prod.media.size > 0
+              assign modal_img = prod.media[0]
+            elsif card_img != blank
+              assign modal_img = card_img
             endif
 
             # Resolve Variant ID and availability
@@ -168,20 +170,28 @@
                 {
                   "id": {{ prod.id | json }},
                   "title": {{ prod.title | json }},
+                  "type": {{ prod.type | default: '' | json }},
                   "price": {{ prod.price | money | json }},
                   "description": {{ look_desc | json }},
-                  "image": {% if modal_img != blank %}{{ modal_img | image_url: width: 700 | json }}{% else %}{{ prod.featured_image | image_url: width: 700 | json }}{% endif %},
+                  "image": {% if modal_img != blank %}{{ modal_img | image_url: width: 800 | json }}{% else %}{{ prod.featured_image | default: prod.media[0] | image_url: width: 800 | json }}{% endif %},
                   "url": {{ prod.url | json }},
                   "available": {{ prod.available | json }},
                   "selected_variant_id": {{ prod.selected_or_first_available_variant.id | json }},
+                  "images": [
+                    {%- for media in prod.media -%}
+                      {{ media | image_url: width: 800 | json }}{%- unless forloop.last -%},{%- endunless -%}
+                    {%- endfor -%}
+                  ],
                   "variants": [
                     {%- for variant in prod.variants -%}
+                      {%- assign var_img = variant.featured_image | default: variant.image -%}
                       {
                         "id": {{ variant.id }},
                         "title": {{ variant.title | json }},
                         "price": {{ variant.price | money | json }},
                         "available": {{ variant.available }},
-                        "options": {{ variant.options | json }}
+                        "options": {{ variant.options | json }},
+                        "image": {% if var_img != blank %}{{ var_img | image_url: width: 800 | json }}{% else %}null{% endif %}
                       }{%- unless forloop.last -%},{%- endunless -%}
                     {%- endfor -%}
                   ],
@@ -423,13 +433,20 @@
       titleElem.textContent = activeProductData.title;
       priceElem.textContent = activeProductData.price;
       descElem.textContent = activeProductData.description;
-      if (activeProductData.image) {
-        imgElem.src = activeProductData.image;
+
+      // Initial image: always use featured/first image (e.g. black bag)
+      const initialImg = (activeProductData.images && activeProductData.images[0]) || activeProductData.image || card.getAttribute('data-image');
+      if (initialImg && imgElem) {
+        imgElem.src = initialImg;
       }
+
       btnElem.setAttribute('data-variant-id', activeProductData.selected_variant_id || (activeProductData.variants[0] && activeProductData.variants[0].id) || '');
       
-      // Build dynamic options if options exist
+      // Build dynamic options if options exist (removes size if bag product)
       buildDynamicModalOptions(activeProductData);
+
+      // Trigger option change to ensure initial active swatch (Black) syncs variant and image
+      onModalOptionChange();
     } else {
       // Fallback from card data attributes
       const title = card.getAttribute('data-title');
@@ -441,8 +458,18 @@
       if (title) titleElem.textContent = title;
       if (price) priceElem.textContent = price;
       if (desc) descElem.textContent = desc;
-      if (image) imgElem.src = image;
+      if (image && imgElem) imgElem.src = image;
       if (variantId) btnElem.setAttribute('data-variant-id', variantId);
+
+      // Hide size group if title is a bag
+      const sizeGroup = document.getElementById('loomhausSizeGroup');
+      if (sizeGroup) {
+        if (title && title.toLowerCase().includes('bag')) {
+          sizeGroup.style.display = 'none';
+        } else {
+          sizeGroup.style.display = '';
+        }
+      }
     }
 
     modal.classList.add('loomhaus-modal--open');
@@ -455,11 +482,22 @@
     const container = document.getElementById('loomhausModalOptionsContainer');
     if (!container || !prodData.options || prodData.options.length === 0) return;
 
-    // Only customize if real product has multiple variants
-    if (prodData.variants && prodData.variants.length > 1) {
+    const isBag = (prodData.title && prodData.title.toLowerCase().includes('bag')) ||
+                  (prodData.type && prodData.type.toLowerCase().includes('bag'));
+
+    // Check if real product has options
+    if (prodData.options && prodData.options.length > 0) {
       let optionsHtml = '';
       prodData.options.forEach((opt, idx) => {
-        const isColor = opt.name.toLowerCase().includes('color') || opt.name.toLowerCase().includes('colour');
+        const optName = opt.name.toLowerCase();
+        const isColor = optName.includes('color') || optName.includes('colour');
+        const isSize = optName.includes('size');
+
+        // As requested: remove size selection feature for bag products!
+        if (isBag && isSize) {
+          return;
+        }
+
         optionsHtml += `<div class="loomhaus-modal__option-group">`;
         optionsHtml += `<label class="loomhaus-modal__option-label">${opt.name.toUpperCase()}</label>`;
 
@@ -467,10 +505,11 @@
           optionsHtml += `<div class="loomhaus-modal__swatches">`;
           opt.values.forEach((val, vIdx) => {
             const activeClass = vIdx === 0 ? 'loomhaus-modal__swatch-btn--active' : '';
-            const bgDot = val.toLowerCase().includes('white') ? '#FFFFFF; border: 1px solid #CCC;' : 
-                          val.toLowerCase().includes('black') ? '#191B18;' : 
-                          val.toLowerCase().includes('navy') || val.toLowerCase().includes('blue') ? '#1B2A4A;' : 
-                          val.toLowerCase().includes('olive') || val.toLowerCase().includes('green') ? '#5A6652;' : '#999999;';
+            const valLower = val.toLowerCase();
+            const bgDot = valLower.includes('white') ? '#FFFFFF; border: 1px solid #CCC;' : 
+                          valLower.includes('black') ? '#191B18;' : 
+                          valLower.includes('navy') || valLower.includes('blue') ? '#1B2A4A;' : 
+                          valLower.includes('olive') || valLower.includes('green') ? '#5A6652;' : '#999999;';
             optionsHtml += `
               <button type="button" class="loomhaus-modal__swatch-btn ${activeClass}" data-opt-idx="${idx}" data-val="${val}" onclick="selectColorSwatch(this)">
                 <span class="loomhaus-modal__swatch-dot" style="background-color: ${bgDot}"></span>
@@ -494,13 +533,30 @@
 
   // Handle color swatch selection
   function selectColorSwatch(btn) {
-    const parent = btn.closest('.loomhaus-modal__swatches');
-    parent.querySelectorAll('.loomhaus-modal__swatch-btn').forEach(b => b.classList.remove('loomhaus-modal__swatch-btn--active'));
+    const parent = btn.closest('.loomhaus-modal__swatches') || document.getElementById('loomhausModalColors');
+    if (parent) {
+      parent.querySelectorAll('.loomhaus-modal__swatch-btn').forEach(b => b.classList.remove('loomhaus-modal__swatch-btn--active'));
+    }
     btn.classList.add('loomhaus-modal__swatch-btn--active');
+
+    // Handle fallback mode when real product data isn't embedded
+    const val = btn.getAttribute('data-val');
+    if (!activeProductData) {
+      const modalImg = document.getElementById('loomhausModalImg');
+      if (modalImg && val) {
+        const valLower = val.toLowerCase();
+        if (valLower.includes('white')) {
+          modalImg.src = "{{ 'white-bag-modal.jpg' | asset_url }}";
+        } else if (valLower.includes('black')) {
+          modalImg.src = "{{ 'black-bag-card.jpg' | asset_url }}";
+        }
+      }
+    }
+
     onModalOptionChange();
   }
 
-  // Find matching variant based on selected options
+  // Find matching variant based on selected options and switch image
   function onModalOptionChange() {
     if (!activeProductData || !activeProductData.variants) return;
 
@@ -509,10 +565,12 @@
     const container = document.getElementById('loomhausModalOptionsContainer');
     
     // Check swatches
+    let selectedColor = '';
     const activeSwatch = container.querySelector('.loomhaus-modal__swatch-btn--active');
     if (activeSwatch) {
       const idx = parseInt(activeSwatch.getAttribute('data-opt-idx'), 10);
-      selectedOptions[idx] = activeSwatch.getAttribute('data-val');
+      selectedColor = activeSwatch.getAttribute('data-val');
+      selectedOptions[idx] = selectedColor;
     }
 
     // Check selects
@@ -522,9 +580,57 @@
     });
 
     // Find matching variant
-    const matched = activeProductData.variants.find(v => {
+    let matched = activeProductData.variants.find(v => {
       return v.options.every((val, i) => selectedOptions[i] === undefined || selectedOptions[i] === val);
     });
+
+    if (!matched && selectedColor) {
+      matched = activeProductData.variants.find(v => {
+        return v.options.some(val => val.toLowerCase() === selectedColor.toLowerCase());
+      });
+    }
+
+    if (!matched) {
+      matched = activeProductData.variants[0];
+    }
+
+    // UPDATE IMAGE TO MATCH SELECTED COLOR!
+    const modalImg = document.getElementById('loomhausModalImg');
+    if (modalImg) {
+      let targetImg = null;
+
+      // 1. If the matched variant has an assigned image, use it
+      if (matched && matched.image) {
+        targetImg = matched.image;
+      }
+      
+      // 2. If not, match by color keyword from product images array
+      if (!targetImg && selectedColor) {
+        const colorLower = selectedColor.toLowerCase();
+        if (colorLower.includes('white')) {
+          if (activeProductData.images && activeProductData.images.length > 1) {
+            targetImg = activeProductData.images[1];
+          } else {
+            targetImg = "{{ 'white-bag-modal.jpg' | asset_url }}";
+          }
+        } else if (colorLower.includes('black')) {
+          if (activeProductData.images && activeProductData.images.length > 0) {
+            targetImg = activeProductData.images[0];
+          } else {
+            targetImg = activeProductData.image || "{{ 'black-bag-card.jpg' | asset_url }}";
+          }
+        }
+      }
+
+      // 3. Fallback to activeProductData.image
+      if (!targetImg) {
+        targetImg = activeProductData.image;
+      }
+
+      if (targetImg) {
+        modalImg.src = targetImg;
+      }
+    }
 
     if (matched) {
       document.getElementById('loomhausModalPrice').textContent = matched.price;

@@ -615,11 +615,11 @@
     <!-- Look Grid (3 Columns) -->
     <div class="loomhaus-stl__grid" style="--stl-columns: ;">
       
-    <div class="loomhaus-stl__card" data-title="Ocean Blue Shirt" data-price="₹331.07" data-desc="Crisp ocean blue button-down shirt in premium organic cotton. Lightweight and tailored for everyday wear." data-image="./assets/look-1.jpg">
+    <div class="loomhaus-stl__card" data-title="Black Leather Bag" data-price="Rs. 176.99" data-desc="Handcrafted genuine leather everyday bag with antique brass hardware and spacious dual compartments." data-image="./assets/black-bag-card.jpg" data-image-white="./assets/white-bag-modal.jpg">
       <div class="loomhaus-stl__card-media">
-        <img src="./assets/look-1.jpg" alt="Ocean Blue Shirt" class="loomhaus-stl__card-img">
+        <img src="./assets/black-bag-card.jpg" alt="Black Leather Bag" class="loomhaus-stl__card-img">
         <button type="button" class="loomhaus-stl__hotspot" style="top: 28%; left: 50%;" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__hotspot-icon">+</span><span class="loomhaus-stl__hotspot-pulse"></span></button>
-        <div class="loomhaus-stl__card-pill" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__card-title">Ocean Blue Shirt</span><span class="loomhaus-stl__card-price">₹331.07</span></div>
+        <div class="loomhaus-stl__card-pill" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__card-title">Black Leather Bag</span><span class="loomhaus-stl__card-price">Rs. 176.99</span></div>
       </div>
     </div>
     <div class="loomhaus-stl__card" data-title="Olive Green Jacket" data-price="₹346.06" data-desc="Utilitarian olive green overshirt with roomy pockets and reinforced stitching. An essential layering piece." data-image="./assets/look-2.jpg">
@@ -1134,9 +1134,12 @@
 </div>
 
 <script>
+  let activeCardInPreview = null;
+
   // Open Quick View Modal (Image 2)
   function openLoomhausModal(card) {
     if (!card) return;
+    activeCardInPreview = card;
     const modal = document.getElementById('loomhausQuickViewModal');
     if (!modal) return;
 
@@ -1149,6 +1152,25 @@
     if (price) document.getElementById('loomhausModalPrice').textContent = price;
     if (desc) document.getElementById('loomhausModalDesc').textContent = desc;
     if (image) document.getElementById('loomhausModalImg').src = image;
+
+    // Reset swatches: first swatch active (Black)
+    const swatches = document.querySelectorAll('.loomhaus-modal__swatch-btn');
+    if (swatches.length) {
+      swatches.forEach((s, idx) => {
+        if (idx === 0) s.classList.add('loomhaus-modal__swatch-btn--active');
+        else s.classList.remove('loomhaus-modal__swatch-btn--active');
+      });
+    }
+
+    // Hide size selector for bag products
+    const sizeSelectGroup = document.getElementById('loomhausModalSizeSelect')?.closest('.loomhaus-modal__option-group');
+    if (sizeSelectGroup) {
+      if (title && title.toLowerCase().includes('bag')) {
+        sizeSelectGroup.style.display = 'none';
+      } else {
+        sizeSelectGroup.style.display = '';
+      }
+    }
 
     modal.classList.add('loomhaus-modal--open');
     modal.setAttribute('aria-hidden', 'false');
@@ -1169,6 +1191,16 @@
     const swatches = btn.closest('.loomhaus-modal__swatches').querySelectorAll('.loomhaus-modal__swatch-btn');
     swatches.forEach(s => s.classList.remove('loomhaus-modal__swatch-btn--active'));
     btn.classList.add('loomhaus-modal__swatch-btn--active');
+
+    const text = btn.textContent.trim().toLowerCase();
+    const modalImg = document.getElementById('loomhausModalImg');
+    if (modalImg) {
+      if (text.includes('white')) {
+        modalImg.src = './assets/white-bag-modal.jpg';
+      } else if (text.includes('black')) {
+        modalImg.src = './assets/black-bag-card.jpg';
+      }
+    }
   }
 
   // When checkout / add to cart is selected in Image 2 -> open Image 3 (Cart Drawer)
