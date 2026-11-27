@@ -417,93 +417,117 @@
       color: #E03131;
     }
 
-    /* Floating Image Wishlist Button */
+    /* Floating Image Wishlist Button (Image 1) */
     .loomhaus-gallery-main {
       position: relative;
     }
     .loomhaus-gallery-wishlist-btn {
       position: absolute;
-      top: 16px;
+      bottom: 16px;
       right: 16px;
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: #FFFFFF;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14);
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       color: #191B18;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
       transition: transform 0.2s ease, background 0.2s ease;
       z-index: 5;
     }
     .loomhaus-gallery-wishlist-btn:hover {
       transform: scale(1.1);
-      background: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     }
     .loomhaus-gallery-wishlist-btn.is-active {
       color: #E03131;
-      background: #FFFFFF;
     }
     .loomhaus-gallery-wishlist-btn.is-active svg {
       fill: #E03131;
       stroke: #E03131;
     }
 
-    /* PDP Wishlist Action Button */
-    .loomhaus-btn-wishlist {
+    /* PDP Action Bar (Share, Wishlist, Add to Bag - Image 2) */
+    .loomhaus-pdp-action-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       width: 100%;
-      height: 52px;
-      background: transparent;
-      color: #191B18;
-      border: 1.5px solid #191B18;
-      border-radius: 12px;
-      font-size: 13.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      margin-top: 14px;
+      box-sizing: border-box;
+    }
+    .loomhaus-pdp-btn-square {
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+      min-height: 50px;
+      background-color: #F0ECE4;
+      border: 1px solid #E5DFD5;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
       cursor: pointer;
+      color: #191B18;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .loomhaus-pdp-btn-square:hover {
+      background-color: #E6E1D8;
+      transform: translateY(-1px);
+    }
+    .loomhaus-pdp-btn-square.is-active {
+      background-color: #FFF0F0;
+      border-color: #E03131;
+      color: #E03131;
+    }
+    .loomhaus-pdp-btn-square.is-active svg {
+      fill: #E03131;
+      stroke: #E03131;
+    }
+    .loomhaus-pdp-icon-svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      color: inherit;
+    }
+    .loomhaus-pdp-btn-add-to-bag {
+      flex: 1;
+      height: 50px;
+      min-height: 50px;
+      background-color: #191B18;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      margin-top: 10px;
-      transition: all 0.2s ease;
+      cursor: pointer;
+      padding: 0 20px;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
       box-sizing: border-box;
-      text-transform: uppercase;
     }
-    .loomhaus-btn-wishlist:hover {
-      background: #191B18;
-      color: #FFFFFF;
+    .loomhaus-pdp-btn-add-to-bag:hover {
+      background-color: #333830;
+      transform: translateY(-1px);
     }
-    .loomhaus-btn-wishlist:hover .loomhaus-wishlist-pdp-icon {
-      stroke: #FFFFFF;
-    }
-    .loomhaus-btn-wishlist.is-active {
-      background: #FAF2F2;
-      border-color: #E03131;
-      color: #E03131;
-    }
-    .loomhaus-btn-wishlist.is-active:hover {
-      background: #E03131;
-      color: #FFFFFF;
-    }
-    .loomhaus-btn-wishlist.is-active .loomhaus-wishlist-pdp-icon {
-      fill: #E03131;
-      stroke: #E03131;
-    }
-    .loomhaus-btn-wishlist.is-active:hover .loomhaus-wishlist-pdp-icon {
-      fill: #FFFFFF;
-      stroke: #FFFFFF;
-    }
-    .loomhaus-wishlist-pdp-icon {
+    .loomhaus-pdp-bag-icon {
       width: 19px;
       height: 19px;
+      stroke: #FFFFFF;
       flex-shrink: 0;
-      transition: transform 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
+      display: block;
     }
 
     /* Product Page Container */
@@ -1141,34 +1165,60 @@
           </div>
         </div>
 
-        <!-- Quantity & Add to Cart -->
-        <div class="loomhaus-actions">
+        <!-- Quantity Selector -->
+        <div class="loomhaus-qty-wrap" style="margin-bottom: 12px;">
+          <span class="loomhaus-option-label" style="display: block; margin-bottom: 6px;">Quantity</span>
           <div class="loomhaus-qty">
             <button type="button" onclick="changeQty(-1)">-</button>
             <span id="qtyVal">01</span>
             <button type="button" onclick="changeQty(1)">+</button>
           </div>
-          <button type="button" class="loomhaus-btn-add" onclick="handleAddToCart()">
-            ADD TO CART →
+        </div>
+
+        <!-- Action Row: Share + Wishlist + Add to Bag (Image 2) -->
+        <div class="loomhaus-pdp-action-bar">
+          <!-- 1. Share Button -->
+          <button 
+            type="button" 
+            class="loomhaus-pdp-btn-square loomhaus-pdp-btn-share" 
+            onclick="handlePdpShareClick(this)" 
+            aria-label="Share product" 
+            title="Share"
+          >
+            <svg class="loomhaus-pdp-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+              <polyline points="16 6 12 2 8 6"></polyline>
+              <line x1="12" y1="2" x2="12" y2="15"></line>
+            </svg>
+          </button>
+
+          <!-- 2. Wishlist Button -->
+          <button 
+            type="button" 
+            class="loomhaus-pdp-btn-square loomhaus-pdp-btn-wishlist loomhaus-wishlist-pdp-btn" 
+            id="pdpWishlistBtn" 
+            onclick="toggleBagWishlist()"
+            aria-label="Add to Wishlist"
+            title="Wishlist"
+          >
+            <svg class="loomhaus-wishlist-pdp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+
+          <!-- 3. Add to Bag Button -->
+          <button type="button" class="loomhaus-pdp-btn-add-to-bag" onclick="handleAddToCart()">
+            <svg class="loomhaus-pdp-bag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Add to Bag</span>
           </button>
         </div>
 
-        <button type="button" class="loomhaus-btn-buy" onclick="handleBuyNow()">
+        <button type="button" class="loomhaus-btn-buy" onclick="handleBuyNow()" style="margin-top: 10px;">
           BUY IT NOW
-        </button>
-
-        <!-- Add to Wishlist Button -->
-        <button 
-          type="button" 
-          class="loomhaus-btn-wishlist" 
-          id="pdpWishlistBtn" 
-          onclick="toggleBagWishlist()"
-          aria-label="Add to Wishlist"
-        >
-          <svg class="loomhaus-wishlist-pdp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-          </svg>
-          <span class="loomhaus-wishlist-pdp-text" id="pdpWishlistText">ADD TO WISHLIST</span>
         </button>
 
         <!-- Promo Coupons -->
@@ -1275,6 +1325,22 @@
 
     function handleBuyNow() {
       alert('Proceeding to checkout for Black Leather Bag...');
+    }
+
+    function handlePdpShareClick(btn) {
+      const url = window.location.href;
+      const title = document.title;
+      if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+          if (btn) {
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<span style="font-size:9.5px;font-weight:700;">COPIED</span>';
+            setTimeout(() => { btn.innerHTML = orig; }, 1800);
+          }
+        });
+      }
     }
 
     function toggleLoomhausSearch() {

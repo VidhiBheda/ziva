@@ -110,6 +110,24 @@
               </div>
             </div>
           {%- endif -%}
+
+          <!-- Floating Wishlist Button on Product Card (Bottom Right as seen in Image 1) -->
+          <button
+            type="button"
+            class="loomhaus-card-wishlist-btn"
+            aria-label="Save to wishlist"
+            title="Save to wishlist"
+            onclick="event.preventDefault(); event.stopPropagation(); handleCardWishlistClick(this);"
+            data-product-title="{{ card_product.title | escape }}"
+            data-product-price="{{ card_product.price | money }}"
+            data-product-image="{{ card_product.featured_media | image_url: width: 400 }}"
+            data-product-url="{{ card_product.url }}"
+          >
+            <svg class="loomhaus-card-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+
           <div class="card__content">
             <div class="card__information">
               <h3

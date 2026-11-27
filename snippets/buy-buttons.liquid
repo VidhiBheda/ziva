@@ -73,50 +73,75 @@
               assign quantity_rule_soldout = true
             endif
           -%}
-          <button
-            id="ProductSubmitButton-{{ section_id }}"
-            type="submit"
-            name="add"
-            class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
-            {% if product.selected_or_first_available_variant.available == false
-              or quantity_rule_soldout
-              or product.selected_or_first_available_variant == null
-            %}
-              disabled
-            {% endif %}
-          >
-            <span>
-              {%- if product.selected_or_first_available_variant == null -%}
-                {{ 'products.product.unavailable' | t }}
-              {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                {{ 'products.product.sold_out' | t }}
-              {%- else -%}
-                {{ 'products.product.add_to_cart' | t }}
-              {%- endif -%}
-            </span>
-            {%- render 'loading-spinner' -%}
-          </button>
+          <!-- Action Bar: Share + Wishlist + Add to Bag (Image 2) -->
+          <div class="loomhaus-pdp-action-bar">
+            <!-- 1. Share Button -->
+            <button 
+              type="button" 
+              class="loomhaus-pdp-btn-square loomhaus-pdp-btn-share" 
+              onclick="handlePdpShareClick(this)" 
+              aria-label="Share product" 
+              title="Share"
+            >
+              <svg class="loomhaus-pdp-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                <polyline points="16 6 12 2 8 6"></polyline>
+                <line x1="12" y1="2" x2="12" y2="15"></line>
+              </svg>
+            </button>
+
+            <!-- 2. Wishlist Button -->
+            <button
+              type="button"
+              class="loomhaus-pdp-btn-square loomhaus-pdp-btn-wishlist loomhaus-wishlist-pdp-btn"
+              id="LoomhausWishlistBtn-{{ section_id }}"
+              onclick="handlePdpWishlistClick(this)"
+              data-product-title="{{ product.title | escape }}"
+              data-product-price="{{ product.selected_or_first_available_variant.price | money }}"
+              data-product-image="{{ product.featured_image | image_url: width: 300 }}"
+              data-product-url="{{ product.url }}"
+              aria-label="Add to Wishlist"
+              title="Wishlist"
+            >
+              <svg class="loomhaus-wishlist-pdp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+
+            <!-- 3. Add to Bag Button -->
+            <button
+              id="ProductSubmitButton-{{ section_id }}"
+              type="submit"
+              name="add"
+              class="loomhaus-pdp-btn-add-to-bag product-form__submit"
+              {% if product.selected_or_first_available_variant.available == false
+                or quantity_rule_soldout
+                or product.selected_or_first_available_variant == null
+              %}
+                disabled
+              {% endif %}
+            >
+              <svg class="loomhaus-pdp-bag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              <span>
+                {%- if product.selected_or_first_available_variant == null -%}
+                  {{ 'products.product.unavailable' | t }}
+                {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- else -%}
+                  Add to Bag
+                {%- endif -%}
+              </span>
+              {%- render 'loading-spinner' -%}
+            </button>
+          </div>
+
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
-
-          <!-- Add to Wishlist Button -->
-          <button
-            type="button"
-            class="button button--secondary button--full-width loomhaus-wishlist-pdp-btn"
-            id="LoomhausWishlistBtn-{{ section_id }}"
-            onclick="handlePdpWishlistClick(this)"
-            data-product-title="{{ product.title | escape }}"
-            data-product-price="{{ product.selected_or_first_available_variant.price | money }}"
-            data-product-image="{{ product.featured_image | image_url: width: 300 }}"
-            data-product-url="{{ product.url }}"
-            aria-label="Add to Wishlist"
-          >
-            <svg class="loomhaus-wishlist-pdp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-            <span class="loomhaus-wishlist-pdp-text">Add to Wishlist</span>
-          </button>
         </div>
       {%- endform -%}
     </product-form>

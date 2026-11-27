@@ -593,3 +593,59 @@
     clip-path: polygon(var(--shape--blob-5));
   }
 }
+
+/* Floating Card Wishlist Button (Image 1) */
+.loomhaus-card-wishlist-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #191B18;
+  z-index: 5;
+  padding: 0;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.loomhaus-card-wishlist-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.loomhaus-card-wishlist-btn.is-active {
+  color: #E03131;
+}
+
+.loomhaus-card-wishlist-btn.is-active .loomhaus-card-wishlist-icon {
+  fill: #E03131;
+  stroke: #E03131;
+}
+
+.loomhaus-card-wishlist-icon {
+  width: 19px;
+  height: 19px;
+  display: block;
+  transition: transform 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .loomhaus-card-wishlist-btn {
+    bottom: 8px;
+    right: 8px;
+    width: 34px;
+    height: 34px;
+  }
+  .loomhaus-card-wishlist-icon {
+    width: 17px;
+    height: 17px;
+  }
+}
+

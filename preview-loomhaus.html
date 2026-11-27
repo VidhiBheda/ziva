@@ -581,6 +581,138 @@
       transition: transform 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
     }
 
+    /* PDP Action Bar (Share, Wishlist, Add to Bag - Image 2) */
+    .loomhaus-pdp-action-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+
+    .loomhaus-pdp-btn-square {
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+      min-height: 50px;
+      background-color: #F0ECE4;
+      border: 1px solid #E5DFD5;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      cursor: pointer;
+      color: #191B18;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      box-shadow: none;
+      text-decoration: none;
+    }
+
+    .loomhaus-pdp-btn-square:hover {
+      background-color: #E6E1D8;
+      transform: translateY(-1px);
+    }
+
+    .loomhaus-pdp-btn-square.is-active {
+      background-color: #FFF0F0;
+      border-color: #E03131;
+      color: #E03131;
+    }
+
+    .loomhaus-pdp-btn-square.is-active svg {
+      fill: #E03131;
+      stroke: #E03131;
+    }
+
+    .loomhaus-pdp-icon-svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      color: inherit;
+    }
+
+    .loomhaus-pdp-btn-add-to-bag {
+      flex: 1;
+      height: 50px;
+      min-height: 50px;
+      background-color: #191B18;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 0 20px;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+
+    .loomhaus-pdp-btn-add-to-bag:hover {
+      background-color: #333830;
+      transform: translateY(-1px);
+    }
+
+    .loomhaus-pdp-bag-icon {
+      width: 19px;
+      height: 19px;
+      stroke: #FFFFFF;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    /* Floating Card Wishlist Button (Image 1) */
+    .loomhaus-card-wishlist-btn {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background-color: #FFFFFF;
+      border: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #191B18;
+      z-index: 5;
+      padding: 0;
+      transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .loomhaus-card-wishlist-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    }
+
+    .loomhaus-card-wishlist-btn.is-active {
+      color: #E03131;
+    }
+
+    .loomhaus-card-wishlist-btn.is-active .loomhaus-card-wishlist-icon {
+      fill: #E03131;
+      stroke: #E03131;
+    }
+
+    .loomhaus-card-wishlist-icon {
+      width: 19px;
+      height: 19px;
+      display: block;
+      transition: transform 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
+    }
+
     /* Hero */
     .loomhaus-hero-wrapper {
       width: 100%;
@@ -862,6 +994,35 @@
         padding: 11px 18px;
         min-height: 44px;
         margin-top: 8px;
+      }
+      .loomhaus-pdp-action-bar {
+        gap: 10px;
+        margin-top: 14px;
+        margin-bottom: 6px;
+      }
+      .loomhaus-pdp-btn-square {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
+        border-radius: 9px;
+      }
+      .loomhaus-pdp-btn-add-to-bag {
+        height: 48px;
+        min-height: 48px;
+        border-radius: 9px;
+        font-size: 14px;
+        gap: 8px;
+      }
+      .loomhaus-card-wishlist-btn {
+        width: 34px;
+        height: 34px;
+        bottom: 10px;
+        right: 10px;
+      }
+      .loomhaus-card-wishlist-icon {
+        width: 17px;
+        height: 17px;
       }
 
       .loomhaus-hero {
@@ -1225,10 +1386,15 @@
     <!-- Look Grid (3 Columns) -->
     <div class="loomhaus-stl__grid" style="--stl-columns: ;">
       
-    <div class="loomhaus-stl__card" data-title="Black Leather Bag" data-price="Rs. 176.99" data-desc="Handcrafted genuine leather everyday bag with antique brass hardware and spacious dual compartments." data-image="./assets/black-bag-card.jpg" data-image-white="./assets/white-bag-modal.jpg">
+    <div class="loomhaus-stl__card" data-title="Black Leather Bag" data-price="Rs. 176.99" data-desc="Handcrafted genuine leather everyday bag with antique brass hardware and spacious dual compartments." data-image="./assets/black-bag-card.jpg" data-image-white="./assets/white-bag-modal.jpg" data-url="./product-black-leather-bag.html">
       <div class="loomhaus-stl__card-media">
         <img src="./assets/black-bag-card.jpg" alt="Black Leather Bag" class="loomhaus-stl__card-img">
         <button type="button" class="loomhaus-stl__hotspot" style="top: 28%; left: 50%;" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__hotspot-icon">+</span><span class="loomhaus-stl__hotspot-pulse"></span></button>
+        <button type="button" class="loomhaus-card-wishlist-btn" aria-label="Save to wishlist" title="Save to wishlist" onclick="event.preventDefault(); event.stopPropagation(); handleCardWishlistClick(this.closest('.loomhaus-stl__card'));">
+          <svg class="loomhaus-card-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
         <div class="loomhaus-stl__card-pill" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__card-title">Black Leather Bag</span><span class="loomhaus-stl__card-price">Rs. 176.99</span></div>
       </div>
     </div>
@@ -1236,6 +1402,11 @@
       <div class="loomhaus-stl__card-media">
         <img src="./assets/look-2.jpg" alt="Olive Green Jacket" class="loomhaus-stl__card-img">
         <button type="button" class="loomhaus-stl__hotspot" style="top: 35%; left: 54%;" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__hotspot-icon">+</span><span class="loomhaus-stl__hotspot-pulse"></span></button>
+        <button type="button" class="loomhaus-card-wishlist-btn" aria-label="Save to wishlist" title="Save to wishlist" onclick="event.preventDefault(); event.stopPropagation(); handleCardWishlistClick(this.closest('.loomhaus-stl__card'));">
+          <svg class="loomhaus-card-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
         <div class="loomhaus-stl__card-pill" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__card-title">Olive Green Jacket</span><span class="loomhaus-stl__card-price">₹346.06</span></div>
       </div>
     </div>
@@ -1243,6 +1414,11 @@
       <div class="loomhaus-stl__card-media">
         <img src="./assets/look-3.jpg" alt="Navy Sports Jacket" class="loomhaus-stl__card-img">
         <button type="button" class="loomhaus-stl__hotspot" style="top: 29%; left: 57%;" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__hotspot-icon">+</span><span class="loomhaus-stl__hotspot-pulse"></span></button>
+        <button type="button" class="loomhaus-card-wishlist-btn" aria-label="Save to wishlist" title="Save to wishlist" onclick="event.preventDefault(); event.stopPropagation(); handleCardWishlistClick(this.closest('.loomhaus-stl__card'));">
+          <svg class="loomhaus-card-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
         <div class="loomhaus-stl__card-pill" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__card-title">Navy Sports Jacket</span><span class="loomhaus-stl__card-price">₹389.55</span></div>
       </div>
     </div>
@@ -1250,6 +1426,11 @@
       <div class="loomhaus-stl__card-media">
         <img src="./assets/look-4.jpg" alt="Striped Silk Blouse" class="loomhaus-stl__card-img">
         <button type="button" class="loomhaus-stl__hotspot" style="top: 34%; left: 53%;" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__hotspot-icon">+</span><span class="loomhaus-stl__hotspot-pulse"></span></button>
+        <button type="button" class="loomhaus-card-wishlist-btn" aria-label="Save to wishlist" title="Save to wishlist" onclick="event.preventDefault(); event.stopPropagation(); handleCardWishlistClick(this.closest('.loomhaus-stl__card'));">
+          <svg class="loomhaus-card-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
         <div class="loomhaus-stl__card-pill" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__card-title">Striped Silk Blouse</span><span class="loomhaus-stl__card-price">₹273.61</span></div>
       </div>
     </div>
@@ -1257,6 +1438,11 @@
       <div class="loomhaus-stl__card-media">
         <img src="./assets/look-5.jpg" alt="LED High Tops" class="loomhaus-stl__card-img">
         <button type="button" class="loomhaus-stl__hotspot" style="top: 70%; left: 50%;" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__hotspot-icon">+</span><span class="loomhaus-stl__hotspot-pulse"></span></button>
+        <button type="button" class="loomhaus-card-wishlist-btn" aria-label="Save to wishlist" title="Save to wishlist" onclick="event.preventDefault(); event.stopPropagation(); handleCardWishlistClick(this.closest('.loomhaus-stl__card'));">
+          <svg class="loomhaus-card-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
         <div class="loomhaus-stl__card-pill" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__card-title">LED High Tops</span><span class="loomhaus-stl__card-price">₹585.43</span></div>
       </div>
     </div>
@@ -1264,6 +1450,11 @@
       <div class="loomhaus-stl__card-media">
         <img src="./assets/look-6.jpg" alt="Striped Skirt and Top" class="loomhaus-stl__card-img">
         <button type="button" class="loomhaus-stl__hotspot" style="top: 60%; left: 55%;" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__hotspot-icon">+</span><span class="loomhaus-stl__hotspot-pulse"></span></button>
+        <button type="button" class="loomhaus-card-wishlist-btn" aria-label="Save to wishlist" title="Save to wishlist" onclick="event.preventDefault(); event.stopPropagation(); handleCardWishlistClick(this.closest('.loomhaus-stl__card'));">
+          <svg class="loomhaus-card-wishlist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
         <div class="loomhaus-stl__card-pill" onclick="openLoomhausModal(this.closest('.loomhaus-stl__card'))"><span class="loomhaus-stl__card-title">Striped Skirt and Top</span><span class="loomhaus-stl__card-price">₹272.27</span></div>
       </div>
     </div>
@@ -1618,29 +1809,47 @@
           </div>
         </div>
 
-        <!-- Add To Cart & Wishlist Action Buttons -->
-        <div class="loomhaus-modal__action">
+        <!-- Action Bar: Share + Wishlist + Add to Bag (Image 2) -->
+        <div class="loomhaus-pdp-action-bar">
           <button 
             type="button" 
-            class="loomhaus-modal__btn" 
-            id="loomhausAddToCartBtn"
-            onclick="triggerCheckoutFromModal()"
+            class="loomhaus-pdp-btn-square loomhaus-pdp-btn-share" 
+            onclick="handlePdpShareClick(this)" 
+            aria-label="Share product" 
+            title="Share"
           >
-            <span>ADD TO CART</span>
-            <span class="loomhaus-modal__btn-arrow" aria-hidden="true">&rarr;</span>
+            <svg class="loomhaus-pdp-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+              <polyline points="16 6 12 2 8 6"></polyline>
+              <line x1="12" y1="2" x2="12" y2="15"></line>
+            </svg>
           </button>
 
           <button 
             type="button" 
-            class="loomhaus-wishlist-pdp-btn loomhaus-modal__btn-wishlist" 
-            id="loomhausModalWishlistBtn"
-            onclick="triggerWishlistFromModal()"
-            aria-label="Add to Wishlist"
+            class="loomhaus-pdp-btn-square loomhaus-pdp-btn-wishlist" 
+            id="loomhausModalWishlistBtn" 
+            onclick="triggerWishlistFromModal()" 
+            aria-label="Add to Wishlist" 
+            title="Wishlist"
           >
-            <svg class="loomhaus-wishlist-pdp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <svg class="loomhaus-wishlist-pdp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
             </svg>
-            <span class="loomhaus-wishlist-pdp-text" id="loomhausModalWishlistText">ADD TO WISHLIST</span>
+          </button>
+
+          <button 
+            type="button" 
+            class="loomhaus-pdp-btn-add-to-bag" 
+            id="loomhausAddToCartBtn" 
+            onclick="triggerCheckoutFromModal()"
+          >
+            <svg class="loomhaus-pdp-bag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Add to Bag</span>
           </button>
         </div>
 
@@ -1847,13 +2056,17 @@
     const isSaved = list.some(item => item.title === title);
     const btn = document.getElementById('loomhausModalWishlistBtn');
     const text = document.getElementById('loomhausModalWishlistText');
-    if (btn && text) {
+    if (btn) {
       if (isSaved) {
         btn.classList.add('is-active');
-        text.textContent = 'ADDED TO WISHLIST';
+        btn.setAttribute('aria-label', 'Remove from Wishlist');
+        btn.title = 'Remove from Wishlist';
+        if (text) text.textContent = 'ADDED TO WISHLIST';
       } else {
         btn.classList.remove('is-active');
-        text.textContent = 'ADD TO WISHLIST';
+        btn.setAttribute('aria-label', 'Add to Wishlist');
+        btn.title = 'Add to Wishlist';
+        if (text) text.textContent = 'ADD TO WISHLIST';
       }
     }
   }
@@ -2112,6 +2325,7 @@
     updateLoomhausWishlistBadge();
     renderLoomhausWishlist();
     syncModalWishlistState();
+    syncAllCardWishlistButtons();
   }
 
   window.toggleLoomhausWishlistItem = function(product) {
@@ -2130,6 +2344,7 @@
     }
     localStorage.setItem('loomhaus_wishlist', JSON.stringify(list));
     updateLoomhausWishlistBadge();
+    syncAllCardWishlistButtons();
     if (isAdded) {
       toggleLoomhausWishlist();
     }
@@ -2146,11 +2361,69 @@
       list.push(product);
       localStorage.setItem('loomhaus_wishlist', JSON.stringify(list));
       updateLoomhausWishlistBadge();
+      syncAllCardWishlistButtons();
     }
     toggleLoomhausWishlist();
   };
 
-  document.addEventListener('DOMContentLoaded', updateLoomhausWishlistBadge);
+  window.handlePdpShareClick = function(btn) {
+    if (!btn) return;
+    const shareData = {
+      title: document.title || 'Loomhaus',
+      url: window.location.href
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(function() {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href).then(function() {
+        const origTitle = btn.getAttribute('title') || '';
+        btn.setAttribute('title', 'Link Copied!');
+        btn.style.borderColor = '#191B18';
+        setTimeout(function() {
+          btn.setAttribute('title', origTitle);
+          btn.style.borderColor = '';
+        }, 2000);
+      }).catch(function() {});
+    }
+  };
+
+  window.handleCardWishlistClick = function(cardElem) {
+    if (!cardElem) return;
+    const title = (cardElem.getAttribute('data-title') || cardElem.querySelector('.loomhaus-stl__card-title')?.textContent || '').trim();
+    const price = (cardElem.getAttribute('data-price') || cardElem.querySelector('.loomhaus-stl__card-price')?.textContent || '').trim();
+    const image = (cardElem.getAttribute('data-image') || cardElem.querySelector('.loomhaus-stl__card-img')?.getAttribute('src') || '').trim();
+    const url = cardElem.getAttribute('data-url') || './product-black-leather-bag.html';
+
+    const product = { title, price, image, url };
+    toggleLoomhausWishlistItem(product);
+    syncModalWishlistState();
+    syncAllCardWishlistButtons();
+  };
+
+  window.syncAllCardWishlistButtons = function() {
+    const list = getLoomhausWishlist();
+    document.querySelectorAll('.loomhaus-stl__card').forEach(function(card) {
+      const title = (card.getAttribute('data-title') || card.querySelector('.loomhaus-stl__card-title')?.textContent || '').trim();
+      const isSaved = list.some(item => item.title === title);
+      const btn = card.querySelector('.loomhaus-card-wishlist-btn');
+      if (btn) {
+        if (isSaved) {
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-label', 'Remove from wishlist');
+          btn.title = 'Remove from wishlist';
+        } else {
+          btn.classList.remove('is-active');
+          btn.setAttribute('aria-label', 'Save to wishlist');
+          btn.title = 'Save to wishlist';
+        }
+      }
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    updateLoomhausWishlistBadge();
+    syncAllCardWishlistButtons();
+  });
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       var searchOverlay = document.getElementById('loomhausSearchOverlay');
