@@ -584,11 +584,22 @@
     /* PDP Action Bar (Share, Wishlist, Add to Bag - Image 2) */
     .loomhaus-pdp-action-bar {
       display: flex;
+      flex-direction: row;
       align-items: center;
+      justify-content: flex-start;
       gap: 12px;
       width: 100%;
       margin-top: 14px;
       margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+
+    .loomhaus-pdp-action-bar > * {
+      margin: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      vertical-align: middle !important;
+      align-self: center !important;
       box-sizing: border-box;
     }
 
@@ -597,6 +608,7 @@
       height: 50px;
       min-width: 50px;
       min-height: 50px;
+      max-height: 50px;
       background-color: #F0ECE4;
       border: 1px solid #E5DFD5;
       border-radius: 10px;
@@ -610,6 +622,7 @@
       flex-shrink: 0;
       box-shadow: none;
       text-decoration: none;
+      line-height: 1;
     }
 
     .loomhaus-pdp-btn-square:hover {
@@ -639,9 +652,10 @@
       flex: 1;
       height: 50px;
       min-height: 50px;
+      max-height: 50px;
       background-color: #191B18;
       color: #FFFFFF;
-      border: none;
+      border: 1px solid #191B18;
       border-radius: 10px;
       font-size: 15px;
       font-weight: 700;
@@ -656,6 +670,7 @@
       text-decoration: none;
       white-space: nowrap;
       box-sizing: border-box;
+      line-height: 1;
     }
 
     .loomhaus-pdp-btn-add-to-bag:hover {
@@ -989,7 +1004,7 @@
       .loomhaus-search-input {
         font-size: 13.5px;
       }
-      .loomhaus-wishlist-pdp-btn {
+      .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square) {
         font-size: 12.5px;
         padding: 11px 18px;
         min-height: 44px;
@@ -1000,18 +1015,29 @@
         margin-top: 14px;
         margin-bottom: 6px;
       }
+      .loomhaus-pdp-action-bar > * {
+        margin: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        vertical-align: middle !important;
+        align-self: center !important;
+      }
       .loomhaus-pdp-btn-square {
         width: 48px;
         height: 48px;
         min-width: 48px;
         min-height: 48px;
+        max-height: 48px;
         border-radius: 9px;
+        padding: 0;
       }
       .loomhaus-pdp-btn-add-to-bag {
         height: 48px;
         min-height: 48px;
+        max-height: 48px;
         border-radius: 9px;
         font-size: 14px;
+        padding: 0 16px;
         gap: 8px;
       }
       .loomhaus-card-wishlist-btn {

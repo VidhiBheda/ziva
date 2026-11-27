@@ -1018,8 +1018,8 @@
     color: #E03131;
   }
 
-  /* PDP & Modal Wishlist Button */
-  .loomhaus-wishlist-pdp-btn {
+  /* PDP & Modal Wishlist Button (Standalone Legacy) */
+  .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square) {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1044,32 +1044,32 @@
     line-height: 1 !important;
   }
 
-  .loomhaus-wishlist-pdp-btn:hover {
+  .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square):hover {
     background-color: #191B18 !important;
     color: #FFFFFF !important;
   }
 
-  .loomhaus-wishlist-pdp-btn:hover .loomhaus-wishlist-pdp-icon {
+  .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square):hover .loomhaus-wishlist-pdp-icon {
     stroke: #FFFFFF !important;
   }
 
-  .loomhaus-wishlist-pdp-btn.is-active {
+  .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square).is-active {
     background-color: #FAF2F2 !important;
     border-color: #E03131 !important;
     color: #E03131 !important;
   }
 
-  .loomhaus-wishlist-pdp-btn.is-active:hover {
+  .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square).is-active:hover {
     background-color: #E03131 !important;
     color: #FFFFFF !important;
   }
 
-  .loomhaus-wishlist-pdp-btn.is-active .loomhaus-wishlist-pdp-icon {
+  .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square).is-active .loomhaus-wishlist-pdp-icon {
     fill: #E03131 !important;
     stroke: #E03131 !important;
   }
 
-  .loomhaus-wishlist-pdp-btn.is-active:hover .loomhaus-wishlist-pdp-icon {
+  .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square).is-active:hover .loomhaus-wishlist-pdp-icon {
     fill: #FFFFFF !important;
     stroke: #FFFFFF !important;
   }
@@ -1084,11 +1084,30 @@
   /* PDP Action Bar (Share, Wishlist, Add to Bag - Image 2) */
   .loomhaus-pdp-action-bar {
     display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
+    justify-content: flex-start !important;
     gap: 12px !important;
     width: 100% !important;
     margin-top: 14px !important;
     margin-bottom: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  .loomhaus-pdp-action-bar > *,
+  .loomhaus-pdp-action-bar > button,
+  .loomhaus-pdp-action-bar .loomhaus-pdp-btn-square,
+  .loomhaus-pdp-action-bar .loomhaus-pdp-btn-add-to-bag,
+  .loomhaus-pdp-action-bar .product-form__submit {
+    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    vertical-align: middle !important;
+    align-self: center !important;
     box-sizing: border-box !important;
   }
 
@@ -1097,6 +1116,7 @@
     height: 50px !important;
     min-width: 50px !important;
     min-height: 50px !important;
+    max-height: 50px !important;
     background-color: #F0ECE4 !important;
     border: 1px solid #E5DFD5 !important;
     border-radius: 10px !important;
@@ -1110,6 +1130,7 @@
     flex-shrink: 0 !important;
     box-shadow: none !important;
     text-decoration: none !important;
+    line-height: 1 !important;
   }
 
   .loomhaus-pdp-btn-square:hover {
@@ -1135,13 +1156,20 @@
     color: inherit !important;
   }
 
-  .loomhaus-pdp-btn-add-to-bag {
+  .loomhaus-pdp-btn-add-to-bag,
+  .loomhaus-pdp-action-bar .product-form__submit {
     flex: 1 !important;
     height: 50px !important;
     min-height: 50px !important;
+    max-height: 50px !important;
+    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     background-color: #191B18 !important;
     color: #FFFFFF !important;
-    border: none !important;
+    border: 1px solid #191B18 !important;
     border-radius: 10px !important;
     font-size: 15px !important;
     font-weight: 700 !important;
@@ -1156,14 +1184,23 @@
     text-decoration: none !important;
     white-space: nowrap !important;
     box-sizing: border-box !important;
+    line-height: 1 !important;
+    align-self: center !important;
+    vertical-align: middle !important;
+    position: relative !important;
+    top: 0 !important;
   }
 
-  .loomhaus-pdp-btn-add-to-bag:hover {
+  .loomhaus-pdp-btn-add-to-bag:hover,
+  .loomhaus-pdp-action-bar .product-form__submit:hover {
     background-color: #333830 !important;
+    border-color: #333830 !important;
     transform: translateY(-1px) !important;
   }
 
-  .loomhaus-pdp-btn-add-to-bag[disabled] {
+  .loomhaus-pdp-btn-add-to-bag[disabled],
+  .loomhaus-pdp-action-bar .product-form__submit[disabled],
+  .loomhaus-pdp-action-bar .product-form__submit[aria-disabled="true"] {
     opacity: 0.55 !important;
     cursor: not-allowed !important;
     transform: none !important;
@@ -1275,7 +1312,7 @@
       font-size: 13.5px;
     }
 
-    .loomhaus-wishlist-pdp-btn {
+    .loomhaus-wishlist-pdp-btn:not(.loomhaus-pdp-btn-square) {
       font-size: 12.5px !important;
       padding: 11px 18px !important;
       min-height: 44px !important;
@@ -1285,6 +1322,21 @@
     .loomhaus-pdp-action-bar {
       gap: 10px !important;
       margin-top: 12px !important;
+      margin-bottom: 8px !important;
+    }
+
+    .loomhaus-pdp-action-bar > *,
+    .loomhaus-pdp-action-bar > button,
+    .loomhaus-pdp-action-bar .loomhaus-pdp-btn-square,
+    .loomhaus-pdp-action-bar .loomhaus-pdp-btn-add-to-bag,
+    .loomhaus-pdp-action-bar .product-form__submit {
+      margin: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      vertical-align: middle !important;
+      align-self: center !important;
     }
 
     .loomhaus-pdp-btn-square {
@@ -1292,12 +1344,17 @@
       height: 48px !important;
       min-width: 48px !important;
       min-height: 48px !important;
+      max-height: 48px !important;
+      padding: 0 !important;
     }
 
-    .loomhaus-pdp-btn-add-to-bag {
+    .loomhaus-pdp-btn-add-to-bag,
+    .loomhaus-pdp-action-bar .product-form__submit {
       height: 48px !important;
       min-height: 48px !important;
+      max-height: 48px !important;
       font-size: 14.5px !important;
+      padding: 0 16px !important;
     }
 
     .loomhaus-card-wishlist-btn {
