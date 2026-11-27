@@ -231,6 +231,8 @@
     "custom_featured_product": {
       "type": "custom-featured-product",
       "settings": {
+        "section_kicker": "FEATURED COLLECTION",
+        "section_heading": "Our Best Seller",
         "product": "",
         "badge_text": "Ziva #1 Everyday Top",
         "rating_text": "4.6 (1,240+ Reviews)",

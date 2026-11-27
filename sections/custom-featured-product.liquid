@@ -49,6 +49,24 @@
 -%}
 
 <section class="loomhaus-fp" data-section-id="{{ section.id }}" id="featured-product-showcase">
+  {%- if section.settings.section_heading != blank or section.settings.section_kicker != blank -%}
+    <div class="loomhaus-fp__header">
+      <div class="loomhaus-fp__header-left">
+        {%- if section.settings.section_kicker != blank -%}
+          <span class="loomhaus-fp__kicker">{{ section.settings.section_kicker }}</span>
+        {%- endif -%}
+        {%- if section.settings.section_heading != blank -%}
+          <h2 class="loomhaus-fp__section-heading">{{ section.settings.section_heading }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.section_subheading != blank -%}
+        <div class="loomhaus-fp__header-right">
+          <p class="loomhaus-fp__subtext">{{ section.settings.section_subheading }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
   <div class="loomhaus-fp__container">
     
     <!-- Left Column: Product Gallery -->
@@ -434,6 +452,47 @@
     width: 100%;
     position: relative;
     box-sizing: border-box;
+  }
+
+  .loomhaus-fp__header {
+    max-width: 1360px;
+    margin: 0 auto 32px auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    box-sizing: border-box;
+  }
+
+  .loomhaus-fp__header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .loomhaus-fp__kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #74786E;
+  }
+
+  .loomhaus-fp__section-heading {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0;
+    color: #191B18;
+  }
+
+  .loomhaus-fp__subtext {
+    font-size: 13.5px;
+    color: #74786E;
+    margin: 0;
+    font-weight: 450;
   }
 
   .loomhaus-fp__container {
@@ -962,6 +1021,10 @@
 
   /* Responsive */
   @media (max-width: 990px) {
+    .loomhaus-fp__header {
+      padding: 0 24px;
+      margin-bottom: 24px;
+    }
     .loomhaus-fp__container {
       grid-template-columns: 1fr;
       gap: 40px;
@@ -973,6 +1036,19 @@
   }
 
   @media (max-width: 768px) {
+    .loomhaus-fp {
+      padding-top: 36px !important;
+    }
+    .loomhaus-fp__header {
+      padding: 0 16px;
+      margin-bottom: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .loomhaus-fp__section-heading {
+      font-size: clamp(26px, 7vw, 36px);
+    }
     .loomhaus-fp__callout {
       display: none !important;
     }
@@ -1040,6 +1116,27 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_kicker",
+      "label": "Section Kicker",
+      "default": "FEATURED COLLECTION"
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading",
+      "default": "Our Best Seller"
+    },
+    {
+      "type": "text",
+      "id": "section_subheading",
+      "label": "Section Subheading"
+    },
     {
       "type": "header",
       "content": "Product Selection"

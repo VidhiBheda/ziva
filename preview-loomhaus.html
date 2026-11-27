@@ -1538,6 +1538,14 @@
 <!-- FEATURED PRODUCT SHOWCASE: Classic Varsity Top -->
 <!-- ======================================================= -->
 <section class="loomhaus-fp" id="featured-product-showcase">
+  <!-- Section Header (Our Best Seller) -->
+  <div class="loomhaus-fp__header">
+    <div class="loomhaus-fp__header-left">
+      <span class="loomhaus-fp__kicker">FEATURED COLLECTION</span>
+      <h2 class="loomhaus-fp__section-heading">Our Best Seller</h2>
+    </div>
+  </div>
+
   <div class="loomhaus-fp__container">
     
     <!-- Left Column: Product Gallery -->
@@ -3226,6 +3234,40 @@
     border-top: 1px solid rgba(0,0,0,0.04);
   }
 
+  .loomhaus-fp__header {
+    max-width: 1360px;
+    margin: 0 auto 32px auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    box-sizing: border-box;
+  }
+
+  .loomhaus-fp__header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .loomhaus-fp__kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #74786E;
+  }
+
+  .loomhaus-fp__section-heading {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0;
+    color: #191B18;
+  }
+
   .loomhaus-fp__container {
     max-width: 1360px;
     margin: 0 auto;
@@ -3733,6 +3775,10 @@
   }
 
   @media (max-width: 990px) {
+    .loomhaus-fp__header {
+      padding: 0 24px;
+      margin-bottom: 24px;
+    }
     .loomhaus-fp__container {
       grid-template-columns: 1fr;
       gap: 40px;
@@ -3744,6 +3790,19 @@
   }
 
   @media (max-width: 768px) {
+    .loomhaus-fp {
+      padding-top: 36px !important;
+    }
+    .loomhaus-fp__header {
+      padding: 0 16px;
+      margin-bottom: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .loomhaus-fp__section-heading {
+      font-size: clamp(26px, 7vw, 36px);
+    }
     .loomhaus-fp__callout {
       display: none !important;
     }
