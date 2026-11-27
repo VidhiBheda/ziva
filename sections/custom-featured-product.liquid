@@ -40,6 +40,12 @@
     assign fp_variant_id = ''
     assign fp_available = true
   endif
+
+  assign fp_is_bag = false
+  assign fp_title_lower = fp_title | downcase
+  if fp_title_lower contains 'bag' or prod.type contains 'bag' or prod.tags contains 'bag'
+    assign fp_is_bag = true
+  endif
 -%}
 
 <section class="loomhaus-fp" data-section-id="{{ section.id }}" id="featured-product-showcase">
@@ -149,16 +155,18 @@
       </div>
       <p class="loomhaus-fp__tax-note">{{ section.settings.mrp_note | default: 'MRP inclusive of all taxes' }}</p>
 
-      <!-- Quality / Guarantee Callout Box -->
-      {%- if section.settings.callout_title != blank -%}
-        <div class="loomhaus-fp__callout">
-          <div class="loomhaus-fp__callout-icon" aria-hidden="true">&#10003;</div>
-          <div class="loomhaus-fp__callout-text">
-            <div class="loomhaus-fp__callout-title">{{ section.settings.callout_title }}</div>
-            <div class="loomhaus-fp__callout-subtitle">{{ section.settings.callout_subtitle }}</div>
+      <!-- Quality / Guarantee Callout Box (Hidden for bag products) -->
+      {%- unless fp_is_bag -%}
+        {%- if section.settings.callout_title != blank -%}
+          <div class="loomhaus-fp__callout">
+            <div class="loomhaus-fp__callout-icon" aria-hidden="true">&#10003;</div>
+            <div class="loomhaus-fp__callout-text">
+              <div class="loomhaus-fp__callout-title">{{ section.settings.callout_title }}</div>
+              <div class="loomhaus-fp__callout-subtitle">{{ section.settings.callout_subtitle }}</div>
+            </div>
           </div>
-        </div>
-      {%- endif -%}
+        {%- endif -%}
+      {%- endunless -%}
 
       <!-- Color Selector -->
       <div class="loomhaus-fp__option-section">
@@ -188,13 +196,6 @@
       </div>
 
       <!-- Size Selector (Hidden for bag products) -->
-      {%- liquid
-        assign fp_is_bag = false
-        assign fp_title_lower = fp_title | downcase
-        if fp_title_lower contains 'bag' or prod.type contains 'bag' or prod.tags contains 'bag'
-          assign fp_is_bag = true
-        endif
-      -%}
       {%- unless fp_is_bag -%}
         <div class="loomhaus-fp__option-section">
           <div class="loomhaus-fp__option-header">
@@ -971,9 +972,18 @@
     }
   }
 
+  @media (max-width: 768px) {
+    .loomhaus-fp__callout {
+      display: none !important;
+    }
+  }
+
   @media (max-width: 580px) {
     .loomhaus-fp__container {
       padding: 0 16px;
+    }
+    .loomhaus-fp__callout {
+      display: none !important;
     }
     .loomhaus-fp__purchase-row {
       display: flex !important;
