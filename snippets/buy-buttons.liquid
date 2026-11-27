@@ -99,6 +99,24 @@
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
+
+          <!-- Add to Wishlist Button -->
+          <button
+            type="button"
+            class="button button--secondary button--full-width loomhaus-wishlist-pdp-btn"
+            id="LoomhausWishlistBtn-{{ section_id }}"
+            onclick="handlePdpWishlistClick(this)"
+            data-product-title="{{ product.title | escape }}"
+            data-product-price="{{ product.selected_or_first_available_variant.price | money }}"
+            data-product-image="{{ product.featured_image | image_url: width: 300 }}"
+            data-product-url="{{ product.url }}"
+            aria-label="Add to Wishlist"
+          >
+            <svg class="loomhaus-wishlist-pdp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span class="loomhaus-wishlist-pdp-text">Add to Wishlist</span>
+          </button>
         </div>
       {%- endform -%}
     </product-form>

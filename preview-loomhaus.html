@@ -518,6 +518,69 @@
       color: #E03131;
     }
 
+    /* PDP & Modal Wishlist Button */
+    .loomhaus-wishlist-pdp-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      background-color: transparent;
+      color: #191B18;
+      border: 1.5px solid #191B18;
+      border-radius: 9999px;
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 13px 24px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      min-height: 48px;
+      box-sizing: border-box;
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .loomhaus-wishlist-pdp-btn:hover {
+      background-color: #191B18;
+      color: #FFFFFF;
+    }
+
+    .loomhaus-wishlist-pdp-btn:hover .loomhaus-wishlist-pdp-icon {
+      stroke: #FFFFFF;
+    }
+
+    .loomhaus-wishlist-pdp-btn.is-active {
+      background-color: #FAF2F2;
+      border-color: #E03131;
+      color: #E03131;
+    }
+
+    .loomhaus-wishlist-pdp-btn.is-active:hover {
+      background-color: #E03131;
+      color: #FFFFFF;
+    }
+
+    .loomhaus-wishlist-pdp-btn.is-active .loomhaus-wishlist-pdp-icon {
+      fill: #E03131;
+      stroke: #E03131;
+    }
+
+    .loomhaus-wishlist-pdp-btn.is-active:hover .loomhaus-wishlist-pdp-icon {
+      fill: #FFFFFF;
+      stroke: #FFFFFF;
+    }
+
+    .loomhaus-wishlist-pdp-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      transition: transform 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
+    }
+
     /* Hero */
     .loomhaus-hero-wrapper {
       width: 100%;
@@ -793,6 +856,12 @@
       }
       .loomhaus-search-input {
         font-size: 13.5px;
+      }
+      .loomhaus-wishlist-pdp-btn {
+        font-size: 12.5px;
+        padding: 11px 18px;
+        min-height: 44px;
+        margin-top: 8px;
       }
 
       .loomhaus-hero {
@@ -1549,7 +1618,7 @@
           </div>
         </div>
 
-        <!-- Add To Cart / Checkout CTA Button (Triggers Image 3) -->
+        <!-- Add To Cart & Wishlist Action Buttons -->
         <div class="loomhaus-modal__action">
           <button 
             type="button" 
@@ -1559,6 +1628,19 @@
           >
             <span>ADD TO CART</span>
             <span class="loomhaus-modal__btn-arrow" aria-hidden="true">&rarr;</span>
+          </button>
+
+          <button 
+            type="button" 
+            class="loomhaus-wishlist-pdp-btn loomhaus-modal__btn-wishlist" 
+            id="loomhausModalWishlistBtn"
+            onclick="triggerWishlistFromModal()"
+            aria-label="Add to Wishlist"
+          >
+            <svg class="loomhaus-wishlist-pdp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span class="loomhaus-wishlist-pdp-text" id="loomhausModalWishlistText">ADD TO WISHLIST</span>
           </button>
         </div>
 
@@ -1716,6 +1798,7 @@
     modal.classList.add('loomhaus-modal--open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    syncModalWishlistState();
   }
 
   // Close Quick View Modal
@@ -1752,7 +1835,38 @@
         currentTitle = currentTitle.replace(/\bWhite\b/gi, 'Black').replace(/\bwhite\b/g, 'black');
       }
       titleElem.textContent = currentTitle;
+      syncModalWishlistState();
     }
+  }
+
+  function syncModalWishlistState() {
+    const titleElem = document.getElementById('loomhausModalTitle');
+    if (!titleElem) return;
+    const title = titleElem.textContent.trim();
+    const list = getLoomhausWishlist();
+    const isSaved = list.some(item => item.title === title);
+    const btn = document.getElementById('loomhausModalWishlistBtn');
+    const text = document.getElementById('loomhausModalWishlistText');
+    if (btn && text) {
+      if (isSaved) {
+        btn.classList.add('is-active');
+        text.textContent = 'ADDED TO WISHLIST';
+      } else {
+        btn.classList.remove('is-active');
+        text.textContent = 'ADD TO WISHLIST';
+      }
+    }
+  }
+
+  function triggerWishlistFromModal() {
+    const title = (document.getElementById('loomhausModalTitle').textContent || '').trim();
+    const price = (document.getElementById('loomhausModalPrice').textContent || '').trim();
+    const image = (document.getElementById('loomhausModalImg').getAttribute('src') || '').trim();
+    const url = activeCardInPreview ? (activeCardInPreview.getAttribute('data-url') || '#') : '#';
+
+    const product = { title, price, image, url };
+    toggleLoomhausWishlistItem(product);
+    syncModalWishlistState();
   }
 
   // When checkout / add to cart is selected in Image 2 -> open Image 3 (Cart Drawer)
@@ -1997,7 +2111,30 @@
     localStorage.setItem('loomhaus_wishlist', JSON.stringify(list));
     updateLoomhausWishlistBadge();
     renderLoomhausWishlist();
+    syncModalWishlistState();
   }
+
+  window.toggleLoomhausWishlistItem = function(product) {
+    var list = getLoomhausWishlist();
+    var index = -1;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].title === product.title) { index = i; break; }
+    }
+    var isAdded = false;
+    if (index > -1) {
+      list.splice(index, 1);
+      isAdded = false;
+    } else {
+      list.push(product);
+      isAdded = true;
+    }
+    localStorage.setItem('loomhaus_wishlist', JSON.stringify(list));
+    updateLoomhausWishlistBadge();
+    if (isAdded) {
+      toggleLoomhausWishlist();
+    }
+    return isAdded;
+  };
 
   window.addLoomhausWishlist = function(product) {
     var list = getLoomhausWishlist();

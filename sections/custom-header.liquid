@@ -391,6 +391,7 @@
     localStorage.setItem('loomhaus_wishlist', JSON.stringify(list));
     updateLoomhausWishlistBadge();
     renderLoomhausWishlist();
+    document.dispatchEvent(new CustomEvent('loomhaus:wishlist:updated'));
   }
 
   window.addLoomhausWishlist = function(product) {
@@ -405,9 +406,67 @@
       updateLoomhausWishlistBadge();
     }
     toggleLoomhausWishlist();
+    document.dispatchEvent(new CustomEvent('loomhaus:wishlist:updated'));
   };
 
-  document.addEventListener('DOMContentLoaded', updateLoomhausWishlistBadge);
+  window.toggleLoomhausWishlistItem = function(product) {
+    var list = getLoomhausWishlist();
+    var index = -1;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].title === product.title) { index = i; break; }
+    }
+    var isAdded = false;
+    if (index > -1) {
+      list.splice(index, 1);
+      isAdded = false;
+    } else {
+      list.push(product);
+      isAdded = true;
+    }
+    localStorage.setItem('loomhaus_wishlist', JSON.stringify(list));
+    updateLoomhausWishlistBadge();
+    document.dispatchEvent(new CustomEvent('loomhaus:wishlist:updated'));
+    if (isAdded) {
+      toggleLoomhausWishlist();
+    }
+    return isAdded;
+  };
+
+  window.handlePdpWishlistClick = function(btn) {
+    if (!btn) return;
+    var title = btn.getAttribute('data-product-title') || document.title;
+    var price = btn.getAttribute('data-product-price') || '';
+    var image = btn.getAttribute('data-product-image') || '';
+    var url = btn.getAttribute('data-product-url') || window.location.pathname;
+    var product = { title: title.trim(), price: price.trim(), image: image.trim(), url: url.trim() };
+    window.toggleLoomhausWishlistItem(product);
+  };
+
+  window.syncPdpWishlistButtons = function() {
+    var list = getLoomhausWishlist();
+    var btns = document.querySelectorAll('.loomhaus-wishlist-pdp-btn');
+    btns.forEach(function(btn) {
+      var title = (btn.getAttribute('data-product-title') || '').trim();
+      var isSaved = list.some(function(item) { return item.title === title; });
+      var textSpan = btn.querySelector('.loomhaus-wishlist-pdp-text');
+      if (isSaved) {
+        btn.classList.add('is-active');
+        if (textSpan) textSpan.textContent = 'Added to Wishlist';
+      } else {
+        btn.classList.remove('is-active');
+        if (textSpan) textSpan.textContent = 'Add to Wishlist';
+      }
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    updateLoomhausWishlistBadge();
+    window.syncPdpWishlistButtons();
+  });
+  document.addEventListener('loomhaus:wishlist:updated', function() {
+    updateLoomhausWishlistBadge();
+    window.syncPdpWishlistButtons();
+  });
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       var searchOverlay = document.getElementById('loomhausSearchOverlay');
@@ -919,6 +978,69 @@
     color: #E03131;
   }
 
+  /* PDP & Modal Wishlist Button */
+  .loomhaus-wishlist-pdp-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+    margin-bottom: 6px !important;
+    background-color: transparent !important;
+    color: #191B18 !important;
+    border: 1.5px solid #191B18 !important;
+    border-radius: 9999px !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    padding: 13px 24px !important;
+    cursor: pointer !important;
+    transition: all 0.22s ease !important;
+    min-height: 48px !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
+    line-height: 1 !important;
+  }
+
+  .loomhaus-wishlist-pdp-btn:hover {
+    background-color: #191B18 !important;
+    color: #FFFFFF !important;
+  }
+
+  .loomhaus-wishlist-pdp-btn:hover .loomhaus-wishlist-pdp-icon {
+    stroke: #FFFFFF !important;
+  }
+
+  .loomhaus-wishlist-pdp-btn.is-active {
+    background-color: #FAF2F2 !important;
+    border-color: #E03131 !important;
+    color: #E03131 !important;
+  }
+
+  .loomhaus-wishlist-pdp-btn.is-active:hover {
+    background-color: #E03131 !important;
+    color: #FFFFFF !important;
+  }
+
+  .loomhaus-wishlist-pdp-btn.is-active .loomhaus-wishlist-pdp-icon {
+    fill: #E03131 !important;
+    stroke: #E03131 !important;
+  }
+
+  .loomhaus-wishlist-pdp-btn.is-active:hover .loomhaus-wishlist-pdp-icon {
+    fill: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+  }
+
+  .loomhaus-wishlist-pdp-icon {
+    width: 18px !important;
+    height: 18px !important;
+    flex-shrink: 0 !important;
+    transition: transform 0.2s ease, fill 0.2s ease, stroke 0.2s ease !important;
+  }
+
   /* Mobile Toggle */
   .loomhaus-header__mobile-toggle {
     display: none;
@@ -973,6 +1095,13 @@
 
     .loomhaus-search-input {
       font-size: 13.5px;
+    }
+
+    .loomhaus-wishlist-pdp-btn {
+      font-size: 12.5px !important;
+      padding: 11px 18px !important;
+      min-height: 44px !important;
+      margin-top: 8px !important;
     }
 
     .loomhaus-header__mobile-toggle {
