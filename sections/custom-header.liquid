@@ -116,8 +116,40 @@
       {%- endif -%}
     </div>
 
-    <!-- Right: Actions (CTA Button + Shopping Bag Cart) -->
+    <!-- Right: Actions (Search + Wishlist + CTA Button + Shopping Bag Cart) -->
     <div class="loomhaus-header__actions">
+      {%- if section.settings.show_search -%}
+        <!-- Search Option Trigger -->
+        <button 
+          type="button" 
+          class="loomhaus-header__icon-btn loomhaus-header__search-btn" 
+          id="loomhausSearchToggle"
+          aria-label="{{ 'general.search.search' | t | default: 'Search' }}"
+          onclick="toggleLoomhausSearch()"
+        >
+          <svg class="loomhaus-header__action-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      {%- endif -%}
+
+      {%- if section.settings.show_wishlist -%}
+        <!-- Wishlist Option Trigger -->
+        <button 
+          type="button" 
+          class="loomhaus-header__icon-btn loomhaus-header__wishlist-btn" 
+          id="loomhausWishlistToggle"
+          aria-label="Wishlist"
+          onclick="toggleLoomhausWishlist()"
+        >
+          <svg class="loomhaus-header__action-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="loomhaus-header__wishlist-badge" id="loomhausWishlistBadge" style="display: none;">0</span>
+        </button>
+      {%- endif -%}
+
       {%- if section.settings.show_cta and section.settings.cta_text != blank -%}
         <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="loomhaus-header__cta">
           <span>{{ section.settings.cta_text }}</span>
@@ -150,6 +182,62 @@
       {%- endif -%}
     </div>
 
+  </div>
+
+  <!-- Search Bar Dropdown / Overlay -->
+  <div class="loomhaus-search-overlay" id="loomhausSearchOverlay" aria-hidden="true">
+    <div class="loomhaus-search-container">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="loomhaus-search-form">
+        <svg class="loomhaus-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input 
+          type="search" 
+          name="q" 
+          id="loomhausSearchInput" 
+          class="loomhaus-search-input" 
+          placeholder="Search products, collections, styles..."
+          autocomplete="off"
+        >
+        <button type="submit" class="loomhaus-search-submit" aria-label="Search">
+          &rarr;
+        </button>
+      </form>
+      <button type="button" class="loomhaus-search-close" onclick="toggleLoomhausSearch()" aria-label="Close search">
+        &times;
+      </button>
+    </div>
+  </div>
+
+  <!-- Wishlist Slide-out Drawer -->
+  <div class="loomhaus-wishlist-drawer" id="loomhausWishlistDrawer" aria-hidden="true">
+    <div class="loomhaus-wishlist-overlay" onclick="toggleLoomhausWishlist()"></div>
+    <div class="loomhaus-wishlist-panel">
+      <div class="loomhaus-wishlist-header">
+        <div class="loomhaus-wishlist-title-wrap">
+          <svg class="loomhaus-wishlist-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <h2 class="loomhaus-wishlist-title">My Wishlist</h2>
+          <span class="loomhaus-wishlist-count" id="loomhausWishlistDrawerCount">(0)</span>
+        </div>
+        <button type="button" class="loomhaus-wishlist-close" onclick="toggleLoomhausWishlist()" aria-label="Close wishlist">
+          &times;
+        </button>
+      </div>
+
+      <div class="loomhaus-wishlist-body" id="loomhausWishlistItems">
+        <div class="loomhaus-wishlist-empty">
+          <div class="loomhaus-wishlist-empty-icon">&#9825;</div>
+          <p class="loomhaus-wishlist-empty-title">Your wishlist is empty</p>
+          <p class="loomhaus-wishlist-empty-sub">Explore our pieces and save your favorite items here.</p>
+          <a href="{{ routes.all_products_collection_url }}" class="loomhaus-wishlist-empty-btn" onclick="toggleLoomhausWishlist()">
+            EXPLORE COLLECTION &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Mobile Slide-out Drawer -->
@@ -218,6 +306,120 @@
     }
     document.body.style.overflow = !isExpanded ? 'hidden' : '';
   }
+
+  function toggleLoomhausSearch() {
+    const overlay = document.getElementById('loomhausSearchOverlay');
+    const input = document.getElementById('loomhausSearchInput');
+    if (!overlay) return;
+    const isOpen = overlay.classList.contains('loomhaus-search-overlay--open');
+    overlay.classList.toggle('loomhaus-search-overlay--open', !isOpen);
+    overlay.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+    if (!isOpen && input) {
+      setTimeout(function() { input.focus(); }, 80);
+    }
+  }
+
+  function toggleLoomhausWishlist() {
+    const drawer = document.getElementById('loomhausWishlistDrawer');
+    if (!drawer) return;
+    const isOpen = drawer.classList.contains('loomhaus-wishlist-drawer--open');
+    drawer.classList.toggle('loomhaus-wishlist-drawer--open', !isOpen);
+    drawer.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+    document.body.style.overflow = !isOpen ? 'hidden' : '';
+    if (!isOpen) {
+      renderLoomhausWishlist();
+    }
+  }
+
+  function getLoomhausWishlist() {
+    try {
+      return JSON.parse(localStorage.getItem('loomhaus_wishlist') || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function updateLoomhausWishlistBadge() {
+    const list = getLoomhausWishlist();
+    const badge = document.getElementById('loomhausWishlistBadge');
+    if (badge) {
+      badge.textContent = list.length;
+      badge.style.display = list.length > 0 ? 'flex' : 'none';
+    }
+    const drawerCount = document.getElementById('loomhausWishlistDrawerCount');
+    if (drawerCount) {
+      drawerCount.textContent = '(' + list.length + ')';
+    }
+  }
+
+  function renderLoomhausWishlist() {
+    const list = getLoomhausWishlist();
+    const container = document.getElementById('loomhausWishlistItems');
+    if (!container) return;
+    if (list.length === 0) {
+      container.innerHTML = '<div class="loomhaus-wishlist-empty">' +
+        '<div class="loomhaus-wishlist-empty-icon">&#9825;</div>' +
+        '<p class="loomhaus-wishlist-empty-title">Your wishlist is empty</p>' +
+        '<p class="loomhaus-wishlist-empty-sub">Explore our pieces and save your favorite items here.</p>' +
+        '<a href="{{ routes.all_products_collection_url }}" class="loomhaus-wishlist-empty-btn" onclick="toggleLoomhausWishlist()">' +
+          'EXPLORE COLLECTION &rarr;' +
+        '</a>' +
+      '</div>';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < list.length; i++) {
+      var item = list[i];
+      html += '<div class="loomhaus-wishlist-item">' +
+        '<img src="' + (item.image || '') + '" alt="' + (item.title || 'Product') + '" class="loomhaus-wishlist-img">' +
+        '<div class="loomhaus-wishlist-info">' +
+          '<h4 class="loomhaus-wishlist-item-title">' + (item.title || '') + '</h4>' +
+          '<span class="loomhaus-wishlist-item-price">' + (item.price || '') + '</span>' +
+          '<div class="loomhaus-wishlist-item-actions">' +
+            '<a href="' + (item.url || '#') + '" class="loomhaus-wishlist-view-btn">View Product</a>' +
+            '<button type="button" class="loomhaus-wishlist-remove-btn" onclick="removeLoomhausWishlistItem(' + i + ')">Remove</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+    container.innerHTML = html;
+  }
+
+  function removeLoomhausWishlistItem(idx) {
+    var list = getLoomhausWishlist();
+    list.splice(idx, 1);
+    localStorage.setItem('loomhaus_wishlist', JSON.stringify(list));
+    updateLoomhausWishlistBadge();
+    renderLoomhausWishlist();
+  }
+
+  window.addLoomhausWishlist = function(product) {
+    var list = getLoomhausWishlist();
+    var exists = false;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].title === product.title) { exists = true; break; }
+    }
+    if (!exists) {
+      list.push(product);
+      localStorage.setItem('loomhaus_wishlist', JSON.stringify(list));
+      updateLoomhausWishlistBadge();
+    }
+    toggleLoomhausWishlist();
+  };
+
+  document.addEventListener('DOMContentLoaded', updateLoomhausWishlistBadge);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var searchOverlay = document.getElementById('loomhausSearchOverlay');
+      if (searchOverlay && searchOverlay.classList.contains('loomhaus-search-overlay--open')) {
+        toggleLoomhausSearch();
+      }
+      var wishlistDrawer = document.getElementById('loomhausWishlistDrawer');
+      if (wishlistDrawer && wishlistDrawer.classList.contains('loomhaus-wishlist-drawer--open')) {
+        toggleLoomhausWishlist();
+      }
+    }
+  });
 </script>
 
 <style>
@@ -380,6 +582,343 @@
     justify-content: center;
   }
 
+  /* Icon Action Buttons (Search & Wishlist) */
+  .loomhaus-header__icon-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .loomhaus-header__icon-btn:hover {
+    transform: scale(1.08);
+    opacity: 0.8;
+  }
+
+  .loomhaus-header__action-svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+  }
+
+  .loomhaus-header__wishlist-badge {
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7C8376;
+    color: #FFFFFF;
+  }
+
+  /* Search Overlay Dropdown */
+  .loomhaus-search-overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: {{ section.settings.bg_color | default: '#F6F3EC' }};
+    border-bottom: 1px solid #DDD8CE;
+    padding: 16px 0;
+    display: none;
+    z-index: 28;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .loomhaus-search-overlay--open {
+    display: block;
+    animation: loomhausSearchSlideDown 0.22s ease forwards;
+  }
+
+  @keyframes loomhausSearchSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .loomhaus-search-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .loomhaus-search-form {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid #DDD8CE;
+    border-radius: 9999px;
+    padding: 0 18px;
+    height: 44px;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  .loomhaus-search-icon {
+    width: 18px;
+    height: 18px;
+    color: #74786E;
+    flex-shrink: 0;
+  }
+
+  .loomhaus-search-input {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: 14px;
+    color: #191B18;
+    outline: none;
+    font-family: inherit;
+  }
+
+  .loomhaus-search-submit {
+    background: none;
+    border: none;
+    color: #191B18;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+
+  .loomhaus-search-submit:hover {
+    transform: translateX(3px);
+  }
+
+  .loomhaus-search-close {
+    background: none;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    color: #4A4E46;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+  }
+
+  .loomhaus-search-close:hover {
+    color: #191B18;
+  }
+
+  /* Wishlist Slide-out Drawer */
+  .loomhaus-wishlist-drawer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+  }
+
+  .loomhaus-wishlist-drawer--open {
+    display: block;
+  }
+
+  .loomhaus-wishlist-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .loomhaus-wishlist-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 380px;
+    max-width: 90vw;
+    height: 100%;
+    background: #FAF7F2;
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    animation: loomhausSlideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .loomhaus-wishlist-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #E5DFD4;
+  }
+
+  .loomhaus-wishlist-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .loomhaus-wishlist-title-icon {
+    width: 19px;
+    height: 19px;
+    color: #191B18;
+  }
+
+  .loomhaus-wishlist-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #191B18;
+    margin: 0;
+  }
+
+  .loomhaus-wishlist-count {
+    font-size: 13.5px;
+    color: #74786E;
+    font-weight: 500;
+  }
+
+  .loomhaus-wishlist-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: #4A4E46;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .loomhaus-wishlist-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+  }
+
+  .loomhaus-wishlist-empty {
+    text-align: center;
+    padding: 40px 10px;
+  }
+
+  .loomhaus-wishlist-empty-icon {
+    font-size: 42px;
+    color: #A39D90;
+    margin-bottom: 14px;
+    line-height: 1;
+  }
+
+  .loomhaus-wishlist-empty-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #191B18;
+    margin: 0 0 8px;
+  }
+
+  .loomhaus-wishlist-empty-sub {
+    font-size: 13px;
+    color: #74786E;
+    margin: 0 0 24px;
+    line-height: 1.5;
+  }
+
+  .loomhaus-wishlist-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #191B18;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 13px 24px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transition: background 0.2s ease;
+  }
+
+  .loomhaus-wishlist-empty-btn:hover {
+    background: #333830;
+  }
+
+  .loomhaus-wishlist-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #ECE7DD;
+    align-items: center;
+  }
+
+  .loomhaus-wishlist-img {
+    width: 64px;
+    height: 76px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #EAE5DC;
+  }
+
+  .loomhaus-wishlist-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .loomhaus-wishlist-item-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #191B18;
+    margin: 0 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .loomhaus-wishlist-item-price {
+    font-size: 13px;
+    font-weight: 700;
+    color: #191B18;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .loomhaus-wishlist-item-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .loomhaus-wishlist-view-btn {
+    font-size: 11.5px;
+    color: #191B18;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+
+  .loomhaus-wishlist-remove-btn {
+    background: none;
+    border: none;
+    font-size: 11.5px;
+    color: #8C867B;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .loomhaus-wishlist-remove-btn:hover {
+    color: #E03131;
+  }
+
   /* Mobile Toggle */
   .loomhaus-header__mobile-toggle {
     display: none;
@@ -417,6 +956,23 @@
 
     .loomhaus-header__logo-text {
       font-size: 22px;
+    }
+
+    .loomhaus-header__actions {
+      gap: 8px;
+    }
+
+    .loomhaus-search-container {
+      padding: 0 16px;
+    }
+
+    .loomhaus-search-form {
+      height: 40px;
+      padding: 0 14px;
+    }
+
+    .loomhaus-search-input {
+      font-size: 13.5px;
     }
 
     .loomhaus-header__mobile-toggle {
@@ -674,7 +1230,19 @@
     },
     {
       "type": "header",
-      "content": "Shopping Cart"
+      "content": "Search, Wishlist & Cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show wishlist icon",
+      "default": true
     },
     {
       "type": "checkbox",

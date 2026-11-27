@@ -47,6 +47,8 @@
         "cta_text_color": "#1a1c19",
         "cta_hover_bg": "#191b18",
         "cta_hover_text": "#ffffff",
+        "show_search": true,
+        "show_wishlist": true,
         "show_cart": true,
         "preview_cart_count": 3,
         "cart_badge_bg": "#7c8376",
