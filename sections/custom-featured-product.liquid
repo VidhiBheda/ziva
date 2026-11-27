@@ -776,9 +776,10 @@
   /* Purchase Row */
   .loomhaus-fp__purchase-row {
     display: flex;
-    align-items: center;
-    gap: 14px;
+    align-items: stretch;
+    gap: 12px;
     margin-top: 8px;
+    width: 100%;
   }
 
   .loomhaus-fp__qty-box {
@@ -789,7 +790,10 @@
     align-items: center;
     justify-content: space-between;
     width: 120px;
-    padding: 12px 14px;
+    min-height: 48px;
+    padding: 0 14px;
+    flex-shrink: 0;
+    box-sizing: border-box;
   }
 
   .loomhaus-fp__qty-btn {
@@ -801,20 +805,28 @@
     cursor: pointer;
     padding: 0 4px;
     line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 100%;
   }
 
   .loomhaus-fp__qty-display {
     font-size: 13.5px;
     font-weight: 700;
     color: #191B18;
+    user-select: none;
   }
 
   .loomhaus-fp__btn-add {
     flex: 1;
+    min-width: 0;
     background: #222420;
     color: #FFFFFF;
     border-radius: 8px;
-    padding: 15px 24px;
+    min-height: 48px;
+    padding: 0 20px;
     font-weight: 700;
     font-size: 13px;
     letter-spacing: 0.05em;
@@ -826,6 +838,8 @@
     justify-content: center;
     gap: 8px;
     transition: background 0.2s ease;
+    box-sizing: border-box;
+    white-space: nowrap;
   }
 
   .loomhaus-fp__btn-add:hover {
@@ -962,16 +976,47 @@
       padding: 0 16px;
     }
     .loomhaus-fp__purchase-row {
-      flex-direction: column;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: stretch !important;
+      gap: 10px !important;
+      width: 100% !important;
     }
     .loomhaus-fp__qty-box {
-      width: 100%;
+      width: 105px !important;
+      min-width: 95px !important;
+      flex-shrink: 0 !important;
+      padding: 0 12px !important;
+      min-height: 48px !important;
+      box-sizing: border-box !important;
     }
     .loomhaus-fp__btn-add {
-      width: 100%;
+      flex: 1 !important;
+      min-width: 0 !important;
+      width: auto !important;
+      padding: 0 14px !important;
+      min-height: 48px !important;
+      font-size: 12px !important;
+      box-sizing: border-box !important;
+      white-space: nowrap !important;
     }
     .loomhaus-fp__coupons-row {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .loomhaus-fp__purchase-row {
+      gap: 8px !important;
+    }
+    .loomhaus-fp__qty-box {
+      width: 90px !important;
+      padding: 0 8px !important;
+    }
+    .loomhaus-fp__btn-add {
+      font-size: 11px !important;
+      gap: 4px !important;
+      padding: 0 8px !important;
     }
   }
 </style>

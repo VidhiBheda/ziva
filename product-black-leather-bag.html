@@ -334,21 +334,25 @@
     /* Actions */
     .loomhaus-actions {
       display: flex;
+      align-items: stretch;
       gap: 12px;
       margin-top: 10px;
+      width: 100%;
     }
     .loomhaus-qty {
       display: flex;
       align-items: center;
       border: 1.5px solid #D5CEBF;
       border-radius: 12px;
-      padding: 0 8px;
+      padding: 0 10px;
       background: #FAF7F2;
       font-weight: 700;
       font-size: 14px;
       height: 52px;
-      min-width: 100px;
+      width: 110px;
+      flex-shrink: 0;
       justify-content: space-between;
+      box-sizing: border-box;
     }
     .loomhaus-qty button {
       background: none;
@@ -364,6 +368,7 @@
     }
     .loomhaus-btn-add {
       flex: 1;
+      min-width: 0;
       height: 52px;
       background: #252822;
       color: #FAF7F2;
@@ -373,6 +378,8 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       cursor: pointer;
+      box-sizing: border-box;
+      white-space: nowrap;
       transition: background 0.2s, transform 0.15s;
     }
     .loomhaus-btn-add:hover {
